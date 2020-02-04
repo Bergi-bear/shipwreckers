@@ -1,0 +1,2 @@
+# shipwreckers
+WASD +LMB/RMB
