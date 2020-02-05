@@ -34,3 +34,15 @@ STRING 7
 Кораблик
 }
 
+STRING 8
+// Abilities: A000 (Амулет), Name (Name)
+{
+Амулет
+}
+
+STRING 9
+// Abilities: A001 (Перерождение), Name (Name)
+{
+Перерождение
+}
+

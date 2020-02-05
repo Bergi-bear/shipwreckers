@@ -17,12 +17,15 @@ end
 
 function InitGameCore()
 	--создаём героев
+	--BlzEnableSelections(false,false)
+	EnableDragSelect(false,false)
 	HERO[0]={
 		ReleaseW=false,
 		ReleaseS=false,
 		ReleaseA=false,
 		ReleaseD=false,
 		Acceleration=0,
+		ReleaseLMB=false,
 		SpeedBase=14,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
 		CurrentSpeed=0
@@ -58,6 +61,7 @@ function InitGameCore()
 	TriggerAddAction(TrigPressD, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
+		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
 		data.ReleaseD=true
 	end)
 	local TrigDePressD = CreateTrigger()
@@ -91,11 +95,40 @@ function InitGameCore()
 		local data=HERO[pid]
 		data.ReleaseA=false
 	end)
-	-----------------------------------------------------------------
+	-----------------------------------------------------------------LMB
+	local TrigPressLMB=CreateTrigger()
+	TriggerRegisterPlayerEvent(TrigPressLMB, Player(0), EVENT_PLAYER_MOUSE_DOWN)
+	TriggerAddAction(TrigPressLMB, function()
+		--print("any")
+		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_LEFT then
+			local pid=GetPlayerId(GetTriggerPlayer())
+			local data=HERO[pid]
+			data.ReleaseLMB=true
+		end
+	end)
+	local TrigDePressLMB=CreateTrigger()
+	TriggerRegisterPlayerEvent(TrigDePressLMB, Player(0), EVENT_PLAYER_MOUSE_UP)
+	TriggerAddAction(TrigDePressLMB, function()
+		--print("any")
+		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_LEFT then
+			local pid=GetPlayerId(GetTriggerPlayer())
+			local data=HERO[pid]
+			data.ReleaseLMB=false
+		end
+	end)
 
+	-----------------------------------------------------------------
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
+			--etCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
+			PanCameraToTimedForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero),0.3)
+			if data.ReleaseLMB then
+				data.ReleaseA=false
+				data.ReleaseD=false
+				data.ReleaseW=false
+				print("Error LMB")
+			end
 
 			if data.ReleaseW then
 				if data.Acceleration<=data.SpeedBase then
@@ -115,19 +148,13 @@ function InitGameCore()
 				--SetUnitFacing(hero,GetUnitFacing(hero)+10)
 			end
 
-
-
-
 			data.CurrentSpeed=data.Acceleration
 			if data.CurrentSpeed>0 then--попытка сделать разгон
 					--print("текущая скорость = "..data.CurrentSpeed)
-				SetCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
+
 				SetUnitX(hero,MoveX(GetUnitX(hero),data.CurrentSpeed,GetUnitFacing(hero)))
 				SetUnitY(hero,MoveY(GetUnitY(hero),data.CurrentSpeed,GetUnitFacing(hero)))
 			end
 		end
 	end)
 end
-
-
-
