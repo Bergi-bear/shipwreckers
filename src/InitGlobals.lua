@@ -11,6 +11,8 @@ do
 	function InitGlobals()
 		InitGlobalsOrigin() -- вызываем оригинальную InitGlobals из переменной
 		InitGameCore()
+		hideEverything()
+		--hidenoul()
 	end
 
 end
@@ -26,10 +28,15 @@ function InitGameCore()
 		ReleaseD=false,
 		Acceleration=0,
 		ReleaseLMB=false,
+		ReleaseRMB=false,
 		SpeedBase=14,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
 		CurrentSpeed=0
 	}
+	BlzLoadTOCFile("Main.toc")
+	HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
+	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_TOPRIGHT, 0.8, 0.57)
+	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
 --триггеры
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
@@ -104,6 +111,8 @@ function InitGameCore()
 			local pid=GetPlayerId(GetTriggerPlayer())
 			local data=HERO[pid]
 			data.ReleaseLMB=true
+			local hero=data.UnitHero
+			BoardCannon(hero,90,5)
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
@@ -116,18 +125,51 @@ function InitGameCore()
 			data.ReleaseLMB=false
 		end
 	end)
+	-----------------------------------------------------------------RMB
+	local TrigPressRMB=CreateTrigger()
+	TriggerRegisterPlayerEvent(TrigPressRMB, Player(0), EVENT_PLAYER_MOUSE_DOWN)
+	TriggerAddAction(TrigPressRMB, function()
+		--print("any")
+		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_RIGHT then
+			local pid=GetPlayerId(GetTriggerPlayer())
+			local data=HERO[pid]
+			data.ReleaseRMB=true
+			local hero=data.UnitHero
+			--SingleCannon(hero)
+			BoardCannon(hero,-90,5)
+		end
+	end)
+	local TrigDePressRMB=CreateTrigger()
+	TriggerRegisterPlayerEvent(TrigDePressRMB, Player(0), EVENT_PLAYER_MOUSE_UP)
+	TriggerAddAction(TrigDePressRMB, function()
+		--print("any")
+		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_RIGHT then
+			local pid=GetPlayerId(GetTriggerPlayer())
+			local data=HERO[pid]
+			data.ReleaseRMB=false
+		end
+	end)
 
-	-----------------------------------------------------------------
+	-----------------------------------------------------------------Lock
+	TimerStart(CreateTimer(), 0.01, true, function()
+		local data=HERO[0]
+		local hero=data.UnitHero
+		ForceUIKeyBJ(GetOwningPlayer(hero),"M")
+		IssueImmediateOrder(hero,"stop")
+	end)
+
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
-			--etCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
+			--SetCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
 			PanCameraToTimedForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero),0.3)
+
 			if data.ReleaseLMB then
-				data.ReleaseA=false
-				data.ReleaseD=false
-				data.ReleaseW=false
-				print("Error LMB")
+
+				--data.ReleaseA=false
+				--data.ReleaseD=false
+				--data.ReleaseW=false
+				--print("Error LMB")
 			end
 
 			if data.ReleaseW then
