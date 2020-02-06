@@ -12,7 +12,7 @@ do
 		InitGlobalsOrigin() -- вызываем оригинальную InitGlobals из переменной
 		InitGameCore()
 		hideEverything()
-		--hidenoul()
+		InitMouseMoveTrigger()
 	end
 
 end
@@ -34,10 +34,30 @@ function InitGameCore()
 		CurrentSpeed=0
 	}
 	BlzLoadTOCFile("Main.toc")
-	HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
+	BlzLoadTOCFile("MySimpleButton.toc")
+	BlzLoadTOCFile("BoxedText.toc")
+	local HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
 	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_TOPRIGHT, 0.8, 0.57)
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
+
+	--CreateWeaponFrame()
+	CreateWeaponFrame()
+
+
+
 --триггеры
+	-----------------------------------------------------------------OSKEY_1
+	local TrigWeaponSwitch1 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch1,Player(i),OSKEY_1,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch1, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		--print("press1")
+	end)
+
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -112,7 +132,7 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			BoardCannon(hero,90,5)
+			BoardCannon(hero,90,GetRandomInt(1,5))
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
@@ -136,7 +156,7 @@ function InitGameCore()
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
 			--SingleCannon(hero)
-			BoardCannon(hero,-90,5)
+			BoardCannon(hero,-90,GetRandomInt(1,5))
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()

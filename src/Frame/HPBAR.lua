@@ -11,38 +11,66 @@
 --BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_TOPRIGHT, 0.8, 0.57)
 
 function HealthBarAdd(u)
-	print("Creating \'"..GetHeroProperName(u).."\' Bar")
-
-	--создаём фрейм по имени
 	local bar = BlzCreateSimpleFrame("MyFakeBar", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
-
-	--делаем видимым
 	BlzFrameSetVisible(bar,true)
-
-	--ставим текстурки
 	BlzFrameSetTexture(bar, "Replaceabletextures\\Teamcolor\\Teamcolor00.blp", 0, true)
 	BlzFrameSetTexture(BlzGetFrameByName("MyFakeBarBorder",0),"MyBarBorder.blp", 0, true)
-
-	--текст по центру
 	BlzFrameSetText(BlzGetFrameByName("MyFakeBarTitle",0), GetHeroProperName(u))
-
-	--сейвим фреймы текста справа и слева для автообновления
 	local lefttext = BlzGetFrameByName("MyFakeBarLeftText",0)
 	local righttext = BlzGetFrameByName("MyFakeBarRightText",0)
-
-	--функция обновления
 	local function on_timer()
-		--ставим бар
 		BlzFrameSetValue(bar, GetUnitLifePercent(u))
 
-		--обновляем текст слева и справа
 		BlzFrameSetText(lefttext, R2I(GetWidgetLife(u)))
 		BlzFrameSetText(righttext, R2I(BlzGetUnitMaxHP(u)))
 	end
-
-	--стартуем функцию обновления
 	TimerStart(CreateTimer(),0.5,true, on_timer)
-
-	--ретурним сам бар для дальнейших действий
 	return bar
+end
+
+
+
+
+function CreateWeaponFrame()
+	local texture={
+		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle",
+		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNClusterRockets.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp"
+	}
+	local weaponName={
+		"[1] Носовое ордие",
+		"[2] Бортовые пушки",
+		"[3] Ракетница",
+		"[4] Огнемёт"
+	}
+	local description={
+		"Одиночный выстрел [RMB]",
+		"Несколько выстрелов с борта [RMB] [LMB]",
+		"Самоновадящаяся ракета [RMB] на цель",
+		"Огнемёт из бортовых оружий. Удерживайте [RMB] [LMB] "
+	}
+	local next=0.039
+	for i = 0, 3 do
+		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)--Create a new frame of Type BACKDROP
+		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0) --face is a BACKDROP it can not have events nor a tooltip, thats why one creates an empty frame managing that.
+		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)--Create the BoxedText Frame
+		BlzFrameSetAllPoints(faceHover, face)
+		BlzFrameSetTooltip(faceHover, tooltip)
+		BlzFrameSetTexture(face, texture[i+1],0, true)
+		BlzFrameSetSize(face, 0.04, 0.04)
+		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next*i, 0.6)
+		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next*i, 0.6-next)
+		BlzFrameSetSize(tooltip, 0.15, 0.08)
+		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
+		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
+
+		local t = CreateTrigger()
+		BlzTriggerRegisterFrameEvent(t, tooltip, FRAMEEVENT_CONTROL_CLICK)
+		TriggerAddAction(t,function()
+			print("click "..i)
+		end)
+
+	end
+
 end

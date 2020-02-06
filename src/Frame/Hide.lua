@@ -18,10 +18,10 @@ function hideEverything()
 	BlzHideOriginFrames(true)
 	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
 	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
-	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
 	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_HERO_BAR, 0), true)
 	--CinematicPortrait
-	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), false)
+	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), false)
 
 	--BlzFrameSetVisible(BlzGetFrameByName("InventoryButton_0",0),  false)
 	--BlzFrameSetVisible(BlzFrameGetParent(BlzGetFrameByName("SimpleInfoPanelUnitDetail", 0)), true)
