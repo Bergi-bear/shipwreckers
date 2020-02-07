@@ -31,7 +31,10 @@ function InitGameCore()
 		ReleaseRMB=false,
 		SpeedBase=14,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
-		CurrentSpeed=0
+		CurrentSpeed=0,
+		WeaponIndex=1,
+		AngleForce=0, --типа какой-то уго для отталкивания
+		IsDisabled=false
 	}
 	BlzLoadTOCFile("Main.toc")
 	BlzLoadTOCFile("MySimpleButton.toc")
@@ -55,9 +58,45 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch1, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
+		data.WeaponIndex=1
 		--print("press1")
 	end)
-
+	-----------------------------------------------------------------OSKEY_2
+	local TrigWeaponSwitch2 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch2,Player(i),OSKEY_2,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch2, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=2
+		--print("press2")
+	end)
+	-----------------------------------------------------------------OSKEY_3
+	local TrigWeaponSwitch3 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch3,Player(i),OSKEY_3,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch3, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=3
+		--print("press3")
+	end)
+	-----------------------------------------------------------------OSKEY_4
+	local TrigWeaponSwitch4 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch4,Player(i),OSKEY_4,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch4, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=4
+		--print("press1")
+	end)
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -132,7 +171,9 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			BoardCannon(hero,90,GetRandomInt(1,5))
+			if data.WeaponIndex==2 then
+				BoardCannon(hero,90,GetRandomInt(5,5))
+			end
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
@@ -155,8 +196,12 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
-			--SingleCannon(hero)
-			BoardCannon(hero,-90,GetRandomInt(1,5))
+			if data.WeaponIndex==1 then
+				SingleCannon(hero)
+			end
+			if data.WeaponIndex==2 then
+				BoardCannon(hero,-90,GetRandomInt(5,5))
+			end
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()
@@ -181,8 +226,10 @@ function InitGameCore()
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
-			--SetCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
-			PanCameraToTimedForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero),0.3)
+			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
+			--SetCameraPositionForPlayer(GetOwningPlayer(hero),camerax,cameray)
+			PanCameraToTimedForPlayer(GetOwningPlayer(hero),camerax,cameray,1)
+			UnitCheckPathingInRound(hero,90)
 
 			if data.ReleaseLMB then
 
@@ -213,10 +260,109 @@ function InitGameCore()
 			data.CurrentSpeed=data.Acceleration
 			if data.CurrentSpeed>0 then--попытка сделать разгон
 					--print("текущая скорость = "..data.CurrentSpeed)
+				local x,y=GetUnitX(hero),GetUnitY(hero)
+				local angle=GetUnitFacing(hero)
+				data.AngleForce=angle
+				local zhero=GetTerrainZ(x,y)
+				if zhero<=-90 then
+					--SetUnitZ(hero,-89.9)
+					--print("провалился в яму")
+				end
+				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
+				local newX2,newY2=MoveX(x,120,angle),MoveY(y,120,angle)
+				local z3=GetTerrainZ(newX3,newY3)
+				local z2=GetTerrainZ(newX2,newY2)
+				--print("z="..z)
+				if z3<=-80 and z2<=-80  then
+					--print("проходима")
+					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+					SetUnitX(hero,newX)
+					SetUnitY(hero,newY)
+				else
+					--print("не проходима")
+					--BlzSetUnitFacingEx(hero,angle-15)
+					IssueImmediateOrder(hero,"stop")
+					--angle=angle-180
+				end
 
-				SetUnitX(hero,MoveX(GetUnitX(hero),data.CurrentSpeed,GetUnitFacing(hero)))
-				SetUnitY(hero,MoveY(GetUnitY(hero),data.CurrentSpeed,GetUnitFacing(hero)))
+
 			end
 		end
 	end)
 end
+
+function UnitCheckPathingInRound(hero,range)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local x,y=GetUnitX(hero),GetUnitY(hero)
+	local nx,ny=nil,nil
+	local a=10
+	local z=nil
+	local k=0
+	local total=0
+	local med=0
+	local min=350
+	local max=0
+	local current=0
+	local dif=0
+	for i=0,35 do
+		nx=MoveX(x,range,a*i)
+		ny=MoveY(y,range,a*i)
+		z=GetTerrainZ(nx,ny)
+		if z>-80 then
+			k=k+1
+			total=total+a*i
+			current=a*i
+			if current>=max then max=current end
+			if current<=min then min=current end
+			--print("a="..a*i)
+			DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+		end
+	end
+	if k>0 then
+		dif=max-min
+		if dif>=90 then
+			--print("dif="..dif.."при минимуме="..min)
+			for i=min,0,-10 do
+				total=total+360
+			end
+		end
+
+		med=total/k
+
+		--print("Средний угол"..med)
+		--local newmed=AngleDifferenceDeg(min,max)
+		if data.IsDisabled==false then
+			--print("Число точек "..k)
+			--print("med="..med)--.." newmed="..newmed)
+			--print ("min="..min.." max="..max)
+			--print("Угол юнита"..GetUnitFacing(hero))
+			if k>=7 then
+				print("selfdamage")
+			end
+			data.IsDisabled=true
+			if dif>=90 then med=med-180 end
+			UnitAddForce(hero,med-180,5,80)
+		end
+	end
+
+
+
+end
+function UnitAddForce(hero,angle,speed,distance)
+	local currentdistance=0
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		currentdistance=currentdistance+speed
+		local x,y=GetUnitX(hero),GetUnitY(hero)
+		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
+		SetUnitX(hero,newX)
+		SetUnitY(hero,newY)
+		if currentdistance>=distance then
+			data.IsDisabled=false
+			DestroyTimer(GetExpiredTimer())
+			--print("stop")
+		end
+	end)
+end
+
+

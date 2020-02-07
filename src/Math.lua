@@ -135,7 +135,7 @@ function AngleDifference(a, b)
 	return c > d and d or c
 end
 
---@author xgm.guru/p/wc3/warden-math
+--@author https://xgm.guru/p/wc3/warden-math
 ---@param a real degrees
 ---@param b real degrees
 ---@return real degrees

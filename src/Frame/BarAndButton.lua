@@ -64,13 +64,52 @@ function CreateWeaponFrame()
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
-
 		local t = CreateTrigger()
 		BlzTriggerRegisterFrameEvent(t, tooltip, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, faceHover, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, face, FRAMEEVENT_CONTROL_CLICK)
 		TriggerAddAction(t,function()
-			print("click "..i)
+			print("click "..i) -- вот тут не работает
 		end)
 
 	end
 
 end
+--[[ --работает
+TimerStart(CreateTimer(),0,false, function()
+	print("Start")
+	BlzLoadTOCFile("war3mapImported\\MySimpleButton.toc")
+	BlzLoadTOCFile("war3mapImported\\MyStatusBar.toc")
+	local trigger = CreateTrigger()
+	TriggerAddAction(trigger, function()
+		print("Button Click")
+		-- SimpleButton does not keep the focus.
+	end)
+	local prevButton = nil
+
+	local customInfo = BlzCreateSimpleFrame("SimpleInfoPanelIconDamage", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 18)
+	BlzFrameSetAbsPoint(customInfo, FRAMEPOINT_CENTER, 0.2, 0.2)
+	BlzFrameSetSize(customInfo, 0.1, 0.1)
+
+	local button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.9, 0.3)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+
+	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.4, 0.3)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroMountainKing", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+	BlzFrameSetEnable(BlzGetFrameByName("MySimpleButtonTexture", 0), false)
+	prevButton = button
+
+	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, -0.1, 0.5)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroArchMage", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+
+
+	BlzFrameSetTooltip(button, customInfo)
+
+	print("Done")
+end)]]

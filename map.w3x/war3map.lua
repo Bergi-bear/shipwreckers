@@ -12,27 +12,37 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
 	local zhero=GetTerrainZ(xhero,yhero)+60
 	local bullet=AddSpecialEffect(effectmodel,xs,ys)
-	local bam=AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
-	local cloud=AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
+	local bam=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
+	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
 	--print("Скорость корабля"..data.CurrentSpeed)
 	BlzSetSpecialEffectScale(bam,0.1)
-	BlzSetSpecialEffectScale(cloud,0.1)
+	BlzSetSpecialEffectScale(cloud,0.02)
 	DestroyEffect(bam)
 	DestroyEffect(cloud)
 	BlzSetSpecialEffectZ(bullet,zhero)
 	--print(zhero)
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y,z=BlzGetLocalSpecialEffectX(bullet),BlzGetLocalSpecialEffectY(bullet),BlzGetLocalSpecialEffectZ(bullet)
-
+		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
 		local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
-
+		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
-		if z<=-128 then
-			DestroyEffect(bullet)
+		if z<=-90 or zGround+z>=-70+z then
+			if z<=-90 then
+
+				--BlzSetSpecialEffectAlpha(bullet,0)
+				DestroyEffect(bullet)
+				DestroyEffect(AddSpecialEffect("Torrent1.mdl",x,y))
+				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
+			else
+				DestroyEffect(bullet)
+			end
+
+
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
@@ -132,7 +142,10 @@ function InitGameCore()
 		ReleaseRMB=false,
 		SpeedBase=14,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
-		CurrentSpeed=0
+		CurrentSpeed=0,
+		WeaponIndex=1,
+		AngleForce=0, --типа какой-то уго для отталкивания
+		IsDisabled=false
 	}
 	BlzLoadTOCFile("Main.toc")
 	BlzLoadTOCFile("MySimpleButton.toc")
@@ -156,9 +169,45 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch1, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		print("press1")
+		data.WeaponIndex=1
+		--print("press1")
 	end)
-
+	-----------------------------------------------------------------OSKEY_2
+	local TrigWeaponSwitch2 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch2,Player(i),OSKEY_2,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch2, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=2
+		--print("press2")
+	end)
+	-----------------------------------------------------------------OSKEY_3
+	local TrigWeaponSwitch3 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch3,Player(i),OSKEY_3,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch3, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=3
+		--print("press3")
+	end)
+	-----------------------------------------------------------------OSKEY_4
+	local TrigWeaponSwitch4 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch4,Player(i),OSKEY_4,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch4, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=4
+		--print("press1")
+	end)
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -233,7 +282,9 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			BoardCannon(hero,90,GetRandomInt(1,5))
+			if data.WeaponIndex==2 then
+				BoardCannon(hero,90,GetRandomInt(5,5))
+			end
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
@@ -256,8 +307,12 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
-			--SingleCannon(hero)
-			BoardCannon(hero,-90,GetRandomInt(1,5))
+			if data.WeaponIndex==1 then
+				SingleCannon(hero)
+			end
+			if data.WeaponIndex==2 then
+				BoardCannon(hero,-90,GetRandomInt(5,5))
+			end
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()
@@ -282,8 +337,10 @@ function InitGameCore()
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
-			--SetCameraPositionForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero))
-			PanCameraToTimedForPlayer(GetOwningPlayer(hero),GetUnitX(hero),GetUnitY(hero),0.3)
+			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
+			--SetCameraPositionForPlayer(GetOwningPlayer(hero),camerax,cameray)
+			PanCameraToTimedForPlayer(GetOwningPlayer(hero),camerax,cameray,1)
+			UnitCheckPathingInRound(hero,90)
 
 			if data.ReleaseLMB then
 
@@ -314,13 +371,112 @@ function InitGameCore()
 			data.CurrentSpeed=data.Acceleration
 			if data.CurrentSpeed>0 then--попытка сделать разгон
 					--print("текущая скорость = "..data.CurrentSpeed)
+				local x,y=GetUnitX(hero),GetUnitY(hero)
+				local angle=GetUnitFacing(hero)
+				data.AngleForce=angle
+				local zhero=GetTerrainZ(x,y)
+				if zhero<=-90 then
+					--SetUnitZ(hero,-89.9)
+					--print("провалился в яму")
+				end
+				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
+				local newX2,newY2=MoveX(x,120,angle),MoveY(y,120,angle)
+				local z3=GetTerrainZ(newX3,newY3)
+				local z2=GetTerrainZ(newX2,newY2)
+				--print("z="..z)
+				if z3<=-80 and z2<=-80  then
+					--print("проходима")
+					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+					SetUnitX(hero,newX)
+					SetUnitY(hero,newY)
+				else
+					--print("не проходима")
+					--BlzSetUnitFacingEx(hero,angle-15)
+					IssueImmediateOrder(hero,"stop")
+					--angle=angle-180
+				end
 
-				SetUnitX(hero,MoveX(GetUnitX(hero),data.CurrentSpeed,GetUnitFacing(hero)))
-				SetUnitY(hero,MoveY(GetUnitY(hero),data.CurrentSpeed,GetUnitFacing(hero)))
+
 			end
 		end
 	end)
 end
+
+function UnitCheckPathingInRound(hero,range)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local x,y=GetUnitX(hero),GetUnitY(hero)
+	local nx,ny=nil,nil
+	local a=10
+	local z=nil
+	local k=0
+	local total=0
+	local med=0
+	local min=350
+	local max=0
+	local current=0
+	local dif=0
+	for i=0,35 do
+		nx=MoveX(x,range,a*i)
+		ny=MoveY(y,range,a*i)
+		z=GetTerrainZ(nx,ny)
+		if z>-80 then
+			k=k+1
+			total=total+a*i
+			current=a*i
+			if current>=max then max=current end
+			if current<=min then min=current end
+			--print("a="..a*i)
+			DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+		end
+	end
+	if k>0 then
+		dif=max-min
+		if dif>=90 then
+			--print("dif="..dif.."при минимуме="..min)
+			for i=min,0,-10 do
+				total=total+360
+			end
+		end
+
+		med=total/k
+
+		--print("Средний угол"..med)
+		--local newmed=AngleDifferenceDeg(min,max)
+		if data.IsDisabled==false then
+			--print("Число точек "..k)
+			--print("med="..med)--.." newmed="..newmed)
+			--print ("min="..min.." max="..max)
+			--print("Угол юнита"..GetUnitFacing(hero))
+			if k>=7 then
+				print("selfdamage")
+			end
+			data.IsDisabled=true
+			if dif>=90 then med=med-180 end
+			UnitAddForce(hero,med-180,5,80)
+		end
+	end
+
+
+
+end
+function UnitAddForce(hero,angle,speed,distance)
+	local currentdistance=0
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		currentdistance=currentdistance+speed
+		local x,y=GetUnitX(hero),GetUnitY(hero)
+		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
+		SetUnitX(hero,newX)
+		SetUnitY(hero,newY)
+		if currentdistance>=distance then
+			data.IsDisabled=false
+			DestroyTimer(GetExpiredTimer())
+			--print("stop")
+		end
+	end)
+end
+
+
 
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -459,7 +615,7 @@ function AngleDifference(a, b)
 	return c > d and d or c
 end
 
---@author xgm.guru/p/wc3/warden-math
+--@author https://xgm.guru/p/wc3/warden-math
 ---@param a real degrees
 ---@param b real degrees
 ---@return real degrees
@@ -487,39 +643,6 @@ end
 ---@return real
 function Perpendicular (xa, ya, xb, yb, xc, yc)
 	return math.sqrt((xa - xc) * (xa - xc) + (ya - yc) * (ya - yc)) * math.sin(math.atan(yc - ya, xc - xa) - math.atan(yb - ya, xb - xa))
-end
-
----
---- Generated by EmmyLua(https://github.com/EmmyLua)
---- Created by Bergi.
---- DateTime: 05.02.2020 22:34
----
-
-function hideEverything()
-	BlzFrameSetVisible(BlzGetFrameByName("ConsoleUIBackdrop", 0), false)
-	for i = 1,11 do
-		BlzFrameSetVisible(BlzGetFrameByName("CommandButton_"..i, 0), false)
-	end
-	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
-
-	--NAZAR
-	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
-	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
-
-	BlzHideOriginFrames(true)
-	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
-	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
-	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
-	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_HERO_BAR, 0), true)
-	--CinematicPortrait
-	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), false)
-
-	--BlzFrameSetVisible(BlzGetFrameByName("InventoryButton_0",0),  false)
-	--BlzFrameSetVisible(BlzFrameGetParent(BlzGetFrameByName("SimpleInfoPanelUnitDetail", 0)), true)
-	--BlzFrameSetParent(BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_ITEM_BUTTON, 0)), BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, 0)))
-
-
-
 end
 
 ---
@@ -588,16 +711,88 @@ function CreateWeaponFrame()
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
-
 		local t = CreateTrigger()
 		BlzTriggerRegisterFrameEvent(t, tooltip, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, faceHover, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, face, FRAMEEVENT_CONTROL_CLICK)
 		TriggerAddAction(t,function()
-			print("click "..i)
+			print("click "..i) -- вот тут не работает
 		end)
 
 	end
 
 end
+--[[ --работает
+TimerStart(CreateTimer(),0,false, function()
+	print("Start")
+	BlzLoadTOCFile("war3mapImported\\MySimpleButton.toc")
+	BlzLoadTOCFile("war3mapImported\\MyStatusBar.toc")
+	local trigger = CreateTrigger()
+	TriggerAddAction(trigger, function()
+		print("Button Click")
+		-- SimpleButton does not keep the focus.
+	end)
+	local prevButton = nil
+
+	local customInfo = BlzCreateSimpleFrame("SimpleInfoPanelIconDamage", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 18)
+	BlzFrameSetAbsPoint(customInfo, FRAMEPOINT_CENTER, 0.2, 0.2)
+	BlzFrameSetSize(customInfo, 0.1, 0.1)
+
+	local button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.9, 0.3)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+
+	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.4, 0.3)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroMountainKing", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+	BlzFrameSetEnable(BlzGetFrameByName("MySimpleButtonTexture", 0), false)
+	prevButton = button
+
+	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
+	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, -0.1, 0.5)
+	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroArchMage", 0, true)
+	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+
+
+	BlzFrameSetTooltip(button, customInfo)
+
+	print("Done")
+end)]]
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 05.02.2020 22:34
+---
+
+function hideEverything()
+	BlzFrameSetVisible(BlzGetFrameByName("ConsoleUIBackdrop", 0), false)
+	for i = 1,11 do
+		BlzFrameSetVisible(BlzGetFrameByName("CommandButton_"..i, 0), false)
+	end
+	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
+
+	--NAZAR
+	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
+	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
+
+	BlzHideOriginFrames(true)
+	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
+	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
+	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_HERO_BAR, 0), true)
+	--CinematicPortrait
+	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), false)
+
+	--BlzFrameSetVisible(BlzGetFrameByName("InventoryButton_0",0),  false)
+	--BlzFrameSetVisible(BlzFrameGetParent(BlzGetFrameByName("SimpleInfoPanelUnitDetail", 0)), true)
+	--BlzFrameSetParent(BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_ITEM_BUTTON, 0)), BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, 0)))
+
+
+
+end
+
 --CUSTOM_CODE
 function InitCustomPlayerSlots()
     SetPlayerStartLocation(Player(0), 0)
@@ -615,8 +810,8 @@ function main()
     SetCameraBounds(-3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 3072.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 3328.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
     SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
     NewSoundEnvironment("Default")
-    SetAmbientDaySound("LordaeronSummerDay")
-    SetAmbientNightSound("LordaeronSummerNight")
+    SetAmbientDaySound("SunkenRuinsDay")
+    SetAmbientNightSound("SunkenRuinsNight")
     SetMapMusic("Music", true, 0)
     InitBlizzard()
     InitGlobals()

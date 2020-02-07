@@ -7,27 +7,37 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
 	local zhero=GetTerrainZ(xhero,yhero)+60
 	local bullet=AddSpecialEffect(effectmodel,xs,ys)
-	local bam=AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
-	local cloud=AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
+	local bam=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
+	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
 	--print("Скорость корабля"..data.CurrentSpeed)
 	BlzSetSpecialEffectScale(bam,0.1)
-	BlzSetSpecialEffectScale(cloud,0.1)
+	BlzSetSpecialEffectScale(cloud,0.02)
 	DestroyEffect(bam)
 	DestroyEffect(cloud)
 	BlzSetSpecialEffectZ(bullet,zhero)
 	--print(zhero)
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y,z=BlzGetLocalSpecialEffectX(bullet),BlzGetLocalSpecialEffectY(bullet),BlzGetLocalSpecialEffectZ(bullet)
-
+		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
 		local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
-
+		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
-		if z<=-128 then
-			DestroyEffect(bullet)
+		if z<=-90 or zGround+z>=-70+z then
+			if z<=-90 then
+
+				--BlzSetSpecialEffectAlpha(bullet,0)
+				DestroyEffect(bullet)
+				DestroyEffect(AddSpecialEffect("Torrent1.mdl",x,y))
+				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
+			else
+				DestroyEffect(bullet)
+			end
+
+
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
