@@ -10,6 +10,7 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local bam=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local CollisionEnemy=false
 	--print("Скорость корабля"..data.CurrentSpeed)
 	BlzSetSpecialEffectScale(bam,0.1)
 	BlzSetSpecialEffectScale(cloud,0.02)
@@ -26,15 +27,20 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
 		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
-		if z<=-90 or zGround+z>=-70+z then
-			if z<=-90 then
+		CollisionEnemy=UnitDamageArea(hero,100,x,y,100)
 
+		if z<=-90 or zGround+z>=-70+z or CollisionEnemy then
+			if z<=-90 then
 				--BlzSetSpecialEffectAlpha(bullet,0)
 				DestroyEffect(bullet)
-				DestroyEffect(AddSpecialEffect("Torrent1.mdl",x,y))
+				local torrent=AddSpecialEffect("Torrent1.mdl",x,y)
+				--BlzSetSpecialEffectScale(torrent,0.1)
+				BlzSetSpecialEffectMatrixScale(torrent,1,1,0.1)
+				DestroyEffect(torrent)
 				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
 			else
 				DestroyEffect(bullet)
+				UnitDamageArea(hero,100,x,y,200)
 			end
 
 
@@ -82,3 +88,39 @@ function BoardCannon(hero,board,cannon) -- left -90 right+90
 		CreateAndForceBullet(hero,angle-15*inverse,30,"Abilities/Weapons/BoatMissile/BoatMissile.mdl",x4,y4)--Сзади 3
 	end
 end
+
+function CreateFire(hero,board)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local facing=GetUnitFacing(hero)
+	--board=board+90
+	local angle=facing+board
+	local x=MoveX(GetUnitX(hero),60,angle)
+	local y=MoveY(GetUnitY(hero),60,angle)
+	local fire=AddSpecialEffect("FireGun.mdl",x,y)
+	local inverse=1
+	if board==90 then inverse=-1 end
+	BlzSetSpecialEffectMatrixScale(fire,2,2,1)
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		--local xf,yf,zf=BlzGetLocalSpecialEffectX(fire),BlzGetLocalSpecialEffectY(fire),BlzGetLocalSpecialEffectZ(fire)
+		local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
+		local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
+		BlzSetSpecialEffectPosition(fire,nx,ny,-140)
+		UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)-board)
+		if board==-90 then
+			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5+90))
+		else
+			local problem=GetUnitFacing(hero)+board-5+90
+			--print("проблемный угол="..problem)
+			BlzSetSpecialEffectYaw(fire,math.rad(problem))
+		end
+		if data.ReleaseRMB==false and board==-90 then
+			DestroyEffect(fire)
+			DestroyTimer(GetExpiredTimer())
+		end
+		if data.ReleaseLMB==false and board==90 then
+			DestroyEffect(fire)
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+

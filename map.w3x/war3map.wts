@@ -56,3 +56,27 @@ STRING 11
 СРЕДНЯЯ
 }
 
+STRING 12
+// Units: e000 (Дамми Основной), Name (Name)
+{
+Дамми Основной
+}
+
+STRING 13
+// Units: e000 (Дамми Основной), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 14
+// Units: e000 (Дамми Основной), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 15
+// Abilities: A003 (Миниракета), Name (Name)
+{
+Миниракета
+}
+

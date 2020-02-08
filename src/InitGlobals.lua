@@ -97,6 +97,30 @@ function InitGameCore()
 		data.WeaponIndex=4
 		--print("press1")
 	end)
+	-----------------------------------------------------------------OSKEY_5
+	local TrigWeaponSwitch5 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch5,Player(i),OSKEY_5,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch5, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=5
+		--print("press1")
+	end)
+	-----------------------------------------------------------------OSKEY_6
+	local TrigWeaponSwitch6 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch6,Player(i),OSKEY_6,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch6, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.WeaponIndex=6
+		--print("press1")
+	end)
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -174,6 +198,9 @@ function InitGameCore()
 			if data.WeaponIndex==2 then
 				BoardCannon(hero,90,GetRandomInt(5,5))
 			end
+			if data.WeaponIndex==4 then
+				CreateFire(hero,90)
+			end
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
@@ -202,6 +229,13 @@ function InitGameCore()
 			if data.WeaponIndex==2 then
 				BoardCannon(hero,-90,GetRandomInt(5,5))
 			end
+			if data.WeaponIndex==4 then
+				CreateFire(hero,-90)
+			end
+			if data.WeaponIndex==3 then
+				UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
+			end
+
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()
@@ -232,7 +266,7 @@ function InitGameCore()
 			UnitCheckPathingInRound(hero,90)
 
 			if data.ReleaseLMB then
-
+			--if data.WeaponIndex==
 				--data.ReleaseA=false
 				--data.ReleaseD=false
 				--data.ReleaseW=false
@@ -273,7 +307,7 @@ function InitGameCore()
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
 				--print("z="..z)
-				if z3<=-80 and z2<=-80  then
+				if z3<=-80 and z2<=-80 and PointContentUnit(newX2,newY2,100)==false then
 					--print("проходима")
 					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 					SetUnitX(hero,newX)
@@ -308,7 +342,7 @@ function UnitCheckPathingInRound(hero,range)
 		nx=MoveX(x,range,a*i)
 		ny=MoveY(y,range,a*i)
 		z=GetTerrainZ(nx,ny)
-		if z>-80 then
+		if z>-80 then--or PointContentUnit(nx,ny,60) then
 			k=k+1
 			total=total+a*i
 			current=a*i
@@ -337,7 +371,8 @@ function UnitCheckPathingInRound(hero,range)
 			--print ("min="..min.." max="..max)
 			--print("Угол юнита"..GetUnitFacing(hero))
 			if k>=7 then
-				print("selfdamage")
+				--print("selfdamage")
+				UnitDamageTarget( hero, hero, 10*(k-7), true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			end
 			data.IsDisabled=true
 			if dif>=90 then med=med-180 end
@@ -363,6 +398,22 @@ function UnitAddForce(hero,angle,speed,distance)
 			--print("stop")
 		end
 	end)
+end
+
+function PointContentUnit(x,y,range)
+	local content=false
+	local e--временный юнит
+	GroupEnumUnitsInRange(perebor,x,y,range,nil)
+	while true do
+		e = FirstOfGroup(perebor)
+		if e == nil then break end
+		if UnitAlive(e)  then
+			--UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
+			content=true
+		end
+		GroupRemoveUnit(perebor,e)
+	end
+	return content
 end
 
 

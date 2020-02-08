@@ -36,22 +36,28 @@ function CreateWeaponFrame()
 		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle",
 		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNClusterRockets.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp"
+		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp"
 	}
 	local weaponName={
 		"[1] Носовое ордие",
 		"[2] Бортовые пушки",
 		"[3] Ракетница",
-		"[4] Огнемёт"
+		"[4] Огнемёт",
+		"[5] Вертикальный залп",
+		"[6] Бочка"
 	}
 	local description={
 		"Одиночный выстрел [RMB]",
 		"Несколько выстрелов с борта [RMB] [LMB]",
 		"Самоновадящаяся ракета [RMB] на цель",
-		"Огнемёт из бортовых оружий. Удерживайте [RMB] [LMB] "
+		"Огнемёт из бортовых орудий. Удерживайте [RMB] [LMB] ",
+		"Стреляет в указанную точку навесом [RMB]",
+		"Спускает на воду бочку [RMB]"
 	}
 	local next=0.039
-	for i = 0, 3 do
+	for i = 0, 5 do
 		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)--Create a new frame of Type BACKDROP
 		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0) --face is a BACKDROP it can not have events nor a tooltip, thats why one creates an empty frame managing that.
 		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)--Create the BoxedText Frame
