@@ -30,6 +30,7 @@ end
 
 
 
+FrameSelecter={}
 
 function CreateWeaponFrame()
 	local texture={
@@ -56,11 +57,22 @@ function CreateWeaponFrame()
 		"Стреляет в указанную точку навесом [RMB]",
 		"Спускает на воду бочку [RMB]"
 	}
+--[[
+	local new_Frame = BlzCreateFrameByType("SPRITE", "justAName", frame_owner, "WarCraftIIILogo", 0)
+	BlzFrameSetPoint(new_Frame, FRAMEPOINT_BOTTOMLEFT, frame_relative, FRAMEPOINT_BOTTOMLEFT, 0.02, 0.02)
+	BlzFrameSetSize(new_Frame, 1., 1.)
+	BlzFrameSetScale(new_Frame, 1.)
+	BlzFrameSetModel(new_Frame, "selecter1.mdx", 0)
+]]
+
+
+
+	--NewButton()
 	local next=0.039
 	for i = 0, 5 do
-		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)--Create a new frame of Type BACKDROP
-		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0) --face is a BACKDROP it can not have events nor a tooltip, thats why one creates an empty frame managing that.
-		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)--Create the BoxedText Frame
+		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0)
+		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)
 		BlzFrameSetAllPoints(faceHover, face)
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)
@@ -70,6 +82,31 @@ function CreateWeaponFrame()
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
+		--if i==0 then
+			local buttonsprite = BlzCreateFrameByType("SPRITE", "justAName", face, "WarCraftIIILogo", 0)
+			BlzFrameSetPoint(buttonsprite, FRAMEPOINT_BOTTOMLEFT, face, FRAMEPOINT_BOTTOMLEFT, 0.02, 0.02)
+			BlzFrameSetSize(buttonsprite, 1., 1.)
+			BlzFrameSetScale(buttonsprite, 1.)
+			BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
+			FrameSelecter[i+1]=buttonsprite
+		if i>= 1 then
+			BlzFrameSetVisible(buttonsprite,false)
+		end
+--[[
+			local new_Frame = BlzCreateFrame('ScriptDialogButton', face, 0, 0)
+			local new_FrameImage = BlzCreateFrameByType("BACKDROP", "ButtonIcon", new_Frame, "", 0)
+			local new_FrameCharges = BlzCreateFrameByType("BACKDROP", "ButtonCharges", new_Frame, "", 0)
+			local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", new_FrameCharges, "", 0)
+			BlzFrameSetPoint(new_FrameCharges, FRAMEPOINT_BOTTOMRIGHT, new_FrameImage, FRAMEPOINT_BOTTOMRIGHT, -0.002, 0.002-next)
+			BlzFrameSetSize(new_FrameCharges, 0.012, 0.012)
+			BlzFrameSetTexture(new_FrameCharges, "ChargesTexture.blp", 0, true)
+			BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, new_FrameCharges, FRAMEPOINT_CENTER, 0.,0.)
+			BlzFrameSetVisible(new_FrameCharges, false)
+			BlzFrameSetText(new_FrameChargesText, "0")
+]]
+
+		--end
+
 		local t = CreateTrigger()
 		BlzTriggerRegisterFrameEvent(t, tooltip, FRAMEEVENT_CONTROL_CLICK)
 		BlzTriggerRegisterFrameEvent(t, faceHover, FRAMEEVENT_CONTROL_CLICK)
@@ -77,45 +114,58 @@ function CreateWeaponFrame()
 		TriggerAddAction(t,function()
 			print("click "..i) -- вот тут не работает
 		end)
-
 	end
-
 end
---[[ --работает
-TimerStart(CreateTimer(),0,false, function()
-	print("Start")
-	BlzLoadTOCFile("war3mapImported\\MySimpleButton.toc")
-	BlzLoadTOCFile("war3mapImported\\MyStatusBar.toc")
-	local trigger = CreateTrigger()
-	TriggerAddAction(trigger, function()
-		print("Button Click")
-		-- SimpleButton does not keep the focus.
-	end)
-	local prevButton = nil
 
-	local customInfo = BlzCreateSimpleFrame("SimpleInfoPanelIconDamage", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 18)
-	BlzFrameSetAbsPoint(customInfo, FRAMEPOINT_CENTER, 0.2, 0.2)
-	BlzFrameSetSize(customInfo, 0.1, 0.1)
-
-	local button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
-	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.9, 0.3)
-	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroPaladin", 0, true)
-	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
-
-	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
-	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, 0.4, 0.3)
-	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroMountainKing", 0, true)
-	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
-	BlzFrameSetEnable(BlzGetFrameByName("MySimpleButtonTexture", 0), false)
-	prevButton = button
-
-	button = BlzCreateSimpleFrame("MySimpleButton", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0)
-	BlzFrameSetAbsPoint(button, FRAMEPOINT_CENTER, -0.1, 0.5)
-	BlzFrameSetTexture(BlzGetFrameByName("MySimpleButtonTexture", 0), "ReplaceableTextures\\CommandButtons\\BTNHeroArchMage", 0, true)
-	BlzTriggerRegisterFrameEvent(trigger, button, FRAMEEVENT_CONTROL_CLICK)
+function SwitchWeaponVisual(pid,index)
+	if GetLocalPlayer()==Player(pid) then
+		for i=1, #FrameSelecter do
+			BlzFrameSetVisible(FrameSelecter[i],false)
+		end
+		BlzFrameSetVisible(FrameSelecter[index],true)
+	end
+end
 
 
-	BlzFrameSetTooltip(button, customInfo)
 
-	print("Done")
-end)]]
+ButtonList={}
+function NewButton(button_type, texture, size_x, size_y, relative_frame, frame_point_from, frame_point_to, offset_x, offset_y, parent_frame)
+	local new_Frame = BlzCreateFrame('ScriptDialogButton', parent_frame, 0, 0)
+	local new_FrameImage = BlzCreateFrameByType("BACKDROP", "ButtonIcon", new_Frame, "", 0)
+	local new_FrameCharges = BlzCreateFrameByType("BACKDROP", "ButtonCharges", new_Frame, "", 0)
+	local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", new_FrameCharges, "", 0)
+
+
+	ButtonList[GetHandleId(new_Frame)] = {
+		button_type = button_type,
+		item = nil,
+		button = new_Frame,
+		image = new_FrameImage,
+		original_texture = texture,
+		charges_frame = new_FrameCharges,
+		charges_text_frame = new_FrameChargesText,
+		sprite = nil
+	}
+
+	--FrameRegisterNoFocus(new_Frame)
+	--FrameRegisterClick(new_Frame, texture)
+
+	--BlzTriggerRegisterFrameEvent(ClickTrigger, new_Frame, FRAMEEVENT_CONTROL_CLICK)
+	--BlzTriggerRegisterFrameEvent(EnterTrigger, new_Frame, FRAMEEVENT_MOUSE_ENTER)
+	--BlzTriggerRegisterFrameEvent(LeaveTrigger, new_Frame, FRAMEEVENT_MOUSE_LEAVE)
+
+
+	BlzFrameSetPoint(new_FrameCharges, FRAMEPOINT_BOTTOMRIGHT, new_FrameImage, FRAMEPOINT_BOTTOMRIGHT, -0.002, 0.002)
+	BlzFrameSetSize(new_FrameCharges, 0.012, 0.012)
+	BlzFrameSetTexture(new_FrameCharges, "ChargesTexture.blp", 0, true)
+	BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, new_FrameCharges, FRAMEPOINT_CENTER, 0.,0.)
+	BlzFrameSetVisible(new_FrameCharges, false)
+	BlzFrameSetText(new_FrameChargesText, "0")
+
+	BlzFrameSetPoint(new_Frame, frame_point_from, relative_frame, frame_point_to, offset_x, offset_y)
+	BlzFrameSetSize(new_Frame, size_x, size_y)
+	BlzFrameSetTexture(new_FrameImage, texture, 0, true)
+	BlzFrameSetAllPoints(new_FrameImage, new_Frame)
+
+	return new_Frame
+end

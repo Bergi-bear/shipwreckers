@@ -13,6 +13,7 @@ do
 		InitGameCore()
 		hideEverything()
 		InitMouseMoveTrigger()
+		InitDamage()
 	end
 
 end
@@ -29,12 +30,13 @@ function InitGameCore()
 		Acceleration=0,
 		ReleaseLMB=false,
 		ReleaseRMB=false,
-		SpeedBase=14,
+		SpeedBase=15/3,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
 		CurrentSpeed=0,
 		WeaponIndex=1,
 		AngleForce=0, --типа какой-то уго для отталкивания
 		IsDisabled=false
+		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	BlzLoadTOCFile("Main.toc")
 	BlzLoadTOCFile("MySimpleButton.toc")
@@ -42,7 +44,6 @@ function InitGameCore()
 	local HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
 	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_TOPRIGHT, 0.8, 0.57)
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
-
 	--CreateWeaponFrame()
 	CreateWeaponFrame()
 
@@ -59,7 +60,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=1
-		--print("press1")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_2
 	local TrigWeaponSwitch2 = CreateTrigger()
@@ -71,7 +72,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=2
-		--print("press2")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_3
 	local TrigWeaponSwitch3 = CreateTrigger()
@@ -83,7 +84,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=3
-		--print("press3")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_4
 	local TrigWeaponSwitch4 = CreateTrigger()
@@ -95,7 +96,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=4
-		--print("press1")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_5
 	local TrigWeaponSwitch5 = CreateTrigger()
@@ -107,7 +108,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=5
-		--print("press1")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_6
 	local TrigWeaponSwitch6 = CreateTrigger()
@@ -119,7 +120,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.WeaponIndex=6
-		--print("press1")
+		SwitchWeaponVisual(pid,data.WeaponIndex)
 	end)
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
@@ -142,6 +143,27 @@ function InitGameCore()
 		local data=HERO[pid]
 		data.ReleaseW=false
 	end)
+	-----------------------------------------------------------------OSKEY_S
+	local gg_trg_EventUpS = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(gg_trg_EventUpS,Player(i),OSKEY_S,0,true)
+	end
+	TriggerAddAction(gg_trg_EventUpS, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.ReleaseS=true
+	end)
+	local TrigDepressS = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigDepressS,Player(i),OSKEY_S,0,false)
+	end
+	TriggerAddAction(TrigDepressS, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.ReleaseS=false
+	end)
 	-----------------------------------------------------------------OSKEY_D
 	local TrigPressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -153,6 +175,7 @@ function InitGameCore()
 		local data=HERO[pid]
 		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
 		data.ReleaseD=true
+		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
 	end)
 	local TrigDePressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -174,6 +197,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.ReleaseA=true
+		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
 	end)
 	local TrigDePressA = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -187,7 +211,10 @@ function InitGameCore()
 	end)
 	-----------------------------------------------------------------LMB
 	local TrigPressLMB=CreateTrigger()
-	TriggerRegisterPlayerEvent(TrigPressLMB, Player(0), EVENT_PLAYER_MOUSE_DOWN)
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		TriggerRegisterPlayerEvent(TrigPressLMB, Player(i), EVENT_PLAYER_MOUSE_DOWN)
+	end
 	TriggerAddAction(TrigPressLMB, function()
 		--print("any")
 		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_LEFT then
@@ -204,7 +231,11 @@ function InitGameCore()
 		end
 	end)
 	local TrigDePressLMB=CreateTrigger()
-	TriggerRegisterPlayerEvent(TrigDePressLMB, Player(0), EVENT_PLAYER_MOUSE_UP)
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		TriggerRegisterPlayerEvent(TrigDePressLMB, Player(i), EVENT_PLAYER_MOUSE_UP)
+	end
+
 	TriggerAddAction(TrigDePressLMB, function()
 		--print("any")
 		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_LEFT then
@@ -215,7 +246,10 @@ function InitGameCore()
 	end)
 	-----------------------------------------------------------------RMB
 	local TrigPressRMB=CreateTrigger()
-	TriggerRegisterPlayerEvent(TrigPressRMB, Player(0), EVENT_PLAYER_MOUSE_DOWN)
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		TriggerRegisterPlayerEvent(TrigPressRMB, Player(i), EVENT_PLAYER_MOUSE_DOWN)
+	end
 	TriggerAddAction(TrigPressRMB, function()
 		--print("any")
 		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_RIGHT then
@@ -229,17 +263,22 @@ function InitGameCore()
 			if data.WeaponIndex==2 then
 				BoardCannon(hero,-90,GetRandomInt(5,5))
 			end
-			if data.WeaponIndex==4 then
-				CreateFire(hero,-90)
-			end
 			if data.WeaponIndex==3 then
 				UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
 			end
-
+			if data.WeaponIndex==4 then
+				CreateFire(hero,-90)
+			end
+			if data.WeaponIndex==6 then
+				CreateBarrel(hero)
+			end
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()
-	TriggerRegisterPlayerEvent(TrigDePressRMB, Player(0), EVENT_PLAYER_MOUSE_UP)
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		TriggerRegisterPlayerEvent(TrigDePressRMB, Player(i), EVENT_PLAYER_MOUSE_UP)
+	end
 	TriggerAddAction(TrigDePressRMB, function()
 		--print("any")
 		if BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_RIGHT then
@@ -260,19 +299,30 @@ function InitGameCore()
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
+			local p=GetOwningPlayer(hero)
 			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
-			--SetCameraPositionForPlayer(GetOwningPlayer(hero),camerax,cameray)
-			PanCameraToTimedForPlayer(GetOwningPlayer(hero),camerax,cameray,1)
+			CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 1)
+			CameraSetupApply(gg_cam_CameraHATE, true, true)
+
+
+			--local camera=data.Camera
+			--SetCameraPositionForPlayer(p,GetUnitX(hero),GetUnitY(hero))--багается пробелом но не дёргается
+			--SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
+			--DestroyEffect(AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",camerax,cameray))
+			--PanCameraToTimedForPlayer(p,GetUnitX(camera),GetUnitY(camera),1)-- супер стойкая к чем угодно, но дёргается
+			--SetCameraTargetControllerNoZForPlayer(p,hero,.0,.0,true) -- не дергается
+			--SetCameraFieldForPlayer(p,CAMERA_FIELD_ROTATION,         90.,.0)
+			--if GetUnitCurrentOrder(camera)~=String2OrderIdBJ("move") then
+				--IssuePointOrder(camera,"move",GetUnitX(hero),GetUnitY(hero))
+			--	IssuePointOrder(camera,"move",camerax,cameray)
+			--end
+
+
 			UnitCheckPathingInRound(hero,90)
-
 			if data.ReleaseLMB then
-			--if data.WeaponIndex==
-				--data.ReleaseA=false
-				--data.ReleaseD=false
-				--data.ReleaseW=false
-				--print("Error LMB")
-			end
 
+			end
+			----------------------------------------------------W
 			if data.ReleaseW then
 				if data.Acceleration<=data.SpeedBase then
 					data.Acceleration=data.Acceleration+1
@@ -282,6 +332,17 @@ function InitGameCore()
 					data.Acceleration=data.Acceleration-1
 				end
 			end
+			----------------------------------------------------S
+			if data.ReleaseS then
+				--[[if data.Acceleration<=-1*(data.SpeedBase*2) then
+					data.Acceleration=data.Acceleration-2
+				end
+			else
+				if data.Acceleration<0 then
+					data.Acceleration=data.Acceleration+1
+				end]]
+			end
+
 			if data.ReleaseD then
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-5)
 				--SetUnitFacing(hero,GetUnitFacing(hero)-10)
@@ -307,113 +368,22 @@ function InitGameCore()
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
 				--print("z="..z)
-				if z3<=-80 and z2<=-80 and PointContentUnit(newX2,newY2,100)==false then
+				if z3<=-80 and z2<=-80 and PointContentUnit(newX2,newY2,100)==false and PointContentDestructable(newX2,newY2,100)==false then
 					--print("проходима")
 					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
-					SetUnitX(hero,newX)
-					SetUnitY(hero,newY)
+					--SetUnitX(hero,newX)
+					--SetUnitY(hero,newY)
+					SetUnitPositionSmooth(hero,newX,newY)
 				else
 					--print("не проходима")
 					--BlzSetUnitFacingEx(hero,angle-15)
 					IssueImmediateOrder(hero,"stop")
 					--angle=angle-180
 				end
-
-
 			end
 		end
 	end)
 end
 
-function UnitCheckPathingInRound(hero,range)
-	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
-	local x,y=GetUnitX(hero),GetUnitY(hero)
-	local nx,ny=nil,nil
-	local a=10
-	local z=nil
-	local k=0
-	local total=0
-	local med=0
-	local min=350
-	local max=0
-	local current=0
-	local dif=0
-	for i=0,35 do
-		nx=MoveX(x,range,a*i)
-		ny=MoveY(y,range,a*i)
-		z=GetTerrainZ(nx,ny)
-		if z>-80 then--or PointContentUnit(nx,ny,60) then
-			k=k+1
-			total=total+a*i
-			current=a*i
-			if current>=max then max=current end
-			if current<=min then min=current end
-			--print("a="..a*i)
-			DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
-		end
-	end
-	if k>0 then
-		dif=max-min
-		if dif>=90 then
-			--print("dif="..dif.."при минимуме="..min)
-			for i=min,0,-10 do
-				total=total+360
-			end
-		end
-
-		med=total/k
-
-		--print("Средний угол"..med)
-		--local newmed=AngleDifferenceDeg(min,max)
-		if data.IsDisabled==false then
-			--print("Число точек "..k)
-			--print("med="..med)--.." newmed="..newmed)
-			--print ("min="..min.." max="..max)
-			--print("Угол юнита"..GetUnitFacing(hero))
-			if k>=7 then
-				--print("selfdamage")
-				UnitDamageTarget( hero, hero, 10*(k-7), true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
-			end
-			data.IsDisabled=true
-			if dif>=90 then med=med-180 end
-			UnitAddForce(hero,med-180,5,80)
-		end
-	end
-
-
-
-end
-function UnitAddForce(hero,angle,speed,distance)
-	local currentdistance=0
-	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
-	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
-		currentdistance=currentdistance+speed
-		local x,y=GetUnitX(hero),GetUnitY(hero)
-		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
-		SetUnitX(hero,newX)
-		SetUnitY(hero,newY)
-		if currentdistance>=distance then
-			data.IsDisabled=false
-			DestroyTimer(GetExpiredTimer())
-			--print("stop")
-		end
-	end)
-end
-
-function PointContentUnit(x,y,range)
-	local content=false
-	local e--временный юнит
-	GroupEnumUnitsInRange(perebor,x,y,range,nil)
-	while true do
-		e = FirstOfGroup(perebor)
-		if e == nil then break end
-		if UnitAlive(e)  then
-			--UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
-			content=true
-		end
-		GroupRemoveUnit(perebor,e)
-	end
-	return content
-end
 
 

@@ -3,13 +3,14 @@
 --- Created by Bergi.
 --- DateTime: 08.02.2020 21:25
 ---
+DummyID=FourCC('e000')
 function CastArea(caster,id,x,y,range, xPoz,yPoz)
 	local dx,dy=x,y
 	if xPoz~=nil then
 		print("позиция")
 		dx,dy=xPoz,yPoz
 	end
-	local dummy=CreateUnit(GetOwningPlayer(caster), FourCC('e000'), dx, dy, 0)--
+	local dummy=CreateUnit(GetOwningPlayer(caster), DummyID, dx, dy, 0)--
 	if UnitAddAbility(dummy,id) then
 	else
 		print("ошибка добавления способности")

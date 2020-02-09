@@ -11,6 +11,7 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
 	local CollisionEnemy=false
+	local CollisisonDestr=false
 	--print("Скорость корабля"..data.CurrentSpeed)
 	BlzSetSpecialEffectScale(bam,0.1)
 	BlzSetSpecialEffectScale(cloud,0.02)
@@ -28,19 +29,17 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
 		CollisionEnemy=UnitDamageArea(hero,100,x,y,100)
-
-		if z<=-90 or zGround+z>=-70+z or CollisionEnemy then
+		CollisisonDestr=PointContentDestructable(x,y,100,false)
+		if z<=-90 or zGround+z>=-70+z or CollisionEnemy or CollisisonDestr then
 			if z<=-90 then
-				--BlzSetSpecialEffectAlpha(bullet,0)
+				PointContentDestructable(x,y,100,true)
 				DestroyEffect(bullet)
-				local torrent=AddSpecialEffect("Torrent1.mdl",x,y)
-				--BlzSetSpecialEffectScale(torrent,0.1)
-				BlzSetSpecialEffectMatrixScale(torrent,1,1,0.1)
-				DestroyEffect(torrent)
+				CreateTorrent(x,y)
 				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
 			else
 				DestroyEffect(bullet)
 				UnitDamageArea(hero,100,x,y,200)
+
 			end
 
 
@@ -124,3 +123,87 @@ function CreateFire(hero,board)
 	end)
 end
 
+function CreateBarrel(hero)
+	local x,y=GetUnitXY(hero)
+	local id=GetPlayerId(GetOwningPlayer(hero))
+	local barrel=AddSpecialEffect("Barrel_Unit.mdl",x,y)
+	local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
+	local dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])
+	if dist>=200 then dist=200 end
+	if dist<=100 then dist=100 end
+	BlzSetSpecialEffectYaw(barrel,math.rad(angle))
+	BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
+
+	JumpEffect(barrel,10,150,angle,dist,hero)
+end
+
+
+function JumpEffect(eff,speed, maxHeight,angle,distance,hero)
+	local i=0
+	local currentdistance=0
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+		local nx,ny=MoveXY(x,y,speed,angle)
+		local f=ParabolaZ(maxHeight,distance,i*speed)
+		local z=BlzGetLocalSpecialEffectZ(eff)
+		local zGround=GetTerrainZ(nx,ny)
+		BlzSetSpecialEffectPosition(eff,nx,ny,f)
+		i=i+1
+		if z<=zGround and i>5 then
+			BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
+			if CreateTorrent(nx,ny) then
+				WaveEffect(eff)
+				EffectAddExplodedTimer(eff,3,hero)
+			else
+				BlzSetSpecialEffectZ(eff,z+30)
+				ExplodeEffect(eff,3)
+				UnitDamageArea(hero,500,nx,ny,300)
+			end
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function EffectAddExplodedTimer(eff,time,hero)
+	local sec=time
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	TimerStart(CreateTimer(), 1, true, function()
+		if sec>0 then
+			FlyTextTagMissXY(x,y,sec,GetOwningPlayer(hero))
+		end
+		sec=sec-1
+		if sec<0 then
+			ExplodeEffect(eff,3)
+			UnitDamageArea(hero,500,x,y,300)
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+
+
+
+function WaveEffect(eff)
+	local i=0
+	local wave=50
+	local deep=BlzGetLocalSpecialEffectZ(eff)
+
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local f=SinBJ(i*wave)
+		BlzSetSpecialEffectZ(eff,f+deep)
+		i=i+0.3
+		if i>=wave then
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function ExplodeEffect(eff,size)
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	local explode=AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",x,y)
+	BlzSetSpecialEffectScale(explode,size)
+	DestroyEffect(explode)
+	CreateTorrent(x,y,size)
+	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
+	DestroyEffect(eff)
+end

@@ -42,6 +42,7 @@ function MoveY(y, distance, angle)
 	return y + distance * math.sin(angle * bj_DEGTORAD)
 end
 
+
 local GetTerrainZ_location = Location(0, 0)
 ---@param x real
 ---@param y real
@@ -163,4 +164,37 @@ end
 ---@return real
 function Perpendicular (xa, ya, xb, yb, xc, yc)
 	return math.sqrt((xa - xc) * (xa - xc) + (ya - yc) * (ya - yc)) * math.sin(math.atan(yc - ya, xc - xa) - math.atan(yb - ya, xb - xa))
+end
+
+--@Hate https://xgm.guru/p/wc3/241479
+---@param source unit
+---@param x real
+---@param y real
+function SetUnitPositionSmooth(source, x, y)
+	local last_x = GetUnitX(source)
+	local last_y = GetUnitY(source)
+	local bx
+	local by
+	SetUnitPosition(source, x, y)
+	if (RAbsBJ(GetUnitX(source) - x) > 0.5) or (RAbsBJ(GetUnitY(source) - y) > 0.5) then
+		SetUnitPosition(source, x, last_y)
+		bx = RAbsBJ(GetUnitX(source) - x) <= 0.5
+		SetUnitPosition(source, last_x, y)
+		by = RAbsBJ(GetUnitY(source) - y) <= 0.5
+		if bx then
+			SetUnitPosition(source, x, last_y)
+		elseif by then
+			SetUnitPosition(source, last_x, y)
+		else
+			SetUnitPosition(source, last_x, last_y)
+		end
+	end
+end
+
+function GetUnitXY(unit)
+	return GetUnitX(unit),GetUnitY(unit)
+end
+
+function MoveXY(x,y, distance, angle)
+	return x + distance * math.cos(angle * bj_DEGTORAD),y + distance * math.sin(angle * bj_DEGTORAD)
 end

@@ -80,3 +80,21 @@ STRING 15
 Миниракета
 }
 
+STRING 16
+// Units: e001 (Камера), Name (Name)
+{
+Камера
+}
+
+STRING 17
+// Units: e001 (Камера), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 18
+// Units: e001 (Камера), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
