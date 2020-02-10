@@ -98,3 +98,9 @@ STRING 18
 Это даммми юнит
 }
 
+STRING 19
+// Destructibles: B000 (Плита 90), Name (Name)
+{
+Плита 90
+}
+

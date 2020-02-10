@@ -30,7 +30,7 @@ function InitGameCore()
 		Acceleration=0,
 		ReleaseLMB=false,
 		ReleaseRMB=false,
-		SpeedBase=15/3,
+		SpeedBase=14,
 		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
 		CurrentSpeed=0,
 		WeaponIndex=1,
@@ -300,6 +300,7 @@ function InitGameCore()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
+			local turnrate=0
 			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
 			CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 1)
 			CameraSetupApply(gg_cam_CameraHATE, true, true)
@@ -318,7 +319,7 @@ function InitGameCore()
 			--end
 
 
-			UnitCheckPathingInRound(hero,90)
+			UnitCheckPathingInRound(hero,50)
 			if data.ReleaseLMB then
 
 			end
@@ -344,11 +345,17 @@ function InitGameCore()
 			end
 
 			if data.ReleaseD then
-				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-5)
+				--x = a and b or c
+				--local range            = GetPlayerAbilityPerkLevel(player, ability.codename, 1, 1) > 0 and 600 or 400
+
+				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
+
+				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-turnrate)
 				--SetUnitFacing(hero,GetUnitFacing(hero)-10)
 			end
 			if data.ReleaseA then
-				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+5)
+				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
+				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+turnrate)
 				--SetUnitFacing(hero,GetUnitFacing(hero)+10)
 			end
 
@@ -363,12 +370,12 @@ function InitGameCore()
 					--SetUnitZ(hero,-89.9)
 					--print("провалился в яму")
 				end
-				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
-				local newX2,newY2=MoveX(x,120,angle),MoveY(y,120,angle)
+				local newX3,newY3=MoveX(x,90,angle),MoveY(y,180,angle)
+				local newX2,newY2=MoveX(x,60,angle),MoveY(y,120,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
 				--print("z="..z)
-				if z3<=-80 and z2<=-80 and PointContentUnit(newX2,newY2,100)==false and PointContentDestructable(newX2,newY2,100)==false then
+				if z3<=-80 and z2<=-80  then --and PointContentUnit(newX2,newY2,100)==false and PointContentDestructable(newX2,newY2,100)==false then
 					--print("проходима")
 					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 					--SetUnitX(hero,newX)
