@@ -40,6 +40,7 @@ end
 
 perebor=CreateGroup()
 function UnitDamageArea(u,damage,x,y,range)
+	local OnlyCHK=false
 	local isdamage=false
 	local e--временный юнит
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
@@ -52,9 +53,10 @@ function UnitDamageArea(u,damage,x,y,range)
 		end
 		GroupRemoveUnit(perebor,e)
 	end
-	PointContentDestructable(x,y,range,true)
+	if PointContentDestructable(x,y,range,true) then	isdamage=true	end
 	return isdamage
 end
+
 
 function UnitDamageLine(u,damage,x,y,range,distance,angle)
 	local isdamage=false

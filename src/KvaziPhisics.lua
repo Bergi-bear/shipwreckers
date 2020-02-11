@@ -69,15 +69,16 @@ function UnitAddForce(hero,angle,speed,distance)
 	end)
 end
 
-function PointContentUnit(x,y,range)
+function PointContentUnit(x,y,range,condconten)
 	local content=false
 	local e--временный юнит
+	if condconten==nil then condconten=true end
 	if range==nil then range=80 end
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
 		if e == nil then break end
-		if UnitAlive(e)  then
+		if UnitAlive(e) and condconten  then
 			--UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			content=true
 		end

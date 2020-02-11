@@ -42,7 +42,7 @@ function InitGameCore()
 	BlzLoadTOCFile("MySimpleButton.toc")
 	BlzLoadTOCFile("BoxedText.toc")
 	local HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
-	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_TOPRIGHT, 0.8, 0.57)
+	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_BOTTOM, 0.4, 0.04)
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
 	--CreateWeaponFrame()
 	CreateWeaponFrame()
@@ -268,6 +268,9 @@ function InitGameCore()
 			end
 			if data.WeaponIndex==4 then
 				CreateFire(hero,-90)
+			end
+			if data.WeaponIndex==5 then
+				CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")
 			end
 			if data.WeaponIndex==6 then
 				CreateBarrel(hero)

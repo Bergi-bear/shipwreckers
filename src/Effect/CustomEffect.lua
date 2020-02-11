@@ -16,3 +16,46 @@ function CreateTorrent(x,y,size)
 	end
 	return IsWater
 end
+
+function WaveEffect(eff)
+	local i=0
+	local wave=50
+	local deep=BlzGetLocalSpecialEffectZ(eff)
+
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local f=SinBJ(i*wave)
+		BlzSetSpecialEffectZ(eff,f+deep)
+		i=i+0.3
+		if i>=wave then
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function ExplodeEffect(eff,size)
+	local onGround=false
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	local explode=AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",x,y)
+	BlzSetSpecialEffectScale(explode,size)
+	DestroyEffect(explode)
+	onGround=CreateTorrent(x,y,size)
+	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
+	DestroyEffect(eff)
+	return onGround
+end
+
+function EffectAddExplodedTimer(eff,time,hero)
+	local sec=time
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	TimerStart(CreateTimer(), 1, true, function()
+		if sec>0 then
+			FlyTextTagMissXY(x,y,sec,GetOwningPlayer(hero))
+		end
+		sec=sec-1
+		if sec<0 then
+			ExplodeEffect(eff,3)
+			UnitDamageArea(hero,500,x,y,300)
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end

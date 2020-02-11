@@ -20,7 +20,6 @@ function HealthBarAdd(u)
 	local righttext = BlzGetFrameByName("MyFakeBarRightText",0)
 	local function on_timer()
 		BlzFrameSetValue(bar, GetUnitLifePercent(u))
-
 		BlzFrameSetText(lefttext, R2I(GetWidgetLife(u)))
 		BlzFrameSetText(righttext, R2I(BlzGetUnitMaxHP(u)))
 	end
@@ -38,16 +37,22 @@ function CreateWeaponFrame()
 		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNClusterRockets.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNCannonTower.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp"
+		"ReplaceableTextures\\CommandButtons\\BTNFireRocks.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
 	}
-	local weaponName={
+	local weaponName= {
 		"[1] Носовое ордие",
 		"[2] Бортовые пушки",
 		"[3] Ракетница",
 		"[4] Огнемёт",
 		"[5] Вертикальный залп",
-		"[6] Бочка"
+		"[6] Бочка",
+		"[7] Молнии",
+		"[8] Пилы",
+		"[9] Нефтяное пятно"
 	}
 	local description={
 		"Одиночный выстрел [RMB]",
@@ -55,7 +60,10 @@ function CreateWeaponFrame()
 		"Самоновадящаяся ракета [RMB] на цель",
 		"Огнемёт из бортовых орудий. Удерживайте [RMB] [LMB] ",
 		"Стреляет в указанную точку навесом [RMB]",
-		"Спускает на воду бочку [RMB]"
+		"Спускает на воду бочку [RMB]",
+		"Бьёт молнией в указанную цель [RMB]",
+		"Урон касанием, перемещает пилу по корпусу [RMB]",
+		"Оставляет позади себя нефтяное пятно, можно поджечь [RMB]"
 	}
 --[[
 	local new_Frame = BlzCreateFrameByType("SPRITE", "justAName", frame_owner, "WarCraftIIILogo", 0)
@@ -69,7 +77,7 @@ function CreateWeaponFrame()
 
 	--NewButton()
 	local next=0.039
-	for i = 0, 5 do
+	for i = 0, 8 do
 		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0)
 		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)
@@ -77,8 +85,8 @@ function CreateWeaponFrame()
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)
 		BlzFrameSetSize(face, 0.04, 0.04)
-		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next*i, 0.6)
-		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next*i, 0.6-next)
+		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next*i, next)
+		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next*i, next*3)
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])

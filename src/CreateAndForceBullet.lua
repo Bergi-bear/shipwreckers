@@ -31,18 +31,14 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		CollisionEnemy=UnitDamageArea(hero,100,x,y,100)
 		CollisisonDestr=PointContentDestructable(x,y,100,false)
 		if z<=-90 or zGround+z>=-70+z or CollisionEnemy or CollisisonDestr then
+			PointContentDestructable(x,y,100,true)
 			if z<=-90 then
-				PointContentDestructable(x,y,100,true)
-				DestroyEffect(bullet)
 				CreateTorrent(x,y)
 				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
-			else
-				DestroyEffect(bullet)
-				UnitDamageArea(hero,100,x,y,200)
-
 			end
 
-
+			UnitDamageArea(hero,100,x,y,200)
+			DestroyEffect(bullet)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
@@ -133,14 +129,12 @@ function CreateBarrel(hero)
 	if dist<=100 then dist=100 end
 	BlzSetSpecialEffectYaw(barrel,math.rad(angle))
 	BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
-
-	JumpEffect(barrel,10,150,angle,dist,hero)
+	JumpEffect(barrel,dist/20,150,angle,dist,hero,1)
 end
 
 
-function JumpEffect(eff,speed, maxHeight,angle,distance,hero)
+function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
 	local i=0
-	local currentdistance=0
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
 		local nx,ny=MoveXY(x,y,speed,angle)
@@ -150,60 +144,57 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)
 		i=i+1
 		if z<=zGround and i>5 then
-			BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
-			if CreateTorrent(nx,ny) then
-				WaveEffect(eff)
-				EffectAddExplodedTimer(eff,3,hero)
-			else
-				BlzSetSpecialEffectZ(eff,z+30)
-				ExplodeEffect(eff,3)
-				UnitDamageArea(hero,500,nx,ny,300)
+			if flag==nil then -- без флага
+
+			end
+
+			if flag==1 then -- бочка со взрывчаткой и таймером
+				BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
+				if CreateTorrent(nx,ny) then
+					WaveEffect(eff)
+					EffectAddExplodedTimer(eff,3,hero)
+				else
+					--BlzSetSpecialEffectZ(eff,z+30)
+					ExplodeEffect(eff,3)
+					UnitDamageArea(hero,500,nx,ny,250)
+				end
+			elseif flag==2 then -- навесной разделяющийся
+				CreateTorrent(nx,ny)
+				if ExplodeEffect(eff,3)==false then-- взрыв не на воде
+					--print("разделяемся")
+					for i=1,7 do
+						local cluster=AddSpecialEffect("Abilities/Spells/Other/Volcano/VolcanoMissile.mdl",nx,ny)
+						BlzSetSpecialEffectZ(cluster,z)
+						BlzSetSpecialEffectScale(cluster,0.4)
+						JumpEffect(cluster,10,GetRandomInt(50,150),GetRandomInt(0,359),GetRandomInt(50,200),hero,3)
+					end
+				end
+				DestroyEffect(eff)
+				UnitDamageArea(hero,300,nx,ny,150)
+			elseif  flag==3 then-- осколки
+				CreateTorrent(nx,ny)
+				DestroyEffect(eff)
+				UnitDamageArea(hero,100,nx,ny,100)
 			end
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
 end
 
-function EffectAddExplodedTimer(eff,time,hero)
-	local sec=time
-	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
-	TimerStart(CreateTimer(), 1, true, function()
-		if sec>0 then
-			FlyTextTagMissXY(x,y,sec,GetOwningPlayer(hero))
-		end
-		sec=sec-1
-		if sec<0 then
-			ExplodeEffect(eff,3)
-			UnitDamageArea(hero,500,x,y,300)
-			DestroyTimer(GetExpiredTimer())
-		end
-	end)
-end
 
 
 
 
-function WaveEffect(eff)
-	local i=0
-	local wave=50
-	local deep=BlzGetLocalSpecialEffectZ(eff)
-
-	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
-		local f=SinBJ(i*wave)
-		BlzSetSpecialEffectZ(eff,f+deep)
-		i=i+0.3
-		if i>=wave then
-			DestroyTimer(GetExpiredTimer())
-		end
-	end)
-end
-
-function ExplodeEffect(eff,size)
-	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
-	local explode=AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",x,y)
-	BlzSetSpecialEffectScale(explode,size)
-	DestroyEffect(explode)
-	CreateTorrent(x,y,size)
-	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
-	DestroyEffect(eff)
+function CreateArtToss(hero,effectmodel)
+	local x,y=GetUnitXY(hero)
+	local id=GetPlayerId(GetOwningPlayer(hero))
+	local art=AddSpecialEffect(effectmodel,x,y)
+	local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
+	local dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])
+	if dist>=1200 then dist=1200 end
+	if dist<=200 then dist=200 end
+	local speed=dist/50
+	BlzSetSpecialEffectYaw(art,math.rad(angle))
+	---BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
+	JumpEffect(art,speed,700,angle,dist,hero,2)
 end
