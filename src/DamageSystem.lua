@@ -39,15 +39,17 @@ end
 
 
 perebor=CreateGroup()
-function UnitDamageArea(u,damage,x,y,range)
+function UnitDamageArea(u,damage,x,y,range,ZDamageSource)
 	local OnlyCHK=false
 	local isdamage=false
 	local e--временный юнит
+	if ZDamageSource==nil then ZDamageSource=GetUnitZ(u)+60 end
+	--print("Поиск целей в на высоте "..ZDamageSource)
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
 		if e == nil then break end
-		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(u)) then
+		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(u))  and IsUnitZCollision(e,ZDamageSource) then
 			UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			isdamage=true
 		end
@@ -55,6 +57,16 @@ function UnitDamageArea(u,damage,x,y,range)
 	end
 	if PointContentDestructable(x,y,range,true) then	isdamage=true	end
 	return isdamage
+end
+
+function IsUnitZCollision(hero,ZDamageSource)
+	local zcollision=false
+	local z=GetUnitZ(hero)
+	--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
+	if  ZDamageSource+60>=z and ZDamageSource-60<=z then
+		zcollision=true
+	end
+	return zcollision
 end
 
 

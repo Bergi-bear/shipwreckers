@@ -98,9 +98,45 @@ STRING 18
 Это даммми юнит
 }
 
-STRING 19
-// Destructibles: B000 (Плита 90), Name (Name)
+STRING 22
+// Destructibles: B002 (Металлический блокиратор), Name (Name)
 {
-Плита 90
+Металлический блокиратор
+}
+
+STRING 23
+// Destructibles: B003 (Деревянный блокиратор), Name (Name)
+{
+Деревянный блокиратор
+}
+
+STRING 24
+// Doodads: D001 (Водное растение), Name (Name)
+{
+Водное растение
+}
+
+STRING 25
+// Destructibles: B005 (Бессмертный блокиратор), Name (Name)
+{
+Бессмертный блокиратор
+}
+
+STRING 26
+// Destructibles: B006 (Лазерные ворота), Name (Name)
+{
+Лазерные ворота
+}
+
+STRING 27
+// Destructibles: B000 (Нажимная кнопка 90%), Name (Name)
+{
+Нажимная кнопка 90%
+}
+
+STRING 28
+// Doodads: D000 (Водоворот), Name (Name)
+{
+Водоворот
 }
 

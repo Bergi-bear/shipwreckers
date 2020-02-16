@@ -5,7 +5,7 @@
 ---
 function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
-	local zhero=GetTerrainZ(xhero,yhero)+60
+	local zhero=GetUnitZ(hero)+60
 	local bullet=AddSpecialEffect(effectmodel,xs,ys)
 	local bam=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
@@ -26,9 +26,10 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
 		local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
+		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
 		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
-		CollisionEnemy=UnitDamageArea(hero,100,x,y,100)
+		CollisionEnemy=UnitDamageArea(hero,100,x,y,100,ZBullet)
 		CollisisonDestr=PointContentDestructable(x,y,100,false)
 		if z<=-90 or zGround+z>=-70+z or CollisionEnemy or CollisisonDestr then
 			PointContentDestructable(x,y,100,true)
@@ -36,8 +37,8 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 				CreateTorrent(x,y)
 				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
 			end
-
-			UnitDamageArea(hero,100,x,y,200)
+			--print("Условие урона прошло")
+			UnitDamageArea(hero,100,x,y,200,ZBullet)
 			DestroyEffect(bullet)
 			DestroyTimer(GetExpiredTimer())
 		end
@@ -91,6 +92,7 @@ function CreateFire(hero,board)
 	local angle=facing+board
 	local x=MoveX(GetUnitX(hero),60,angle)
 	local y=MoveY(GetUnitY(hero),60,angle)
+
 	local fire=AddSpecialEffect("FireGun.mdl",x,y)
 	local inverse=1
 	if board==90 then inverse=-1 end
@@ -99,7 +101,9 @@ function CreateFire(hero,board)
 		--local xf,yf,zf=BlzGetLocalSpecialEffectX(fire),BlzGetLocalSpecialEffectY(fire),BlzGetLocalSpecialEffectZ(fire)
 		local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
 		local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
-		BlzSetSpecialEffectPosition(fire,nx,ny,-140)
+		local z=GetUnitZ(hero)
+		BlzSetSpecialEffectPosition(fire,nx,ny,z-140+89)
+		--print("z Огня="..BlzGetLocalSpecialEffectZ(fire))
 		UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)-board)
 		if board==-90 then
 			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5+90))
@@ -129,16 +133,18 @@ function CreateBarrel(hero)
 	if dist<=100 then dist=100 end
 	BlzSetSpecialEffectYaw(barrel,math.rad(angle))
 	BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
+	BlzSetSpecialEffectZ(barrel,GetUnitZ(hero))
 	JumpEffect(barrel,dist/20,150,angle,dist,hero,1)
 end
 
 
 function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
 	local i=0
+	local zs=GetUnitZ(hero)
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
 		local nx,ny=MoveXY(x,y,speed,angle)
-		local f=ParabolaZ(maxHeight,distance,i*speed)
+		local f=ParabolaZ(maxHeight,distance,i*speed)+zs
 		local z=BlzGetLocalSpecialEffectZ(eff)
 		local zGround=GetTerrainZ(nx,ny)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)

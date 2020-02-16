@@ -16,12 +16,16 @@ function UnitCheckPathingInRound(hero,range)
 	local max=0
 	local current=0
 	local dif=0
+	local perepad=0
 	if data.IsDisabled==false then
 		for i=0,35 do
 			nx=MoveX(x,range,a*i)
 			ny=MoveY(y,range,a*i)
 			z=GetTerrainZ(nx,ny)
-			if z>-80 then--or PointContentUnit(nx,ny,60) then
+			perepad=GetUnitZ(hero)-GetTerrainZ(x,y)
+			--print("perepad="..perepad)
+			--if perepad<=2 then
+			if z>-80 and data.OnTorrent==false then
 				k=k+1
 				total=total+a*i
 				current=a*i
@@ -98,7 +102,11 @@ function PointContentDestructable (x,y,range,iskill)
 		if GetDestructableLife(d)>0 then
 			content=true
 			if iskill then
-				KillDestructable(d)
+				SetDestructableLife(d,GetDestructableLife(d)-1)
+				if GetDestructableLife(d)>=1 then
+					SetDestructableAnimation(d,"Stand Hit")
+				end
+				--KillDestructable(d)
 			end
 		end
 	end)

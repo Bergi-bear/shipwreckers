@@ -13,9 +13,68 @@ function CreateTorrent(x,y,size)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
+		if size>=3 then
+			UnitFlyTorrentInRange(x,y,size*50)
+		end
 	end
 	return IsWater
 end
+
+function UnitFlyTorrentInRange(x,y,range)
+	local e--временный юнит
+	GroupEnumUnitsInRange(perebor,x,y,range,nil)
+	while true do
+		e = FirstOfGroup(perebor)
+		if e == nil then break end
+		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
+			FlyUnitOnTorrent(e,500)
+			UnitAddAbility(e,FourCC('Aeth'))
+			if IsUnitType(e,UNIT_TYPE_HERO) then
+				local data=HERO[UnitGetPid(e)]
+				data.OnTorrent=true
+			end
+		end
+		GroupRemoveUnit(perebor,e)
+	end
+end
+
+function UnitGetPid(hero)
+	return GetPlayerId(GetOwningPlayer(hero))
+end
+
+
+function FlyUnitOnTorrent(hero,MaxHeight)
+	local i=0
+	local speed=10
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local x,y=GetUnitXY(hero)
+		---local nx,ny=MoveXY(x,y,speed,angle)
+		local f=ParabolaZ(MaxHeight, MaxHeight,i*speed)
+		local z=GetUnitZ(hero)
+		local zGround=GetTerrainZ(x,y)
+		SetUnitZ(hero,f)
+		--print("z="..z)
+		--print("zGround="..zGround)
+		i=i+1
+		if  i>5 and z<=zGround+1 then--z<=-89 and
+			UnitRemoveAbility(hero,FourCC('Aeth'))
+			if IsUnitType(hero,UNIT_TYPE_HERO) then
+				local data=HERO[UnitGetPid(hero)]
+				data.OnTorrent=false
+				--print("false")
+			end
+			--print("end")
+			DestroyTimer(GetExpiredTimer())
+			CreateTorrent(x,y)
+		end
+		if i>=100 then
+			DestroyTimer(GetExpiredTimer())
+			print("ERROR")
+		end
+	end)
+end
+
+
 
 function WaveEffect(eff)
 	local i=0

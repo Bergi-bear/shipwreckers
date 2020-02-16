@@ -14,6 +14,8 @@ do
 		hideEverything()
 		InitMouseMoveTrigger()
 		InitDamage()
+		InitUnitDeath()
+		InitZone0()
 	end
 
 end
@@ -35,7 +37,8 @@ function InitGameCore()
 		CurrentSpeed=0,
 		WeaponIndex=1,
 		AngleForce=0, --типа какой-то уго для отталкивания
-		IsDisabled=false
+		IsDisabled=false,
+		OnTorrent=false
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	BlzLoadTOCFile("Main.toc")
@@ -296,7 +299,7 @@ function InitGameCore()
 		local data=HERO[0]
 		local hero=data.UnitHero
 		ForceUIKeyBJ(GetOwningPlayer(hero),"M")
-		IssueImmediateOrder(hero,"stop")
+		--IssueImmediateOrder(hero,"stop")
 	end)
 
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
@@ -304,25 +307,23 @@ function InitGameCore()
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
 			local turnrate=0
-			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
-			CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 1)
-			CameraSetupApply(gg_cam_CameraHATE, true, true)
-
-
+			--local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
+			--CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 0) -- пробовал 2
+			--BlzCameraSetupApplyForceDurationSmooth(gg_cam_CameraHATE, true, 0.3, 0.03, 1, 1)
 			--local camera=data.Camera
-			--SetCameraPositionForPlayer(p,GetUnitX(hero),GetUnitY(hero))--багается пробелом но не дёргается
-			--SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
+			--SetCameraPositionForPlayer(p, camerax,cameray)--багается пробелом но не дёргается
+			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			--DestroyEffect(AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",camerax,cameray))
 			--PanCameraToTimedForPlayer(p,GetUnitX(camera),GetUnitY(camera),1)-- супер стойкая к чем угодно, но дёргается
-			--SetCameraTargetControllerNoZForPlayer(p,hero,.0,.0,true) -- не дергается
+			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
 			--SetCameraFieldForPlayer(p,CAMERA_FIELD_ROTATION,         90.,.0)
 			--if GetUnitCurrentOrder(camera)~=String2OrderIdBJ("move") then
 				--IssuePointOrder(camera,"move",GetUnitX(hero),GetUnitY(hero))
 			--	IssuePointOrder(camera,"move",camerax,cameray)
 			--end
 
-
 			UnitCheckPathingInRound(hero,50)
+
 			if data.ReleaseLMB then
 
 			end
@@ -338,28 +339,15 @@ function InitGameCore()
 			end
 			----------------------------------------------------S
 			if data.ReleaseS then
-				--[[if data.Acceleration<=-1*(data.SpeedBase*2) then
-					data.Acceleration=data.Acceleration-2
-				end
-			else
-				if data.Acceleration<0 then
-					data.Acceleration=data.Acceleration+1
-				end]]
 			end
 
 			if data.ReleaseD then
-				--x = a and b or c
-				--local range            = GetPlayerAbilityPerkLevel(player, ability.codename, 1, 1) > 0 and 600 or 400
-
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
-
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-turnrate)
-				--SetUnitFacing(hero,GetUnitFacing(hero)-10)
 			end
 			if data.ReleaseA then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+turnrate)
-				--SetUnitFacing(hero,GetUnitFacing(hero)+10)
 			end
 
 			data.CurrentSpeed=data.Acceleration
@@ -368,27 +356,25 @@ function InitGameCore()
 				local x,y=GetUnitX(hero),GetUnitY(hero)
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
-				local zhero=GetTerrainZ(x,y)
-				if zhero<=-90 then
-					--SetUnitZ(hero,-89.9)
-					--print("провалился в яму")
-				end
+				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
 				local newX3,newY3=MoveX(x,90,angle),MoveY(y,180,angle)
 				local newX2,newY2=MoveX(x,60,angle),MoveY(y,120,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
-				--print("z="..z)
-				if z3<=-80 and z2<=-80  then --and PointContentUnit(newX2,newY2,100)==false and PointContentDestructable(newX2,newY2,100)==false then
-					--print("проходима")
-					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
-					--SetUnitX(hero,newX)
-					--SetUnitY(hero,newY)
+				local Perepad=zhero-z2
+				--print("Perepad="..Perepad)
+				--if z3<=-80 and z2<=-80  then
+				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+
+				if Perepad<1  then
+
 					SetUnitPositionSmooth(hero,newX,newY)
 				else
-					--print("не проходима")
-					--BlzSetUnitFacingEx(hero,angle-15)
-					IssueImmediateOrder(hero,"stop")
-					--angle=angle-180
+					--print("Высоко, надо пройти")
+					if Perepad>50 then
+						SetUnitX(hero,newX)
+						SetUnitY(hero,newY)
+					end
 				end
 			end
 		end

@@ -1,17 +1,25 @@
+gg_rct_Zone0 = nil
+gg_rct_ZoneLaserGate0 = nil
+gg_rct_SingleTorrentZone = nil
 gg_cam_CameraHATE = nil
+gg_trg_Button0IsDead = nil
+gg_trg_Button12IsDead = nil
+gg_trg_ResLeft = nil
+gg_trg_ResRight = nil
 gg_trg_EVENTLMB = nil
+gg_dest_B000_0118 = nil
+gg_dest_B000_0275 = nil
+gg_dest_B000_0273 = nil
 function InitGlobals()
 end
 
-function CreateBuildingsForPlayer1()
-    local p = Player(1)
-    local u
-    local unitID
+function CreateAllDestructables()
+    local d
     local t
     local life
-    u = BlzCreateUnitWithSkin(p, FourCC("hctw"), -576.0, -1984.0, 270.000, FourCC("hctw"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hctw"), -576.0, -2240.0, 270.000, FourCC("hctw"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hctw"), -576.0, -2496.0, 270.000, FourCC("hctw"))
+    gg_dest_B000_0275 = BlzCreateDestructableWithSkin(FourCC("B000"), -1472.0, 0.0, 354.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0273 = BlzCreateDestructableWithSkin(FourCC("B000"), -3264.0, 128.0, 174.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0118 = BlzCreateDestructableWithSkin(FourCC("B000"), -2432.0, -1600.0, 84.000, 1.000, 0, FourCC("B000"))
 end
 
 function CreateUnitsForPlayer1()
@@ -20,25 +28,18 @@ function CreateUnitsForPlayer1()
     local unitID
     local t
     local life
-    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2113.6, 550.3, 282.951, FourCC("hbot"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -634.0, -486.3, 28.291, FourCC("hbot"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hdes"), -1358.5, 911.2, 156.461, FourCC("hdes"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hbsh"), -2519.1, -3109.2, 330.863, FourCC("hbsh"))
+    u = BlzCreateUnitWithSkin(p, FourCC("u000"), -416.1, 1011.5, 88.350, FourCC("u000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2984.9, 101.9, 2.767, FourCC("hbot"))
+    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1729.2, 69.6, 171.573, FourCC("hbot"))
+    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1727.6, 1412.6, 41.530, FourCC("hbot"))
     u = BlzCreateUnitWithSkin(p, FourCC("obot"), 2437.4, -702.0, 95.342, FourCC("obot"))
     u = BlzCreateUnitWithSkin(p, FourCC("odes"), 2799.2, -659.6, 205.330, FourCC("odes"))
     u = BlzCreateUnitWithSkin(p, FourCC("ojgn"), 2108.0, 341.7, 120.930, FourCC("ojgn"))
-    u = BlzCreateUnitWithSkin(p, FourCC("ubot"), 199.2, 650.3, 359.286, FourCC("ubot"))
-    u = BlzCreateUnitWithSkin(p, FourCC("udes"), 563.7, 656.3, 255.956, FourCC("udes"))
-    u = BlzCreateUnitWithSkin(p, FourCC("uubs"), 920.0, 689.8, 261.461, FourCC("uubs"))
-    u = BlzCreateUnitWithSkin(p, FourCC("etrs"), -880.9, -3344.8, 298.244, FourCC("etrs"))
-    u = BlzCreateUnitWithSkin(p, FourCC("edes"), -1280.9, -3425.7, 166.876, FourCC("edes"))
-    u = BlzCreateUnitWithSkin(p, FourCC("ebsh"), -309.3, -3382.5, 271.667, FourCC("ebsh"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hdes"), -3008.0, 1281.3, 274.623, FourCC("hdes"))
-    u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2161.6, -2451.4, 28.291, FourCC("hbot"))
+    u = BlzCreateUnitWithSkin(p, FourCC("u000"), -904.8, 194.8, 87.811, FourCC("u000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("u000"), 163.5, 204.7, 86.634, FourCC("u000"))
 end
 
 function CreatePlayerBuildings()
-    CreateBuildingsForPlayer1()
 end
 
 function CreatePlayerUnits()
@@ -48,6 +49,13 @@ end
 function CreateAllUnits()
     CreatePlayerBuildings()
     CreatePlayerUnits()
+end
+
+function CreateRegions()
+    local we
+    gg_rct_Zone0 = Rect(-3104.0, -1536.0, -2784.0, -1408.0)
+    gg_rct_ZoneLaserGate0 = Rect(-2656.0, 544.0, -2112.0, 704.0)
+    gg_rct_SingleTorrentZone = Rect(-1856.0, 1312.0, -1600.0, 1600.0)
 end
 
 function CreateCameras()
@@ -114,7 +122,7 @@ end
 ---
 function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
-	local zhero=GetTerrainZ(xhero,yhero)+60
+	local zhero=GetUnitZ(hero)+60
 	local bullet=AddSpecialEffect(effectmodel,xs,ys)
 	local bam=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
 	local cloud=nil--AddSpecialEffect("Abilities/Weapons/SteamTank/SteamTankImpact.mdl",xs,ys)
@@ -135,9 +143,10 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
 		local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
+		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
 		--print("zGround ="..zGround.."z= "..z)
 		--BlzSetSpecialEffectPosition(bam,MoveX(GetUnitX(hero),120,GetUnitFacing(hero)),MoveY(GetUnitY(hero),120,GetUnitFacing(hero)),z)
-		CollisionEnemy=UnitDamageArea(hero,100,x,y,100)
+		CollisionEnemy=UnitDamageArea(hero,100,x,y,100,ZBullet)
 		CollisisonDestr=PointContentDestructable(x,y,100,false)
 		if z<=-90 or zGround+z>=-70+z or CollisionEnemy or CollisisonDestr then
 			PointContentDestructable(x,y,100,true)
@@ -145,8 +154,8 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 				CreateTorrent(x,y)
 				BlzSetSpecialEffectPosition(bullet,4000,4000,0)
 			end
-
-			UnitDamageArea(hero,100,x,y,200)
+			--print("Условие урона прошло")
+			UnitDamageArea(hero,100,x,y,200,ZBullet)
 			DestroyEffect(bullet)
 			DestroyTimer(GetExpiredTimer())
 		end
@@ -200,6 +209,7 @@ function CreateFire(hero,board)
 	local angle=facing+board
 	local x=MoveX(GetUnitX(hero),60,angle)
 	local y=MoveY(GetUnitY(hero),60,angle)
+
 	local fire=AddSpecialEffect("FireGun.mdl",x,y)
 	local inverse=1
 	if board==90 then inverse=-1 end
@@ -208,7 +218,9 @@ function CreateFire(hero,board)
 		--local xf,yf,zf=BlzGetLocalSpecialEffectX(fire),BlzGetLocalSpecialEffectY(fire),BlzGetLocalSpecialEffectZ(fire)
 		local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
 		local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
-		BlzSetSpecialEffectPosition(fire,nx,ny,-140)
+		local z=GetUnitZ(hero)
+		BlzSetSpecialEffectPosition(fire,nx,ny,z-140+89)
+		--print("z Огня="..BlzGetLocalSpecialEffectZ(fire))
 		UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)-board)
 		if board==-90 then
 			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5+90))
@@ -238,16 +250,18 @@ function CreateBarrel(hero)
 	if dist<=100 then dist=100 end
 	BlzSetSpecialEffectYaw(barrel,math.rad(angle))
 	BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
+	BlzSetSpecialEffectZ(barrel,GetUnitZ(hero))
 	JumpEffect(barrel,dist/20,150,angle,dist,hero,1)
 end
 
 
 function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
 	local i=0
+	local zs=GetUnitZ(hero)
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
 		local nx,ny=MoveXY(x,y,speed,angle)
-		local f=ParabolaZ(maxHeight,distance,i*speed)
+		local f=ParabolaZ(maxHeight,distance,i*speed)+zs
 		local z=BlzGetLocalSpecialEffectZ(eff)
 		local zGround=GetTerrainZ(nx,ny)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)
@@ -348,15 +362,17 @@ end
 
 
 perebor=CreateGroup()
-function UnitDamageArea(u,damage,x,y,range)
+function UnitDamageArea(u,damage,x,y,range,ZDamageSource)
 	local OnlyCHK=false
 	local isdamage=false
 	local e--временный юнит
+	if ZDamageSource==nil then ZDamageSource=GetUnitZ(u)+60 end
+	--print("Поиск целей в на высоте "..ZDamageSource)
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
 		if e == nil then break end
-		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(u)) then
+		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(u))  and IsUnitZCollision(e,ZDamageSource) then
 			UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			isdamage=true
 		end
@@ -364,6 +380,16 @@ function UnitDamageArea(u,damage,x,y,range)
 	end
 	if PointContentDestructable(x,y,range,true) then	isdamage=true	end
 	return isdamage
+end
+
+function IsUnitZCollision(hero,ZDamageSource)
+	local zcollision=false
+	local z=GetUnitZ(hero)
+	--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
+	if  ZDamageSource+60>=z and ZDamageSource-60<=z then
+		zcollision=true
+	end
+	return zcollision
 end
 
 
@@ -443,6 +469,8 @@ do
 		hideEverything()
 		InitMouseMoveTrigger()
 		InitDamage()
+		InitUnitDeath()
+		InitZone0()
 	end
 
 end
@@ -464,7 +492,8 @@ function InitGameCore()
 		CurrentSpeed=0,
 		WeaponIndex=1,
 		AngleForce=0, --типа какой-то уго для отталкивания
-		IsDisabled=false
+		IsDisabled=false,
+		OnTorrent=false
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	BlzLoadTOCFile("Main.toc")
@@ -725,7 +754,7 @@ function InitGameCore()
 		local data=HERO[0]
 		local hero=data.UnitHero
 		ForceUIKeyBJ(GetOwningPlayer(hero),"M")
-		IssueImmediateOrder(hero,"stop")
+		--IssueImmediateOrder(hero,"stop")
 	end)
 
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
@@ -733,25 +762,23 @@ function InitGameCore()
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
 			local turnrate=0
-			local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
-			CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 1)
-			CameraSetupApply(gg_cam_CameraHATE, true, true)
-
-
+			--local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
+			--CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 0) -- пробовал 2
+			--BlzCameraSetupApplyForceDurationSmooth(gg_cam_CameraHATE, true, 0.3, 0.03, 1, 1)
 			--local camera=data.Camera
-			--SetCameraPositionForPlayer(p,GetUnitX(hero),GetUnitY(hero))--багается пробелом но не дёргается
-			--SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
+			--SetCameraPositionForPlayer(p, camerax,cameray)--багается пробелом но не дёргается
+			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			--DestroyEffect(AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",camerax,cameray))
 			--PanCameraToTimedForPlayer(p,GetUnitX(camera),GetUnitY(camera),1)-- супер стойкая к чем угодно, но дёргается
-			--SetCameraTargetControllerNoZForPlayer(p,hero,.0,.0,true) -- не дергается
+			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
 			--SetCameraFieldForPlayer(p,CAMERA_FIELD_ROTATION,         90.,.0)
 			--if GetUnitCurrentOrder(camera)~=String2OrderIdBJ("move") then
 				--IssuePointOrder(camera,"move",GetUnitX(hero),GetUnitY(hero))
 			--	IssuePointOrder(camera,"move",camerax,cameray)
 			--end
 
-
 			UnitCheckPathingInRound(hero,50)
+
 			if data.ReleaseLMB then
 
 			end
@@ -767,28 +794,15 @@ function InitGameCore()
 			end
 			----------------------------------------------------S
 			if data.ReleaseS then
-				--[[if data.Acceleration<=-1*(data.SpeedBase*2) then
-					data.Acceleration=data.Acceleration-2
-				end
-			else
-				if data.Acceleration<0 then
-					data.Acceleration=data.Acceleration+1
-				end]]
 			end
 
 			if data.ReleaseD then
-				--x = a and b or c
-				--local range            = GetPlayerAbilityPerkLevel(player, ability.codename, 1, 1) > 0 and 600 or 400
-
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
-
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-turnrate)
-				--SetUnitFacing(hero,GetUnitFacing(hero)-10)
 			end
 			if data.ReleaseA then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+turnrate)
-				--SetUnitFacing(hero,GetUnitFacing(hero)+10)
 			end
 
 			data.CurrentSpeed=data.Acceleration
@@ -797,27 +811,25 @@ function InitGameCore()
 				local x,y=GetUnitX(hero),GetUnitY(hero)
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
-				local zhero=GetTerrainZ(x,y)
-				if zhero<=-90 then
-					--SetUnitZ(hero,-89.9)
-					--print("провалился в яму")
-				end
+				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
 				local newX3,newY3=MoveX(x,90,angle),MoveY(y,180,angle)
 				local newX2,newY2=MoveX(x,60,angle),MoveY(y,120,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
-				--print("z="..z)
-				if z3<=-80 and z2<=-80  then --and PointContentUnit(newX2,newY2,100)==false and PointContentDestructable(newX2,newY2,100)==false then
-					--print("проходима")
-					local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
-					--SetUnitX(hero,newX)
-					--SetUnitY(hero,newY)
+				local Perepad=zhero-z2
+				--print("Perepad="..Perepad)
+				--if z3<=-80 and z2<=-80  then
+				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+
+				if Perepad<1  then
+
 					SetUnitPositionSmooth(hero,newX,newY)
 				else
-					--print("не проходима")
-					--BlzSetUnitFacingEx(hero,angle-15)
-					IssueImmediateOrder(hero,"stop")
-					--angle=angle-180
+					--print("Высоко, надо пройти")
+					if Perepad>50 then
+						SetUnitX(hero,newX)
+						SetUnitY(hero,newY)
+					end
 				end
 			end
 		end
@@ -845,12 +857,16 @@ function UnitCheckPathingInRound(hero,range)
 	local max=0
 	local current=0
 	local dif=0
+	local perepad=0
 	if data.IsDisabled==false then
 		for i=0,35 do
 			nx=MoveX(x,range,a*i)
 			ny=MoveY(y,range,a*i)
 			z=GetTerrainZ(nx,ny)
-			if z>-80 then--or PointContentUnit(nx,ny,60) then
+			perepad=GetUnitZ(hero)-GetTerrainZ(x,y)
+			--print("perepad="..perepad)
+			--if perepad<=2 then
+			if z>-80 and data.OnTorrent==false then
 				k=k+1
 				total=total+a*i
 				current=a*i
@@ -927,12 +943,37 @@ function PointContentDestructable (x,y,range,iskill)
 		if GetDestructableLife(d)>0 then
 			content=true
 			if iskill then
-				KillDestructable(d)
+				SetDestructableLife(d,GetDestructableLife(d)-1)
+				if GetDestructableLife(d)>=1 then
+					SetDestructableAnimation(d,"Stand Hit")
+				end
+				--KillDestructable(d)
 			end
 		end
 	end)
 	return content
 end
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 23.01.2020 20:11
+function InitUnitDeath()
+	gg_trg_DEADGUI = CreateTrigger()
+	TriggerRegisterAnyUnitEventBJ(gg_trg_DEADGUI, EVENT_PLAYER_UNIT_DEATH)--меня полностью устраивает это событие
+	TriggerAddAction(gg_trg_DEADGUI, function()
+		local DeadUnit=GetTriggerUnit()--умерший
+
+		local killer=GetKillingUnit()--убийца
+		if IsUnitType(DeadUnit,UNIT_TYPE_HERO) then --герои
+			TimerStart(CreateTimer(), 5, false, function()
+				local PD=GetOwningPlayer(DeadUnit)
+				ReviveHero(DeadUnit,GetPlayerStartLocationX(PD),GetPlayerStartLocationY(PD),true)
+				SelectUnitForPlayerSingle(DeadUnit,PD)
+			end)
+		end
+	end)
+end
+
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
@@ -948,9 +989,68 @@ function CreateTorrent(x,y,size)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
+		if size>=3 then
+			UnitFlyTorrentInRange(x,y,size*50)
+		end
 	end
 	return IsWater
 end
+
+function UnitFlyTorrentInRange(x,y,range)
+	local e--временный юнит
+	GroupEnumUnitsInRange(perebor,x,y,range,nil)
+	while true do
+		e = FirstOfGroup(perebor)
+		if e == nil then break end
+		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
+			FlyUnitOnTorrent(e,500)
+			UnitAddAbility(e,FourCC('Aeth'))
+			if IsUnitType(e,UNIT_TYPE_HERO) then
+				local data=HERO[UnitGetPid(e)]
+				data.OnTorrent=true
+			end
+		end
+		GroupRemoveUnit(perebor,e)
+	end
+end
+
+function UnitGetPid(hero)
+	return GetPlayerId(GetOwningPlayer(hero))
+end
+
+
+function FlyUnitOnTorrent(hero,MaxHeight)
+	local i=0
+	local speed=10
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local x,y=GetUnitXY(hero)
+		---local nx,ny=MoveXY(x,y,speed,angle)
+		local f=ParabolaZ(MaxHeight, MaxHeight,i*speed)
+		local z=GetUnitZ(hero)
+		local zGround=GetTerrainZ(x,y)
+		SetUnitZ(hero,f)
+		--print("z="..z)
+		--print("zGround="..zGround)
+		i=i+1
+		if  i>5 and z<=zGround+1 then--z<=-89 and
+			UnitRemoveAbility(hero,FourCC('Aeth'))
+			if IsUnitType(hero,UNIT_TYPE_HERO) then
+				local data=HERO[UnitGetPid(hero)]
+				data.OnTorrent=false
+				--print("false")
+			end
+			--print("end")
+			DestroyTimer(GetExpiredTimer())
+			CreateTorrent(x,y)
+		end
+		if i>=100 then
+			DestroyTimer(GetExpiredTimer())
+			print("ERROR")
+		end
+	end)
+end
+
+
 
 function WaveEffect(eff)
 	local i=0
@@ -1081,8 +1181,8 @@ function CreateWeaponFrame()
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)
 		BlzFrameSetSize(face, 0.04, 0.04)
-		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next*i, next)
-		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next*i, next*3)
+		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next+next*i, next)
+		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next+next*i, next*3)
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
@@ -1536,7 +1636,87 @@ function FlyTextTagMissXY(x,y, text, player)
 	return FlyTextTag(text, 0.024, x, y, 150, 255, 0, 0, 255, 0, 0.03, 1, 3, player)
 end
 
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 16.02.2020 18:42
+---
+function InitZone0()
+	TimerStart(CreateTimer(), 5, true, function()
+		local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
+		CreateTorrent(x,y,4)
+	end)
+end
 --CUSTOM_CODE
+function Trig_Button0IsDead_Func001A()
+    KillDestructable(GetEnumDestructable())
+end
+
+function Trig_Button0IsDead_Actions()
+    EnumDestructablesInRectAll(gg_rct_Zone0, Trig_Button0IsDead_Func001A)
+end
+
+function InitTrig_Button0IsDead()
+    gg_trg_Button0IsDead = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_Button0IsDead, gg_dest_B000_0118)
+    TriggerAddAction(gg_trg_Button0IsDead, Trig_Button0IsDead_Actions)
+end
+
+function Trig_Button12IsDead_Func001C()
+    if (not (IsDestructableAliveBJ(gg_dest_B000_0273) == false)) then
+        return false
+    end
+    if (not (IsDestructableAliveBJ(gg_dest_B000_0275) == false)) then
+        return false
+    end
+    return true
+end
+
+function Trig_Button12IsDead_Conditions()
+    if (not Trig_Button12IsDead_Func001C()) then
+        return false
+    end
+    return true
+end
+
+function Trig_Button12IsDead_Func002A()
+    KillDestructable(GetEnumDestructable())
+end
+
+function Trig_Button12IsDead_Actions()
+    EnumDestructablesInRectAll(gg_rct_ZoneLaserGate0, Trig_Button12IsDead_Func002A)
+end
+
+function InitTrig_Button12IsDead()
+    gg_trg_Button12IsDead = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_Button12IsDead, gg_dest_B000_0273)
+    TriggerRegisterDeathEvent(gg_trg_Button12IsDead, gg_dest_B000_0275)
+    TriggerAddCondition(gg_trg_Button12IsDead, Condition(Trig_Button12IsDead_Conditions))
+    TriggerAddAction(gg_trg_Button12IsDead, Trig_Button12IsDead_Actions)
+end
+
+function Trig_ResLeft_Actions()
+    TriggerSleepAction(2)
+    DestructableRestoreLife(GetDyingDestructable(), GetDestructableMaxLife(GetLastCreatedDestructable()), true)
+end
+
+function InitTrig_ResLeft()
+    gg_trg_ResLeft = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_ResLeft, gg_dest_B000_0273)
+    TriggerAddAction(gg_trg_ResLeft, Trig_ResLeft_Actions)
+end
+
+function Trig_ResRight_Actions()
+    TriggerSleepAction(2)
+    DestructableRestoreLife(GetDyingDestructable(), GetDestructableMaxLife(GetLastCreatedDestructable()), true)
+end
+
+function InitTrig_ResRight()
+    gg_trg_ResRight = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_ResRight, gg_dest_B000_0275)
+    TriggerAddAction(gg_trg_ResRight, Trig_ResRight_Actions)
+end
+
 function Trig_EVENTLMB_Conditions()
     if (not (BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_MIDDLE)) then
         return false
@@ -1556,6 +1736,10 @@ function InitTrig_EVENTLMB()
 end
 
 function InitCustomTriggers()
+    InitTrig_Button0IsDead()
+    InitTrig_Button12IsDead()
+    InitTrig_ResLeft()
+    InitTrig_ResRight()
     InitTrig_EVENTLMB()
 end
 
@@ -1578,7 +1762,9 @@ function main()
     SetAmbientDaySound("SunkenRuinsDay")
     SetAmbientNightSound("SunkenRuinsNight")
     SetMapMusic("Music", true, 0)
+    CreateRegions()
     CreateCameras()
+    CreateAllDestructables()
     CreateAllUnits()
     InitBlizzard()
     InitGlobals()
@@ -1591,7 +1777,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -2816.0, -960.0)
+    DefineStartLocation(0, -2368.0, 1216.0)
     InitCustomPlayerSlots()
     SetPlayerSlotAvailable(Player(0), MAP_CONTROL_USER)
     InitGenericPlayerSlots()
