@@ -10,6 +10,7 @@ gg_trg_EVENTLMB = nil
 gg_dest_B000_0118 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
+gg_rct_Region_003 = nil
 function InitGlobals()
 end
 
@@ -56,6 +57,7 @@ function CreateRegions()
     gg_rct_Zone0 = Rect(-3104.0, -1536.0, -2784.0, -1408.0)
     gg_rct_ZoneLaserGate0 = Rect(-2656.0, 544.0, -2112.0, 704.0)
     gg_rct_SingleTorrentZone = Rect(-1856.0, 1312.0, -1600.0, 1600.0)
+    gg_rct_Region_003 = Rect(-1184.0, -160.0, 384.0, 1792.0)
 end
 
 function CreateCameras()
