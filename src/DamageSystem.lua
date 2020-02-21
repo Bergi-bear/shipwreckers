@@ -39,7 +39,7 @@ end
 
 
 perebor=CreateGroup()
-function UnitDamageArea(u,damage,x,y,range,ZDamageSource)
+function UnitDamageArea(u,damage,x,y,range,ZDamageSource,EffectModel)
 	local OnlyCHK=false
 	local isdamage=false
 	local e--временный юнит
@@ -52,6 +52,12 @@ function UnitDamageArea(u,damage,x,y,range,ZDamageSource)
 		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(u))  and IsUnitZCollision(e,ZDamageSource) then
 			UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			isdamage=true
+			if EffectModel~=nil then
+				--print("уффеет")
+				local DE=AddSpecialEffect(EffectModel,GetUnitX(e),GetUnitY(e))
+				BlzSetSpecialEffectZ(DE,ZDamageSource)
+				DestroyEffect(DE)
+			end
 		end
 		GroupRemoveUnit(perebor,e)
 	end

@@ -8,4 +8,7 @@ function InitZone0()
 		local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
 		CreateTorrent(x,y,4)
 	end)
+	--перечисляем все регистрации
+	Enter00()
+	StartAllSaw()
 end

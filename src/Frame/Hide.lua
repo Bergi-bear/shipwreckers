@@ -10,23 +10,10 @@ function hideEverything()
 		BlzFrameSetVisible(BlzGetFrameByName("CommandButton_"..i, 0), false)
 	end
 	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
-
-	--NAZAR
 	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
-
 	BlzHideOriginFrames(true)
 	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
 	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
 	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
-	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_HERO_BAR, 0), true)
-	--CinematicPortrait
-	--BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), false)
-
-	--BlzFrameSetVisible(BlzGetFrameByName("InventoryButton_0",0),  false)
-	--BlzFrameSetVisible(BlzFrameGetParent(BlzGetFrameByName("SimpleInfoPanelUnitDetail", 0)), true)
-	--BlzFrameSetParent(BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_ITEM_BUTTON, 0)), BlzFrameGetParent(BlzGetOriginFrame(ORIGIN_FRAME_COMMAND_BUTTON, 0)))
-
-
-
 end

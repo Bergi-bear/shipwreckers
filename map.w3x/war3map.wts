@@ -140,3 +140,15 @@ STRING 28
 Водоворот
 }
 
+STRING 29
+// Destructibles: B007 (Лазерные ворота), Name (Name)
+{
+Лазерные ворота
+}
+
+STRING 30
+// Units: h001 (Башня с пилой), Name (Name)
+{
+Башня с пилой
+}
+

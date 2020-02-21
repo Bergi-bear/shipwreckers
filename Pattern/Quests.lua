@@ -77,7 +77,6 @@ function FindUnitOfType(id)
 	end
 	if unit==nil then
 		print("Не найдено живых юнитов данного типа")
-
 	end
 	return unit
 end
