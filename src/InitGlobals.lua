@@ -16,8 +16,9 @@ do
 		InitDamage()
 		InitUnitDeath()
 		InitZone0()
+		RegisterAnyCheckpointSave()
+		StartMainTheme()
 	end
-
 end
 
 function InitGameCore()
@@ -225,8 +226,7 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			--FIXME ошибка бага поворота
-			IssueImmediateOrder(hero,"stop")
+			--IssueImmediateOrder(hero,"stop")
 			if data.WeaponIndex==2 then
 				BoardCannon(hero,90,GetRandomInt(5,5))
 			end

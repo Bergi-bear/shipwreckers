@@ -6,7 +6,6 @@ ReactionAI=1
 UnitAI={}
 
 function StartSheepAI(hero)
-
 	if UnitAI[GetHandleId(hero)]==nil then
 	--	print("Запущен первый прототип ИИ")
 	else
@@ -19,7 +18,6 @@ function StartSheepAI(hero)
 		RandomTimeFactor=GetRandomReal(-.5,.5)
 	}
 	local data=UnitAI[GetHandleId(hero)]
-
 	TimerStart(CreateTimer(), ReactionAI+data.RandomTimeFactor, true, function()--поиск врага 1 секунда по умлочанию
 		local e=nil
 		local x,y=GetUnitXY(hero)
@@ -28,7 +26,7 @@ function StartSheepAI(hero)
 		while true do
 			e = FirstOfGroup(perebor)
 			if e == nil then break end
-			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitVisible(hero,GetOwningPlayer(e)) and data.IsEscape==false then
+			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitVisible(e,GetOwningPlayer(hero)) and data.IsEscape==false then
 				enemy=e
 				data.IsAttack=true
 				--print("Найден враг "..GetUnitName())
@@ -39,7 +37,7 @@ function StartSheepAI(hero)
 			local xe,ye=GetUnitXY(enemy)
 			if IsUnitInRange(hero,enemy,100) then
 				if data.IsEscape==false then
-					local escapeX,escapeY=MoveXY(xe,ye,1000,GetUnitFacing(hero)-180)
+					local escapeX,escapeY=MoveXY(xe,ye,500,GetUnitFacing(hero)-180)
 					--print("Слишком близко!")
 					data.IsEscape=true
 					data.IsAttack=false
@@ -63,6 +61,57 @@ function StartSheepAI(hero)
 		if UnitAlive(hero)==false then
 			DestroyTimer(GetExpiredTimer())
 		--	print("умираю....")
+		end
+	end)
+end
+-------------------башенки
+function StartTowerAI(hero)
+	if UnitAI[GetHandleId(hero)]==nil then
+		--	print("Запущен первый прототип ИИ")
+	else
+		print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ")
+	end
+	UnitAI[GetHandleId(hero)]={
+		IsAttack=false,
+		FocusUnit=nil,
+		RandomTimeFactor=GetRandomReal(-.5,.5)
+	}
+	local data=UnitAI[GetHandleId(hero)]
+	TimerStart(CreateTimer(), ReactionAI+data.RandomTimeFactor, true, function()--поиск врага 1 секунда по умлочанию
+		local e=nil
+		local x,y=GetUnitXY(hero)
+		local enemy=nil
+		GroupEnumUnitsInRange(perebor,x,y,2000,nil)
+		while true do
+			e = FirstOfGroup(perebor)
+			if e == nil or enemy~=nil then break end
+			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitVisible(e,GetOwningPlayer(hero)) then
+				enemy=e
+				data.IsAttack=true
+				--print("Найден враг "..GetUnitName())
+			end
+			GroupRemoveUnit(perebor,e)
+		end
+
+		if data.IsAttack and data.FocusUnit~=enemy then
+			SetUnitLookAt(hero, 'bone_turret', enemy, 0, 0, 90)
+			data.FocusUnit=enemy
+		end
+
+		if enemy~=nil then
+			if IsUnitInRange(hero,enemy,1800) then
+				local xe,ye=GetUnitXY(enemy)
+				local angle=AngleBetweenXY(xe,ye,x,y)/bj_DEGTORAD
+				local dist=DistanceBetweenXY(x,y,xe,ye)
+				CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl",angle-180,dist,3)
+			else
+				data.IsAttack=false
+				data.FocusUnit=nil
+			end
+		end
+		if UnitAlive(hero)==false then
+			DestroyTimer(GetExpiredTimer())
+			--	print("умираю....")
 		end
 	end)
 end

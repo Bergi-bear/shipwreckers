@@ -4,7 +4,7 @@
 --- DateTime: 21.02.2020 23:45
 ---
 
-SawDiskModel="Abilities\\Weapons\\SentinelMissile\\SentinelMissile.mdl"
+SawDiskModel="Chakram_02.mdl"--"Abilities\\Weapons\\SentinelMissile\\SentinelMissile.mdl"
 SawChainModel="abilities\\weapons\\wyvernspear\\wyvernspearmissile.mdl"
 function CreateRoundSawZ(hero,ChainCount,angle,z)
 	local xs,ys=GetUnitXY(hero)
@@ -20,7 +20,7 @@ function CreateRoundSawZ(hero,ChainCount,angle,z)
 		--print("создан кусок цепи "..i)
 	end
 	-- установки
-	BlzSetSpecialEffectScale(saw,3)
+	BlzSetSpecialEffectScale(saw,0.9)
 
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y=0,0
@@ -51,5 +51,5 @@ function StartAllSaw()
 		end
 		GroupRemoveUnit(perebor,e)
 	end
-	print("Запущено пил: "..k)
+	--print("Запущено пил: "..k)
 end

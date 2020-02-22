@@ -11,4 +11,5 @@ function InitZone0()
 	--перечисляем все регистрации
 	Enter00()
 	StartAllSaw()
+	ActivatedAllTower()
 end

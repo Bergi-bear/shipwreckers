@@ -137,14 +137,34 @@ function CreateBarrel(hero)
 	JumpEffect(barrel,dist/20,150,angle,dist,hero,1)
 end
 
+function CreateArtToss(hero,effectmodel,angle,dist,flag)
+	local x,y=GetUnitXY(hero)
+	local id=GetPlayerId(GetOwningPlayer(hero))
+	local art=AddSpecialEffect(effectmodel,x,y)
+	if angle==nil then angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD end
+	if dist==nil then dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id]) end
+	if dist>=1200 then dist=1200 end
+	if dist<=200 then dist=200 end
+	local speed=dist/50
+	BlzSetSpecialEffectYaw(art,math.rad(angle))
+	---BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
+	if flag==nil then
+		JumpEffect(art,speed,700,angle,dist,hero,2)
+	elseif flag==3 then--Стрельба простых пушек
+		JumpEffect(art,speed*2,200,angle,dist*.7,hero,flag,GetUnitZ(hero)+150)--осколочный мелкий
 
-function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
+	else
+		JumpEffect(art,speed,300,angle,dist,hero,flag)--любой другой
+	end
+end
+
+function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 	local i=0
-	local zs=GetUnitZ(hero)
+	if ZStart==nil then ZStart=GetUnitZ(hero) end
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
 		local nx,ny=MoveXY(x,y,speed,angle)
-		local f=ParabolaZ(maxHeight,distance,i*speed)+zs
+		local f=ParabolaZ(maxHeight,distance,i*speed)+ZStart
 		local z=BlzGetLocalSpecialEffectZ(eff)
 		local zGround=GetTerrainZ(nx,ny)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)
@@ -180,7 +200,7 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
 			elseif  flag==3 then-- осколки
 				CreateTorrent(nx,ny)
 				DestroyEffect(eff)
-				UnitDamageArea(hero,100,nx,ny,100)
+				UnitDamageArea(hero,100,nx,ny,200,z)
 			end
 			DestroyTimer(GetExpiredTimer())
 		end
@@ -188,19 +208,3 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag)
 end
 
 
-
-
-
-function CreateArtToss(hero,effectmodel)
-	local x,y=GetUnitXY(hero)
-	local id=GetPlayerId(GetOwningPlayer(hero))
-	local art=AddSpecialEffect(effectmodel,x,y)
-	local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
-	local dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])
-	if dist>=1200 then dist=1200 end
-	if dist<=200 then dist=200 end
-	local speed=dist/50
-	BlzSetSpecialEffectYaw(art,math.rad(angle))
-	---BlzPlaySpecialEffect(barrel,ANIM_TYPE_WALK)
-	JumpEffect(art,speed,700,angle,dist,hero,2)
-end

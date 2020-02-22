@@ -92,7 +92,7 @@ function PointContentUnit(x,y,range,condconten)
 end
 
 GlobalRect=Rect(0,0,0,0)
-function PointContentDestructable (x,y,range,iskill)
+function PointContentDestructable (x,y,range,iskill,damage)
 	local content=false
 	if range==nil then range=80 end
 	if iskill==nil then iskill=false end
@@ -102,7 +102,7 @@ function PointContentDestructable (x,y,range,iskill)
 		if GetDestructableLife(d)>0 then
 			content=true
 			if iskill then
-				SetDestructableLife(d,GetDestructableLife(d)-1)
+				SetDestructableLife(d,GetDestructableLife(d)-damage)
 				if GetDestructableLife(d)>=1 then
 					SetDestructableAnimation(d,"Stand Hit")
 				end

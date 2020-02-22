@@ -30,6 +30,7 @@ function InitDamage()
 				local x,y=GetUnitX(target),GetUnitY(target)
 				ShowUnit(target, false)
 				CreateTorrent(x,y)
+				UnitDamageArea(target,0,GetUnitX(target),GetUnitY(target),150)
 			end
 		end
 	end)
@@ -53,7 +54,7 @@ function UnitDamageArea(u,damage,x,y,range,ZDamageSource,EffectModel)
 			UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			isdamage=true
 			if EffectModel~=nil then
-				--print("уффеет")
+				--print("эффеет")
 				local DE=AddSpecialEffect(EffectModel,GetUnitX(e),GetUnitY(e))
 				BlzSetSpecialEffectZ(DE,ZDamageSource)
 				DestroyEffect(DE)
@@ -61,7 +62,7 @@ function UnitDamageArea(u,damage,x,y,range,ZDamageSource,EffectModel)
 		end
 		GroupRemoveUnit(perebor,e)
 	end
-	if PointContentDestructable(x,y,range,true) then	isdamage=true	end
+	if PointContentDestructable(x,y,range,true,1+damage/10) then	isdamage=true	end
 	return isdamage
 end
 
@@ -107,10 +108,10 @@ function UnitRocketArea(hero,x,y,range)
 		--print("цель определена- "..GetUnitName(targ))
 		Cast(dummy,0,0,targ)
 	else
-		local enemyDummy=CreateUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE), DummyID, x, y, 0)
-		UnitRemoveAbility(enemyDummy,FourCC('Aloc'))
-		Cast(dummy,0,0,enemyDummy)
-		UnitApplyTimedLife(enemyDummy,DummyID,3)
+		targ=CreateUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE), DummyID, x, y, 0)
+		UnitRemoveAbility(targ,FourCC('Aloc'))
+		Cast(dummy,0,0,targ)
+		UnitApplyTimedLife(targ,DummyID,3)
 		--print("Нет врагов, летим в воду")
 	end
 end
