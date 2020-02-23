@@ -98,8 +98,7 @@ function ExplodeEffect(eff,size)
 	BlzSetSpecialEffectScale(explode,size)
 	DestroyEffect(explode)
 	onGround=CreateTorrent(x,y,size)
-	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
-	DestroyEffect(eff)
+	RemoveEffect(eff)
 	return onGround
 end
 
@@ -117,4 +116,9 @@ function EffectAddExplodedTimer(eff,time,hero)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
+end
+
+function RemoveEffect (eff)
+	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
+	DestroyEffect(eff)
 end

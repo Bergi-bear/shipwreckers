@@ -7,6 +7,9 @@ gg_rct_Zone02Out = nil
 gg_rct_Spawn00 = nil
 gg_rct_Region_007 = nil
 gg_cam_CameraHATE = nil
+gg_snd_AAA = nil
+gg_snd_AAA1 = nil
+gg_snd_Load = nil
 gg_trg_InitZone = nil
 gg_trg_Button0IsDead = nil
 gg_trg_Button12IsDead = nil
@@ -15,12 +18,38 @@ gg_trg_ResRight = nil
 gg_trg_InCombatZone = nil
 gg_trg_EVENTMMB = nil
 gg_trg_NonAttack = nil
+gg_trg_sec1 = nil
 gg_trg_StartMainTheme = nil
+gg_unit_h002_0023 = nil
 gg_dest_B000_0118 = nil
 gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
+gg_rct_Zone03In = nil
+gg_rct_Zone03Out = nil
+gg_trg_InMineWay = nil
 function InitGlobals()
+end
+
+function InitSounds()
+    gg_snd_AAA = CreateSound("Units/Creeps/GoblinZeppelin/GoblinZeppelinWhat3", false, true, true, 10, 10, "DefaultEAXON")
+    SetSoundParamsFromLabel(gg_snd_AAA, "GoblinZeppelinWhat")
+    SetSoundDuration(gg_snd_AAA, 1838)
+    SetSoundChannel(gg_snd_AAA, 0)
+    SetSoundVolume(gg_snd_AAA, 110)
+    SetSoundDistances(gg_snd_AAA, 0.0, 100000.0)
+    SetSoundDistanceCutoff(gg_snd_AAA, 3000.0)
+    gg_snd_AAA1 = CreateSound("Units/Creeps/GoblinZeppelin/GoblinZeppelinWhat4", false, true, true, 10, 10, "DefaultEAXON")
+    SetSoundParamsFromLabel(gg_snd_AAA1, "GoblinZeppelinWhat")
+    SetSoundDuration(gg_snd_AAA1, 1417)
+    SetSoundChannel(gg_snd_AAA1, 0)
+    SetSoundVolume(gg_snd_AAA1, 110)
+    SetSoundDistances(gg_snd_AAA1, 0.0, 100000.0)
+    SetSoundDistanceCutoff(gg_snd_AAA1, 3000.0)
+    gg_snd_Load = CreateSound("Abilities/Spells/Other/LoadUnload/Loading.flac", false, true, true, 1, 1, "DefaultEAXON")
+    SetSoundParamsFromLabel(gg_snd_Load, "LoadUnload")
+    SetSoundDuration(gg_snd_Load, 740)
+    SetSoundVolume(gg_snd_Load, 127)
 end
 
 function CreateAllDestructables()
@@ -59,7 +88,7 @@ function CreateBuildingsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("n003"), -1984.0, 4352.0, 270.000, FourCC("n003"))
     u = BlzCreateUnitWithSkin(p, FourCC("n003"), 704.0, 4352.0, 270.000, FourCC("n003"))
     u = BlzCreateUnitWithSkin(p, FourCC("n003"), 704.0, 6080.0, 270.000, FourCC("n003"))
-    u = BlzCreateUnitWithSkin(p, FourCC("h002"), 832.0, -1472.0, 270.000, FourCC("h002"))
+    gg_unit_h002_0023 = BlzCreateUnitWithSkin(p, FourCC("h002"), 832.0, -1472.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), 1216.0, -832.0, 270.000, FourCC("h002"))
 end
 
@@ -70,6 +99,7 @@ function CreateUnitsForPlayer10()
     local t
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2984.9, 101.9, 2.767, FourCC("hbot"))
+    u = BlzCreateUnitWithSkin(p, FourCC("o001"), 2801.5, 2496.1, 177.920, FourCC("o001"))
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1729.2, 69.6, 171.573, FourCC("hbot"))
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1727.6, 1412.6, 60.770, FourCC("hbot"))
     u = BlzCreateUnitWithSkin(p, FourCC("n000"), -1039.7, 4367.0, 305.100, FourCC("n000"))
@@ -115,6 +145,8 @@ function CreateRegions()
     gg_rct_Zone02Out = Rect(-576.0, -384.0, -64.0, -256.0)
     gg_rct_Spawn00 = Rect(-576.0, 32.0, -128.0, 224.0)
     gg_rct_Region_007 = Rect(1504.0, -3296.0, 3232.0, -1600.0)
+    gg_rct_Zone03In = Rect(2464.0, 1632.0, 3136.0, 1920.0)
+    gg_rct_Zone03Out = Rect(-1088.0, 2208.0, -800.0, 2976.0)
 end
 
 function CreateCameras()
@@ -328,7 +360,6 @@ function CreateArtToss(hero,effectmodel,angle,dist,flag)
 		JumpEffect(art,speed,700,angle,dist,hero,2)
 	elseif flag==3 then--Стрельба простых пушек
 		JumpEffect(art,speed*2,200,angle,dist*.7,hero,flag,GetUnitZ(hero)+150)--осколочный мелкий
-
 	else
 		JumpEffect(art,speed,300,angle,dist,hero,flag)--любой другой
 	end
@@ -345,6 +376,13 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 		local zGround=GetTerrainZ(nx,ny)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)
 		i=i+1
+		if i==10 then
+			if flag==4 then
+				EffectAddRegistrationCollision(eff,hero,150,0,1)
+			end
+		end
+
+
 		if z<=zGround and i>5 then
 			if flag==nil then -- без флага
 
@@ -377,7 +415,47 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 				CreateTorrent(nx,ny)
 				DestroyEffect(eff)
 				UnitDamageArea(hero,100,nx,ny,200,z)
+			elseif  flag==4 then-- выпрыгнул гоблин
+				if CreateTorrent(nx,ny,0.1) then
+					BlzSetSpecialEffectZ(eff,-90)
+
+				else
+					DestroyEffect(eff)
+				end
 			end
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
+	local sec=duration
+	local infinity=false
+	if duration==nil or duration==0 then infinity=true end
+	TimerStart(CreateTimer(), 0.1, true, function()
+		local x,y,z=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff),BlzGetLocalSpecialEffectZ(eff)
+		local e=nil
+		GroupEnumUnitsInRange(perebor,x,y,range,nil)
+		while true do
+			e = FirstOfGroup(perebor)
+			if e == nil then break end
+			if UnitAlive(e) and IsUnitZCollision(e,z) then
+				--print("Эффет столкнулся с "..GetUnitName(e))
+				if flag==1 then-- орк в уточке
+					RemoveEffect(eff)
+					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
+					DestroyTimer(GetExpiredTimer())
+				elseif flag==2 then
+					if IsUnitEnemy(e,GetOwningPlayer(UnitEffectOwner)) then
+						UnitDamageArea(UnitEffectOwner,100,x,y,200,z)
+					end
+				end
+			end
+			GroupRemoveUnit(perebor,e)
+		end
+		sec=sec-1
+		if sec<0 and infinity==false then
+			DestroyEffect(eff)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
@@ -419,6 +497,18 @@ function InitDamage()
 				CreateTorrent(x,y)
 				UnitDamageArea(target,0,GetUnitX(target),GetUnitY(target),150)
 			end
+			if damage>=30 then
+				local angle=GetRandomReal(0,360)
+				local dist=200
+				CreateArtToss(target,"GoblinRubberDuck.mdl",angle,dist,4)
+				local r=GetRandomInt(1,2)
+				if r==1 then
+					PlaySoundAtPointBJ( gg_snd_AAA, 100, Location(GetUnitX(target),GetUnitY(target)), 0 )
+				else
+					PlaySoundAtPointBJ( gg_snd_AAA1, 100, Location(GetUnitX(target),GetUnitY(target)), 0 )
+				end
+				--JumpEffect
+			end
 		end
 	end)
 end
@@ -430,7 +520,7 @@ perebor=CreateGroup()
 function UnitDamageArea(u,damage,x,y,range,ZDamageSource,EffectModel)
 	local OnlyCHK=false
 	local isdamage=false
-	local e--временный юнит
+	local e=nil
 	if ZDamageSource==nil then ZDamageSource=GetUnitZ(u)+60 end
 	--print("Поиск целей в на высоте "..ZDamageSource)
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
@@ -1328,8 +1418,7 @@ function ExplodeEffect(eff,size)
 	BlzSetSpecialEffectScale(explode,size)
 	DestroyEffect(explode)
 	onGround=CreateTorrent(x,y,size)
-	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
-	DestroyEffect(eff)
+	RemoveEffect(eff)
 	return onGround
 end
 
@@ -1347,6 +1436,11 @@ function EffectAddExplodedTimer(eff,time,hero)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
+end
+
+function RemoveEffect (eff)
+	BlzSetSpecialEffectPosition(eff,4000,4000,-200)
+	DestroyEffect(eff)
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -2113,6 +2207,15 @@ function InitTrig_InCombatZone()
     TriggerAddAction(gg_trg_InCombatZone, Trig_InCombatZone_Actions)
 end
 
+function Trig_InMineWay_Actions()
+end
+
+function InitTrig_InMineWay()
+    gg_trg_InMineWay = CreateTrigger()
+    TriggerRegisterEnterRectSimple(gg_trg_InMineWay, gg_rct_Zone03In)
+    TriggerAddAction(gg_trg_InMineWay, Trig_InMineWay_Actions)
+end
+
 function Trig_EVENTMMB_Conditions()
     if (not (BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_MIDDLE)) then
         return false
@@ -2162,6 +2265,15 @@ function InitTrig_NonAttack()
     TriggerAddAction(gg_trg_NonAttack, Trig_NonAttack_Actions)
 end
 
+function Trig_sec1_Actions()
+    PlaySoundAtPointBJ(gg_snd_AAA, 100, GetUnitLoc(gg_unit_h002_0023), 0)
+end
+
+function InitTrig_sec1()
+    gg_trg_sec1 = CreateTrigger()
+    TriggerAddAction(gg_trg_sec1, Trig_sec1_Actions)
+end
+
 function InitCustomTriggers()
     InitTrig_InitZone()
     InitTrig_Button0IsDead()
@@ -2169,8 +2281,10 @@ function InitCustomTriggers()
     InitTrig_ResLeft()
     InitTrig_ResRight()
     InitTrig_InCombatZone()
+    InitTrig_InMineWay()
     InitTrig_EVENTMMB()
     InitTrig_NonAttack()
+    InitTrig_sec1()
 end
 
 function RunInitializationTriggers()
@@ -2197,6 +2311,7 @@ function main()
     SetAmbientDaySound("SunkenRuinsDay")
     SetAmbientNightSound("SunkenRuinsNight")
     SetMapMusic("Music", true, 0)
+    InitSounds()
     CreateRegions()
     CreateCameras()
     CreateAllDestructables()

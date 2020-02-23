@@ -32,6 +32,18 @@ function InitDamage()
 				CreateTorrent(x,y)
 				UnitDamageArea(target,0,GetUnitX(target),GetUnitY(target),150)
 			end
+			if damage>=200 then
+				local angle=GetRandomReal(0,360)
+				local dist=200
+				CreateArtToss(target,"GoblinRubberDuck.mdl",angle,dist,4)
+				local r=GetRandomInt(1,2)
+				if r==1 then
+					PlaySoundAtPointBJ( gg_snd_AAA, 100, Location(GetUnitX(target),GetUnitY(target)), 0 )
+				else
+					PlaySoundAtPointBJ( gg_snd_AAA1, 100, Location(GetUnitX(target),GetUnitY(target)), 0 )
+				end
+				--JumpEffect
+			end
 		end
 	end)
 end
@@ -43,7 +55,7 @@ perebor=CreateGroup()
 function UnitDamageArea(u,damage,x,y,range,ZDamageSource,EffectModel)
 	local OnlyCHK=false
 	local isdamage=false
-	local e--временный юнит
+	local e=nil
 	if ZDamageSource==nil then ZDamageSource=GetUnitZ(u)+60 end
 	--print("Поиск целей в на высоте "..ZDamageSource)
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)

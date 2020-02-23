@@ -152,7 +152,6 @@ function CreateArtToss(hero,effectmodel,angle,dist,flag)
 		JumpEffect(art,speed,700,angle,dist,hero,2)
 	elseif flag==3 then--Стрельба простых пушек
 		JumpEffect(art,speed*2,200,angle,dist*.7,hero,flag,GetUnitZ(hero)+150)--осколочный мелкий
-
 	else
 		JumpEffect(art,speed,300,angle,dist,hero,flag)--любой другой
 	end
@@ -169,6 +168,13 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 		local zGround=GetTerrainZ(nx,ny)
 		BlzSetSpecialEffectPosition(eff,nx,ny,f)
 		i=i+1
+		if i==10 then
+			if flag==4 then
+				EffectAddRegistrationCollision(eff,hero,150,0,1)
+			end
+		end
+
+
 		if z<=zGround and i>5 then
 			if flag==nil then -- без флага
 
@@ -201,7 +207,47 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 				CreateTorrent(nx,ny)
 				DestroyEffect(eff)
 				UnitDamageArea(hero,100,nx,ny,200,z)
+			elseif  flag==4 then-- выпрыгнул гоблин
+				if CreateTorrent(nx,ny,0.1) then
+					BlzSetSpecialEffectZ(eff,-90)
+
+				else
+					DestroyEffect(eff)
+				end
 			end
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
+	local sec=duration
+	local infinity=false
+	if duration==nil or duration==0 then infinity=true end
+	TimerStart(CreateTimer(), 0.1, true, function()
+		local x,y,z=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff),BlzGetLocalSpecialEffectZ(eff)
+		local e=nil
+		GroupEnumUnitsInRange(perebor,x,y,range,nil)
+		while true do
+			e = FirstOfGroup(perebor)
+			if e == nil then break end
+			if UnitAlive(e) and IsUnitZCollision(e,z) then
+				--print("Эффет столкнулся с "..GetUnitName(e))
+				if flag==1 then-- орк в уточке
+					RemoveEffect(eff)
+					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
+					DestroyTimer(GetExpiredTimer())
+				elseif flag==2 then
+					if IsUnitEnemy(e,GetOwningPlayer(UnitEffectOwner)) then
+						UnitDamageArea(UnitEffectOwner,100,x,y,200,z)
+					end
+				end
+			end
+			GroupRemoveUnit(perebor,e)
+		end
+		sec=sec-1
+		if sec<0 and infinity==false then
+			DestroyEffect(eff)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
