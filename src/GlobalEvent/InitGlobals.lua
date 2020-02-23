@@ -6,6 +6,7 @@
 ---Глобалки
 TIMER_PERIOD = 0.03125
 HERO={}
+Ammo={}
 do
 	local InitGlobalsOrigin = InitGlobals -- записываем InitGlobals в переменную
 	function InitGlobals()
@@ -39,18 +40,44 @@ function InitGameCore()
 		WeaponIndex=1,
 		AngleForce=0, --типа какой-то уго для отталкивания
 		IsDisabled=false,
-		OnTorrent=false
+		OnTorrent=false,
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
+	}
+	Ammo[0]={
+		Available ={
+			Single=true,
+			Board=true,
+			Rocket=false,
+			Fire=false,
+			Toss=false,
+			Barrel=false,
+			Light=false,
+			Saw=false,
+			Oil=false
+		},
+		Count={
+			Single=150,
+			Board=100,
+			Rocket=0,
+			Fire=0,
+			Toss=0,
+			Barrel=0,
+			Light=0,
+			Saw=0,
+			Oil=0
+		}
 	}
 	BlzLoadTOCFile("Main.toc")
 	BlzLoadTOCFile("MySimpleButton.toc")
 	BlzLoadTOCFile("BoxedText.toc")
 	local HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
-	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_BOTTOM, 0.4, 0.04)
+	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_LEFT, 0.04, 0.58)
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
 	--CreateWeaponFrame()
 	CreateWeaponFrame()
-
+	for i=1,9 do
+		HeroUpdateWeaponCharges(HERO[0].UnitHero,i,0)
+	end
 
 
 --триггеры
@@ -227,10 +254,10 @@ function InitGameCore()
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
 			--IssueImmediateOrder(hero,"stop")
-			if data.WeaponIndex==2 then
+			if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
 				BoardCannon(hero,90,GetRandomInt(5,5))
 			end
-			if data.WeaponIndex==4 then
+			if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				CreateFire(hero,90)
 			end
 		end
@@ -262,24 +289,28 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
-			if data.WeaponIndex==1 then
+			if data.WeaponIndex==1 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				SingleCannon(hero)
 			end
-			if data.WeaponIndex==2 then
+			if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
 				BoardCannon(hero,-90,GetRandomInt(5,5))
 			end
-			if data.WeaponIndex==3 then
+			if data.WeaponIndex==3 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
+
 			end
-			if data.WeaponIndex==4 then
+			if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				CreateFire(hero,-90)
 			end
-			if data.WeaponIndex==5 then
+			if data.WeaponIndex==5 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")
+
 			end
-			if data.WeaponIndex==6 then
+			if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 				CreateBarrel(hero)
+
 			end
+
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()

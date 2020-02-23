@@ -30,6 +30,8 @@ end
 
 
 FrameSelecter={}
+VisualCharges={}
+
 
 function CreateWeaponFrame()
 	local texture={
@@ -81,26 +83,37 @@ function CreateWeaponFrame()
 		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0)
 		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)
+		local charges= BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+		local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", charges, "", 0)
+		BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, charges, FRAMEPOINT_CENTER, 0.,0.)
+		BlzFrameSetText(new_FrameChargesText, "0")
+
+
 		BlzFrameSetAllPoints(faceHover, face)
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)
+		BlzFrameSetTexture(charges, "ChargesTexture.blp", 0, true)
 		BlzFrameSetSize(face, 0.04, 0.04)
+		BlzFrameSetSize(charges, 0.04, 0.012)
 		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next+next*i, next)
+		BlzFrameSetAbsPoint(charges, FRAMEPOINT_TOPLEFT, next+next+next*i, next*1.3)
 		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next+next*i, next*3)
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextTitle",0), weaponName[i+1])
 		--if i==0 then
-			local buttonsprite = BlzCreateFrameByType("SPRITE", "justAName", face, "WarCraftIIILogo", 0)
-			BlzFrameSetPoint(buttonsprite, FRAMEPOINT_BOTTOMLEFT, face, FRAMEPOINT_BOTTOMLEFT, 0.02, 0.02)
-			BlzFrameSetSize(buttonsprite, 1., 1.)
-			BlzFrameSetScale(buttonsprite, 1.)
-			BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
-			FrameSelecter[i+1]=buttonsprite
+		local buttonsprite = BlzCreateFrameByType("SPRITE", "justAName", face, "WarCraftIIILogo", 0)
+		BlzFrameSetPoint(buttonsprite, FRAMEPOINT_BOTTOMLEFT, face, FRAMEPOINT_BOTTOMLEFT, 0.02, 0.02)
+		BlzFrameSetSize(buttonsprite, 1., 1.)
+		BlzFrameSetScale(buttonsprite, 1.)
+		BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
+		FrameSelecter[i+1]=buttonsprite
+		VisualCharges[i+1]=new_FrameChargesText
 		if i>= 1 then
 			BlzFrameSetVisible(buttonsprite,false)
 		end
---[[
+
+			--[[проблемный блок зарядов
 			local new_Frame = BlzCreateFrame('ScriptDialogButton', face, 0, 0)
 			local new_FrameImage = BlzCreateFrameByType("BACKDROP", "ButtonIcon", new_Frame, "", 0)
 			local new_FrameCharges = BlzCreateFrameByType("BACKDROP", "ButtonCharges", new_Frame, "", 0)
@@ -110,8 +123,8 @@ function CreateWeaponFrame()
 			BlzFrameSetTexture(new_FrameCharges, "ChargesTexture.blp", 0, true)
 			BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, new_FrameCharges, FRAMEPOINT_CENTER, 0.,0.)
 			BlzFrameSetVisible(new_FrameCharges, false)
-			BlzFrameSetText(new_FrameChargesText, "0")
-]]
+			BlzFrameSetText(new_FrameChargesText, "0")]]
+
 
 		--end
 
@@ -133,6 +146,72 @@ function SwitchWeaponVisual(pid,index)
 		BlzFrameSetVisible(FrameSelecter[index],true)
 	end
 end
+
+function HeroUpdateWeaponCharges(hero,index,amount)
+	local pid=GetPlayerId(GetOwningPlayer(hero))
+	local data=Ammo[pid]
+	local count=0
+	local HasAmmo=true
+	--слабонервным не смотреть
+	if index==1 then
+		data.Count.Single=data.Count.Single-amount
+		count=data.Count.Single
+	elseif index==2 then
+		data.Count.Board=data.Count.Board-amount
+		count=data.Count.Board
+	elseif index==3 then
+		data.Count.Rocket=data.Count.Rocket-amount
+		count=data.Count.Rocket
+	elseif index==4 then
+		data.Count.Fire=data.Count.Fire-amount
+		count=data.Count.Fire
+	elseif index==5 then
+		data.Count.Toss=data.Count.Toss-amount
+		count=data.Count.Toss
+	elseif index==6 then
+		data.Count.Barrel=data.Count.Barrel-amount
+		count=data.Count.Barrel
+	elseif index==7 then
+		data.Count.Light=data.Count.Light-amount
+		count=data.Count.Light
+	elseif index==8 then
+		data.Count.Saw=data.Count.Saw-amount
+		count=data.Count.Saw
+	elseif index==9 then
+		data.Count.Oil=data.Count.Oil-amount
+		count=data.Count.Oil
+	end
+
+	if count+amount<amount then
+		HasAmmo=false
+		if index==1 then
+			count=data.Count.Single==0
+		elseif index==2 then
+			count=data.Count.Board==0
+		elseif index==3 then
+			count=data.Count.Rocket==0
+		elseif index==4 then
+			count=data.Count.Fire==0
+		elseif index==5 then
+			count=data.Count.Toss==0
+		elseif index==6 then
+			count=data.Count.Barrel==0
+		elseif index==7 then
+			count=data.Count.Light==0
+		elseif index==8 then
+			count=data.Count.Saw==0
+		elseif index==9 then
+			count=data.Count.Oil==0
+		end
+		--print(count.." мало патронов")
+	end
+	--print(count)
+	if GetLocalPlayer()==Player(pid) then
+	BlzFrameSetText(VisualCharges[index], count )
+	end
+	return HasAmmo
+end
+
 
 
 

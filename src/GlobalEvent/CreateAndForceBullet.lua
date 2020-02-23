@@ -103,6 +103,8 @@ function CreateFire(hero,board)
 		local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
 		local z=GetUnitZ(hero)
 		BlzSetSpecialEffectPosition(fire,nx,ny,z-140+89)
+		HeroUpdateWeaponCharges(hero,4,1)
+
 		--print("z Огня="..BlzGetLocalSpecialEffectZ(fire))
 		UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)-board)
 		if board==-90 then
@@ -112,11 +114,11 @@ function CreateFire(hero,board)
 			--print("проблемный угол="..problem)
 			BlzSetSpecialEffectYaw(fire,math.rad(problem))
 		end
-		if data.ReleaseRMB==false and board==-90 then
+		if (data.ReleaseRMB==false and board==-90) or HeroUpdateWeaponCharges(hero,4,1)==false then
 			DestroyEffect(fire)
 			DestroyTimer(GetExpiredTimer())
 		end
-		if data.ReleaseLMB==false and board==90 then
+		if (data.ReleaseLMB==false and board==90) or HeroUpdateWeaponCharges(hero,4,1)==false then
 			DestroyEffect(fire)
 			DestroyTimer(GetExpiredTimer())
 		end
