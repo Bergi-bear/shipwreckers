@@ -7,6 +7,6 @@ function InMineWay()
 	local gg_trg_InMineWay = CreateTrigger()
 	TriggerRegisterEnterRectSimple(gg_trg_InMineWay, gg_rct_Zone03In)
 	TriggerAddAction(gg_trg_InMineWay, function()
-
+		print("баржа отправляется в путь")
 	end)
 end

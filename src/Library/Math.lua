@@ -198,3 +198,8 @@ end
 function MoveXY(x,y, distance, angle)
 	return x + distance * math.cos(angle * bj_DEGTORAD),y + distance * math.sin(angle * bj_DEGTORAD)
 end
+
+function UnitCollisionOFF(unit)
+	UnitAddAbility(unit,FourCC('A000'))
+	IssueImmediateOrder(unit,"windwalk")
+end

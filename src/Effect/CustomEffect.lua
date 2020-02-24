@@ -28,7 +28,9 @@ function UnitFlyTorrentInRange(x,y,range)
 		if e == nil then break end
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,500)
-			UnitAddAbility(e,FourCC('Aeth'))
+			--UnitAddAbility(e,FourCC('Aeth'))
+			--SetUnitPathing(e,false)
+			UnitCollisionOFF(e)
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
 				data.OnTorrent=true
@@ -57,7 +59,9 @@ function FlyUnitOnTorrent(hero,MaxHeight)
 		--print("zGround="..zGround)
 		i=i+1
 		if  i>5 and z<=zGround+1 then--z<=-89 and
-			UnitRemoveAbility(hero,FourCC('Aeth'))
+			--UnitRemoveAbility(hero,FourCC('Aeth'))
+			--SetUnitPathing(hero,true)
+			UnitRemoveAbility(hero,FourCC('B000'))
 			if IsUnitType(hero,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(hero)]
 				data.OnTorrent=false

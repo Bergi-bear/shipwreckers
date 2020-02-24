@@ -12,4 +12,5 @@ function InitZone0()
 	Enter00()
 	StartAllSaw()
 	ActivatedAllTower()
+	InMineWay()
 end

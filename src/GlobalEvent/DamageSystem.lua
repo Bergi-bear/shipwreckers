@@ -26,7 +26,7 @@ function InitDamage()
 		local casterOwner     = GetOwningPlayer(caster)
 
 		if isEventDamaged then
-			if GetUnitTypeId(target)==DummyID  then
+			if GetUnitTypeId(target)==DummyID  then--попадание в даммика эффект ракеты
 				local x,y=GetUnitX(target),GetUnitY(target)
 				ShowUnit(target, false)
 				CreateTorrent(x,y)
@@ -104,6 +104,7 @@ function UnitRocketArea(hero,x,y,range)
 	local find=false
 	local e--временный юнит
 	local targ=nil
+	--print("стреляем")
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
@@ -114,6 +115,7 @@ function UnitRocketArea(hero,x,y,range)
 		GroupRemoveUnit(perebor,e)
 	end
 	local dummy=CreateUnit(GetOwningPlayer(hero), DummyID, GetUnitX(hero), GetUnitY(hero), 0)
+	SetUnitZ(dummy,GetUnitZ(hero))
 	UnitAddAbility(dummy,FourCC('A003'))
 	UnitApplyTimedLife(dummy,DummyID,1)
 	if targ~=nil then
@@ -121,6 +123,7 @@ function UnitRocketArea(hero,x,y,range)
 		Cast(dummy,0,0,targ)
 	else
 		targ=CreateUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE), DummyID, x, y, 0)
+
 		UnitRemoveAbility(targ,FourCC('Aloc'))
 		Cast(dummy,0,0,targ)
 		UnitApplyTimedLife(targ,DummyID,3)

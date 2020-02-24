@@ -33,7 +33,13 @@ function CreateRoundSawZ(hero,ChainCount,angle,z)
 		BlzSetSpecialEffectPosition(saw,nx,ny,z)
 		UnitDamageArea(hero,20,nx,ny,150,z-90,"Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl")
 		angle=angle+speed
-		--DestroyTimer(GetExpiredTimer()) -- временно вечный таймер
+		if UnitAlive(hero)==false then
+			DestroyTimer(GetExpiredTimer()) -- временно вечный таймер
+			DestroyEffect(saw)
+			for i=1,ChainCount do
+				DestroyEffect(chain[i])
+			end
+		end
 	end)
 end
 

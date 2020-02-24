@@ -16,5 +16,5 @@ function ActivatedAllTower()
 		end
 		GroupRemoveUnit(perebor,e)
 	end
-	print("Запущено башен: "..k)
+	--print("Запущено башен: "..k)
 end

@@ -26,6 +26,7 @@ function InitGameCore()
 	--создаём героев
 	--BlzEnableSelections(false,false)
 	EnableDragSelect(false,false)
+	EnablePreSelect(false,false)
 	HERO[0]={
 		ReleaseW=false,
 		ReleaseS=false,
@@ -41,6 +42,10 @@ function InitGameCore()
 		AngleForce=0, --типа какой-то уго для отталкивания
 		IsDisabled=false,
 		OnTorrent=false,
+		Alive=true,
+		IsAttackReadyR=true,
+		IsAttackReadyL=true,
+		AttackCD=0.5
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	Ammo[0]={
@@ -73,6 +78,7 @@ function InitGameCore()
 	local HealthPlayer1 = HealthBarAdd(HERO[0].UnitHero)
 	BlzFrameSetAbsPoint(HealthPlayer1, FRAMEPOINT_LEFT, 0.04, 0.58)
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
+	RegisterAllAmmoBoxes(HERO[0].UnitHero)
 	--CreateWeaponFrame()
 	CreateWeaponFrame()
 	for i=1,9 do
@@ -90,8 +96,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch1, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=1
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Single then
+			data.WeaponIndex=1
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_2
 	local TrigWeaponSwitch2 = CreateTrigger()
@@ -102,8 +110,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch2, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=2
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Board then
+			data.WeaponIndex=2
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_3
 	local TrigWeaponSwitch3 = CreateTrigger()
@@ -114,8 +124,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch3, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=3
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Rocket then
+			data.WeaponIndex=3
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_4
 	local TrigWeaponSwitch4 = CreateTrigger()
@@ -126,8 +138,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch4, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=4
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Fire then
+			data.WeaponIndex=4
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_5
 	local TrigWeaponSwitch5 = CreateTrigger()
@@ -138,8 +152,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch5, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=5
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Toss then
+			data.WeaponIndex=5
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_6
 	local TrigWeaponSwitch6 = CreateTrigger()
@@ -150,8 +166,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch6, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.WeaponIndex=6
-		SwitchWeaponVisual(pid,data.WeaponIndex)
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=6
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
 	end)
 	-----------------------------------------------------------------OSKEY_W
 	local gg_trg_EventUpW = CreateTrigger()
@@ -253,12 +271,14 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			--IssueImmediateOrder(hero,"stop")
-			if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
-				BoardCannon(hero,90,GetRandomInt(5,5))
-			end
-			if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				CreateFire(hero,90)
+			if 	data.Alive and data.IsAttackReadyL then
+				data.IsAttackReadyL=false
+				if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
+					BoardCannon(hero,90,GetRandomInt(5,5))
+				end
+				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateFire(hero,90)
+				end
 			end
 		end
 	end)
@@ -289,28 +309,27 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
-			if data.WeaponIndex==1 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				SingleCannon(hero)
+			if 	data.Alive and data.IsAttackReadyR then
+				data.IsAttackReadyR=false
+				if data.WeaponIndex==1 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					SingleCannon(hero)
+				end
+				if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
+					BoardCannon(hero,-90,GetRandomInt(5,5))
+				end
+				if data.WeaponIndex==3 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
+				end
+				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateFire(hero,-90)
+				end
+				if data.WeaponIndex==5 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")
+				end
+				if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateBarrel(hero)
+				end
 			end
-			if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
-				BoardCannon(hero,-90,GetRandomInt(5,5))
-			end
-			if data.WeaponIndex==3 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
-
-			end
-			if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				CreateFire(hero,-90)
-			end
-			if data.WeaponIndex==5 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")
-
-			end
-			if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-				CreateBarrel(hero)
-
-			end
-
 		end
 	end)
 	local TrigDePressRMB=CreateTrigger()
@@ -334,40 +353,46 @@ function InitGameCore()
 		ForceUIKeyBJ(GetOwningPlayer(hero),"M")
 		--IssueImmediateOrder(hero,"stop")
 	end)
-
+	local acdr=0
+	local acdl=0
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
 			local turnrate=0
-			--local camerax,cameray=MoveX(GetUnitX(hero),data.CurrentSpeed*20,GetUnitFacing(hero)),MoveY(GetUnitY(hero),data.CurrentSpeed*20,GetUnitFacing(hero))
-			--CameraSetupSetDestPosition(gg_cam_CameraHATE, camerax,cameray, 0) -- пробовал 2
-			--BlzCameraSetupApplyForceDurationSmooth(gg_cam_CameraHATE, true, 0.3, 0.03, 1, 1)
-			--local camera=data.Camera
-			--SetCameraPositionForPlayer(p, camerax,cameray)--багается пробелом но не дёргается
 			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
-			--DestroyEffect(AddSpecialEffect("Abilities/Spells/Other/TinkerRocket/TinkerRocketMissile.mdl",camerax,cameray))
-			--PanCameraToTimedForPlayer(p,GetUnitX(camera),GetUnitY(camera),1)-- супер стойкая к чем угодно, но дёргается
 			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
-			--SetCameraFieldForPlayer(p,CAMERA_FIELD_ROTATION,         90.,.0)
-			--if GetUnitCurrentOrder(camera)~=String2OrderIdBJ("move") then
-				--IssuePointOrder(camera,"move",GetUnitX(hero),GetUnitY(hero))
-			--	IssuePointOrder(camera,"move",camerax,cameray)
-			--end
 
-			UnitCheckPathingInRound(hero,50)
+			if data.IsAttackReadyR==false then
+				acdr=acdr+TIMER_PERIOD
+				if acdr>=data.AttackCD then
+					data.IsAttackReadyR=true
+					acdr=0
+				end
+			end
+			if data.IsAttackReadyL==false then
+				acdl=acdl+TIMER_PERIOD
+				if acdl>=data.AttackCD then
+					data.IsAttackReadyL=true
+					acdl=0
+				end
+			end
+
+			UnitCheckPathingInRound(hero,50)--Фунция выталкивания
 
 			if data.ReleaseLMB then
 
 			end
 			----------------------------------------------------W
-			if data.ReleaseW then
-				if data.Acceleration<=data.SpeedBase then
-					data.Acceleration=data.Acceleration+1
-				end
-			else
-				if data.Acceleration>0 then
-					data.Acceleration=data.Acceleration-1
+			if UnitAlive(hero) then
+				if data.ReleaseW then
+					if data.Acceleration<=data.SpeedBase then
+						data.Acceleration=data.Acceleration+1
+					end
+				else
+					if data.Acceleration>0 then
+						data.Acceleration=data.Acceleration-1
+					end
 				end
 			end
 			----------------------------------------------------S

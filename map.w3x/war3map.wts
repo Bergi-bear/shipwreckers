@@ -34,18 +34,6 @@ STRING 7
 Кораблик
 }
 
-STRING 8
-// Abilities: A000 (Амулет), Name (Name)
-{
-Амулет
-}
-
-STRING 9
-// Abilities: A001 (Перерождение), Name (Name)
-{
-Перерождение
-}
-
 STRING 10
 {
  
@@ -72,12 +60,6 @@ STRING 14
 // Units: e000 (Дамми Основной), Ubertip (Tooltip - Extended)
 {
 Это даммми юнит
-}
-
-STRING 15
-// Abilities: A003 (Миниракета), Name (Name)
-{
-Миниракета
 }
 
 STRING 16
@@ -156,5 +138,53 @@ STRING 31
 // Units: n003 (Мини некропль), Name (Name)
 {
 Мини некропль
+}
+
+STRING 33
+// Units: e002 (Запас - ядра), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 34
+// Units: e002 (Запас - ядра), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 35
+// Units: e002 (Запас - ядра), Name (Name)
+{
+Запас - ядра
+}
+
+STRING 36
+// Units: e003 (Запас - ракеты), Name (Name)
+{
+Запас - ракеты
+}
+
+STRING 37
+// Units: e003 (Запас - ракеты), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 38
+// Units: e003 (Запас - ракеты), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 39
+// Abilities: A000 (Отключение коллизии), Name (Name)
+{
+Отключение коллизии
+}
+
+STRING 40
+// Abilities: A003 (Ракета), Name (Name)
+{
+Ракета
 }
 
