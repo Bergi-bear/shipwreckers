@@ -125,7 +125,10 @@ function UnitRocketArea(hero,x,y,range)
 		targ=CreateUnit(Player(PLAYER_NEUTRAL_AGGRESSIVE), DummyID, x, y, 0)
 
 		UnitRemoveAbility(targ,FourCC('Aloc'))
-		Cast(dummy,0,0,targ)
+		if Cast(dummy,0,0,targ)==false then
+			--print("выстрел в пустоту")
+			HeroUpdateWeaponCharges(hero,3,-1)
+		end
 		UnitApplyTimedLife(targ,DummyID,3)
 		--print("Нет врагов, летим в воду")
 	end

@@ -19,11 +19,15 @@ ImmediateOrders={"defend","magicdefense","militia","townbellon","avatar","divine
 ---@param y real
 ---@param target unit
 function Cast(u,x,y,target)
+	local IsCast=false
 	if UnitAlive(u) then
 		AllPoint(u,x,y)
-		AllTarget(u,target)
+		if AllTarget(u,target) then
+			IsCast=true
+		end
 		AllImmediate(u)
 	end
+	return IsCast
 end
 
 function AllImmediate(u)
@@ -41,8 +45,12 @@ function AllPoint(u,x,y)
 end
 
 function AllTarget(u,target)
+	local IsCast=false
 	for i = 1,#TargetOrders do
 		--print(TargetOrders[i].." is target")
-		IssueTargetOrder(u,TargetOrders[i],target)
+		if IssueTargetOrder(u,TargetOrders[i],target) then
+			IsCast=true
+		end
 	end
+	return IsCast
 end

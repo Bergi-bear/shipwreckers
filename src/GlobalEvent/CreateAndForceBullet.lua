@@ -125,12 +125,12 @@ function CreateFire(hero,board)
 	end)
 end
 
-function CreateBarrel(hero)
+function CreateBarrel(hero,angle,dist)
 	local x,y=GetUnitXY(hero)
 	local id=GetPlayerId(GetOwningPlayer(hero))
 	local barrel=AddSpecialEffect("Barrel_Unit.mdl",x,y)
-	local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
-	local dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])
+	if angle==nil then	angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD end
+	if dist==nil then dist=DistanceBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id]) end
 	if dist>=200 then dist=200 end
 	if dist<=100 then dist=100 end
 	BlzSetSpecialEffectYaw(barrel,math.rad(angle))
