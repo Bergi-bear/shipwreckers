@@ -53,7 +53,7 @@ function InitGameCore()
 			Single=true,
 			Board=true,
 			Rocket=false,
-			Fire=false,
+			Fire=true,
 			Toss=false,
 			Barrel=false,
 			Light=false,
@@ -64,7 +64,7 @@ function InitGameCore()
 			Single=150,
 			Board=100,
 			Rocket=0,
-			Fire=0,
+			Fire=500,
 			Toss=0,
 			Barrel=0,
 			Light=0,
@@ -224,7 +224,7 @@ function InitGameCore()
 		local data=HERO[pid]
 		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
 		data.ReleaseD=true
-		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
 	end)
 	local TrigDePressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -246,7 +246,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.ReleaseA=true
-		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
 	end)
 	local TrigDePressA = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -277,7 +277,7 @@ function InitGameCore()
 					BoardCannon(hero,90,GetRandomInt(5,5))
 				end
 				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-					CreateFire(hero,90)
+					CreateFire(hero,1)
 				end
 			end
 		end
@@ -321,7 +321,7 @@ function InitGameCore()
 					UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
 				end
 				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-					CreateFire(hero,-90)
+					CreateFire(hero,0)
 				end
 				if data.WeaponIndex==5 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")

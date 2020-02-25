@@ -122,7 +122,7 @@ function CreateUnitsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("n001"), -759.1, 4598.9, 45.617, FourCC("n001"))
     u = BlzCreateUnitWithSkin(p, FourCC("n002"), -577.8, 4546.9, 137.784, FourCC("n002"))
     u = BlzCreateUnitWithSkin(p, FourCC("n002"), -709.9, 4809.1, 21.028, FourCC("n002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("n002"), -478.7, 4626.9, -49.345, FourCC("n002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("n002"), -478.7, 4626.9, 310.655, FourCC("n002"))
 end
 
 function CreateNeutralPassiveBuildings()
@@ -1039,35 +1039,51 @@ function CreateFire(hero,board)
 	local x=MoveX(GetUnitX(hero),60,angle)
 	local y=MoveY(GetUnitY(hero),60,angle)
 
-	local fire=AddSpecialEffect("FireGun.mdl",x,y)
+	--local fire=AddSpecialEffect("FireGun.mdl",x,y)
+	local fire=AddSpecialEffect("Flame Thrower.mdl",x,y)
 	local inverse=1
-	if board==90 then inverse=-1 end
-	BlzSetSpecialEffectMatrixScale(fire,2,2,1)
+	if board==1 then inverse=-1 end
+	BlzSetSpecialEffectMatrixScale(fire,1,1,1)
+
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		--local xf,yf,zf=BlzGetLocalSpecialEffectX(fire),BlzGetLocalSpecialEffectY(fire),BlzGetLocalSpecialEffectZ(fire)
 		local xhero,yhero=GetUnitX(hero),GetUnitY(hero)
-		local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
+		--local nx,ny=MoveX(xhero,80,GetUnitFacing(hero)-board),MoveY(yhero,80,GetUnitFacing(hero)-board)
+		local nx,ny=MoveXY(xhero,yhero,10,GetUnitFacing(hero)-board)
 		local z=GetUnitZ(hero)
 		BlzSetSpecialEffectPosition(fire,nx,ny,z-140+89)
-		HeroUpdateWeaponCharges(hero,4,1)
+		BlzPlaySpecialEffect(fire,ANIM_TYPE_BIRTH)
+		--HeroUpdateWeaponCharges(hero,4,1)
 
 		--print("z Огня="..BlzGetLocalSpecialEffectZ(fire))
-		UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)-board)
-		if board==-90 then
-			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5+90))
+
+		if board==0 then
+			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5-90))
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5-90)
 		else
 			local problem=GetUnitFacing(hero)+board-5+90
 			--print("проблемный угол="..problem)
 			BlzSetSpecialEffectYaw(fire,math.rad(problem))
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5+90)
 		end
-		if (data.ReleaseRMB==false and board==-90) or HeroUpdateWeaponCharges(hero,4,1)==false then
+		if (data.ReleaseRMB==false and board==0)  then
+			--print("отключен вручную")
 			DestroyEffect(fire)
 			DestroyTimer(GetExpiredTimer())
+			BlzPlaySpecialEffect(fire,ANIM_TYPE_DEATH)
 		end
-		if (data.ReleaseLMB==false and board==90) or HeroUpdateWeaponCharges(hero,4,1)==false then
+		if (data.ReleaseLMB==false and board==1)  then
 			DestroyEffect(fire)
 			DestroyTimer(GetExpiredTimer())
+			BlzPlaySpecialEffect(fire,ANIM_TYPE_DEATH)
 		end
+		if Ammo[GetPlayerId(GetOwningPlayer(hero))].Count.Fire<=0 then
+			--print("закончились заряды")
+			DestroyEffect(fire)
+			DestroyTimer(GetExpiredTimer())
+			BlzPlaySpecialEffect(fire,ANIM_TYPE_DEATH)
+		end
+		HeroUpdateWeaponCharges(hero,4,1)
 	end)
 end
 
@@ -1415,7 +1431,7 @@ function InitGameCore()
 			Single=true,
 			Board=true,
 			Rocket=false,
-			Fire=false,
+			Fire=true,
 			Toss=false,
 			Barrel=false,
 			Light=false,
@@ -1426,7 +1442,7 @@ function InitGameCore()
 			Single=150,
 			Board=100,
 			Rocket=0,
-			Fire=0,
+			Fire=500,
 			Toss=0,
 			Barrel=0,
 			Light=0,
@@ -1586,7 +1602,7 @@ function InitGameCore()
 		local data=HERO[pid]
 		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
 		data.ReleaseD=true
-		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
 	end)
 	local TrigDePressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -1608,7 +1624,7 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		data.ReleaseA=true
-		BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
 	end)
 	local TrigDePressA = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -1639,7 +1655,7 @@ function InitGameCore()
 					BoardCannon(hero,90,GetRandomInt(5,5))
 				end
 				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-					CreateFire(hero,90)
+					CreateFire(hero,1)
 				end
 			end
 		end
@@ -1683,7 +1699,7 @@ function InitGameCore()
 					UnitRocketArea(hero,GetPlayerMouseX[pid],GetPlayerMouseY[pid],200)
 				end
 				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
-					CreateFire(hero,-90)
+					CreateFire(hero,0)
 				end
 				if data.WeaponIndex==5 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateArtToss(hero,"Abilities/Spells/Other/Volcano/VolcanoMissile.mdl")
@@ -2429,7 +2445,7 @@ function InMineWay()
 			CreateBarrel(barga,GetUnitFacing(barga)-180,100)
 			if IsUnitInRangeXY(barga,x,y,250)  then
 				if GetDestructableLife(gg_dest_B000_0131) <= 0 then
-					print("конец")
+					--print("конец")
 					DestroyTimer(GetExpiredTimer())
 				end
 				IssuePointOrder(barga,"move",xs,ys)
