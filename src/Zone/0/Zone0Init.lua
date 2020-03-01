@@ -6,11 +6,12 @@
 function InitZone0()
 	TimerStart(CreateTimer(), 5, true, function()
 		local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
-		CreateTorrent(x,y,4)
+		CreateTorrent(x,y,4,500)
 	end)
 	--перечисляем все регистрации
 	Enter00()
 	StartAllSaw()
 	ActivatedAllTower()
 	InMineWay()
+	InitZone1()--- временно потом перенести в другое место
 end

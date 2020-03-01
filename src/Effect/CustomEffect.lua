@@ -3,33 +3,33 @@
 --- Created by Bergi.
 --- DateTime: 09.02.2020 13:11
 ---
-function CreateTorrent(x,y,size)
+function CreateTorrent(x,y,size,zMax)
 	local torrent=nil
 	local z=GetTerrainZ(x,y)
 	local IsWater=false
 	if size==nil then size=1 end
+	if zMax==nil then zMax=100 end
 	if z<=-80 then
 		torrent=AddSpecialEffect("Torrent1.mdl",x,y)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
 		if size>=3 then
-			UnitFlyTorrentInRange(x,y,size*50)
+			UnitFlyTorrentInRange(x,y,size*50,zMax)
 		end
 	end
 	return IsWater
 end
 
-function UnitFlyTorrentInRange(x,y,range)
+function UnitFlyTorrentInRange(x,y,range,zMax)
 	local e--временный юнит
+	if zMax==nil then zMax=110 end
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
 		if e == nil then break end
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
-			FlyUnitOnTorrent(e,500)
-			--UnitAddAbility(e,FourCC('Aeth'))
-			--SetUnitPathing(e,false)
+			FlyUnitOnTorrent(e,zMax)
 			UnitCollisionOFF(e)
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]

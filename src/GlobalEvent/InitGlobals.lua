@@ -26,7 +26,7 @@ function InitGameCore()
 	--создаём героев
 	--BlzEnableSelections(false,false)
 	EnableDragSelect(false,false)
-	EnablePreSelect(false,false)
+	--EnablePreSelect(false,false)--выделение
 	HERO[0]={
 		ReleaseW=false,
 		ReleaseS=false,
@@ -53,9 +53,9 @@ function InitGameCore()
 			Single=true,
 			Board=true,
 			Rocket=false,
-			Fire=true,
-			Toss=false,
-			Barrel=false,
+			Fire=false,
+			Toss=true,
+			Barrel=true,
 			Light=false,
 			Saw=false,
 			Oil=false
@@ -64,9 +64,9 @@ function InitGameCore()
 			Single=150,
 			Board=100,
 			Rocket=0,
-			Fire=500,
-			Toss=0,
-			Barrel=0,
+			Fire=0,
+			Toss=10,
+			Barrel=10,
 			Light=0,
 			Saw=0,
 			Oil=0
@@ -415,8 +415,8 @@ function InitGameCore()
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
 				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
-				local newX3,newY3=MoveX(x,90,angle),MoveY(y,180,angle)
-				local newX2,newY2=MoveX(x,60,angle),MoveY(y,120,angle)
+				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
+				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
 				local Perepad=zhero-z2
@@ -425,13 +425,17 @@ function InitGameCore()
 				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
 				if Perepad<1  then
-
 					SetUnitPositionSmooth(hero,newX,newY)
+					--SetUnitX(hero,newX)
+					--SetUnitY(hero,newY)
 				else
-					--print("Высоко, надо пройти")
-					if Perepad>50 then
+					--print("Высоко, надо пройти "..Perepad)
+					if Perepad>110 then
+						--print("Большой перепад="..Perepad)
 						SetUnitX(hero,newX)
 						SetUnitY(hero,newY)
+					else
+						SetUnitPositionSmooth(hero,newX,newY)
 					end
 				end
 			end

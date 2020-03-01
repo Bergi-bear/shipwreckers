@@ -270,5 +270,3 @@ function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
 		end
 	end)
 end
-
-

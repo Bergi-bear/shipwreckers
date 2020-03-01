@@ -26,5 +26,15 @@ function InitUnitDeath()
 				SelectUnitForPlayerSingle(DeadUnit,PD)
 			end)
 		end
+		if IsUnitInGroup(DeadUnit,OrcSkeletonPoolG) then--зомбки орки с первой зоны
+			OrcSkeletonPool[4]=OrcSkeletonPool[4]-1
+			local hObelisk=GetUnitUserData(DeadUnit)
+			for i=1,4 do
+				if hObelisk==GetHandleId(OrcSkeletonPool[5+i]) then
+					local obelisk=OrcSkeletonPool[5+i]
+					SetUnitUserData(obelisk,GetUnitUserData(obelisk)-1)
+				end
+			end
+		end
 	end)
 end
