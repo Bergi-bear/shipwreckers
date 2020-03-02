@@ -7,8 +7,55 @@ function InitZone1()
 	TimerStart(CreateTimer(), 10, true, function()
 		--CreateZombies()
 		InitZombies()
+		--gg_rct_TestFog
+
+	end)
+	--print("0")
+	CreateFogInRect(gg_rct_TestFog)
+end
+
+function CreateFogInRect(rect)
+	--print("1")
+	local xMax,yMax=GetRectMaxX(rect),GetRectMaxY(rect)
+	local xMin,yMin=GetRectMinX(rect),GetRectMinY(rect)
+	local step=70
+	local Wide=R2I(math.abs(xMax-xMin)/step)
+	local Height=R2I(math.abs(yMax-yMin)/step)
+	local xPos,yPos=xMax,yMax
+	local fog={}
+	print("x="..Wide.." y="..Height)
+	for i=0,Wide do
+		xPos=MoveX(xMax,-step*i,0)
+		--print("Создан туман по х="..i)
+		for k=0,Height do
+			yPos=MoveY(yMax,-step*k,90)
+			--fog[i]=
+			--print("Создан туман по y="..k)
+			local eff =AddSpecialEffect("bluegas4",xPos,yPos) --WaterOrb --bluegas
+			SetEffectAlphaNearHero(eff)
+		end
+	end
+end
+
+function SetEffectAlphaNearHero(eff)
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	TimerStart(CreateTimer(), 0.3, true, function()
+		if PointContentUnit(x,y,450) then
+			BlzSetSpecialEffectAlpha(eff,100)
+			--print("alpha")
+			BlzPlaySpecialEffect(eff,ANIM_TYPE_DEATH)
+			DestroyEffect(eff)
+			DestroyTimer(GetExpiredTimer())
+			--BlzSetSpecialEffectTime(eff,2300)
+			BlzSetSpecialEffectPosition(eff,4000,4000,0)
+		else
+			BlzSetSpecialEffectAlpha(eff,0)
+			BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
+			BlzSetSpecialEffectPosition(eff,x,y,0)
+		end
 	end)
 end
+
 
 
 

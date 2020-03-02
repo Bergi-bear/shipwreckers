@@ -62,20 +62,14 @@ STRING 14
 Это даммми юнит
 }
 
-STRING 16
-// Units: e001 (Камера), Name (Name)
-{
-Камера
-}
-
 STRING 17
-// Units: e001 (Камера), Tip (Tooltip - Basic)
+// Units: e001 (Дамми имитирующий), Tip (Tooltip - Basic)
 {
 дамми
 }
 
 STRING 18
-// Units: e001 (Камера), Ubertip (Tooltip - Extended)
+// Units: e001 (Дамми имитирующий), Ubertip (Tooltip - Extended)
 {
 Это даммми юнит
 }
@@ -192,5 +186,11 @@ STRING 41
 // Doodads: D002 (Арка прожодимая вертикальная), Name (Name)
 {
 Арка прожодимая вертикальная
+}
+
+STRING 42
+// Units: e001 (Дамми имитирующий), Name (Name)
+{
+Дамми имитирующий
 }
 

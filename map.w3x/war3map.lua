@@ -10,6 +10,7 @@ gg_rct_Zone03Out = nil
 gg_rct_Region_010 = nil
 gg_rct_Region_011 = nil
 gg_rct_Combat1Zone = nil
+gg_rct_TestFog = nil
 gg_cam_CameraHATE = nil
 gg_snd_AAA = nil
 gg_snd_AAA1 = nil
@@ -205,6 +206,7 @@ function CreateRegions()
     we = AddWeatherEffect(gg_rct_Region_011, FourCC("LRaa"))
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
+    gg_rct_TestFog = Rect(-3264.0, 6816.0, 1728.0, 8640.0)
 end
 
 function CreateCameras()
@@ -1911,19 +1913,20 @@ end
 function PointContentUnit(x,y,range,condconten)
 	local content=false
 	local e--временный юнит
+	local ContentUnit=nil
 	if condconten==nil then condconten=true end
 	if range==nil then range=80 end
 	GroupEnumUnitsInRange(perebor,x,y,range,nil)
 	while true do
 		e = FirstOfGroup(perebor)
 		if e == nil then break end
-		if UnitAlive(e) and condconten  then
-			--UnitDamageTarget( u, e, damage, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
+		if UnitAlive(e) and condconten and content==false  then
 			content=true
+			ContentUnit=e
 		end
 		GroupRemoveUnit(perebor,e)
 	end
-	return content
+	return content,ContentUnit
 end
 
 GlobalRect=Rect(0,0,0,0)
@@ -1975,7 +1978,7 @@ function InitUnitDeath()
 				SelectUnitForPlayerSingle(DeadUnit,PD)
 			end)
 		end
-		if IsUnitInGroup(DeadUnit,OrcSkeletonPoolG) then
+		if IsUnitInGroup(DeadUnit,OrcSkeletonPoolG) then--зомбки орки с первой зоны
 			OrcSkeletonPool[4]=OrcSkeletonPool[4]-1
 			local hObelisk=GetUnitUserData(DeadUnit)
 			for i=1,4 do
@@ -2507,8 +2510,55 @@ function InitZone1()
 	TimerStart(CreateTimer(), 10, true, function()
 		--CreateZombies()
 		InitZombies()
+		--gg_rct_TestFog
+
+	end)
+	--print("0")
+	CreateFogInRect(gg_rct_TestFog)
+end
+
+function CreateFogInRect(rect)
+	--print("1")
+	local xMax,yMax=GetRectMaxX(rect),GetRectMaxY(rect)
+	local xMin,yMin=GetRectMinX(rect),GetRectMinY(rect)
+	local step=70
+	local Wide=R2I(math.abs(xMax-xMin)/step)
+	local Height=R2I(math.abs(yMax-yMin)/step)
+	local xPos,yPos=xMax,yMax
+	local fog={}
+	print("x="..Wide.." y="..Height)
+	for i=0,Wide do
+		xPos=MoveX(xMax,-step*i,0)
+		--print("Создан туман по х="..i)
+		for k=0,Height do
+			yPos=MoveY(yMax,-step*k,90)
+			--fog[i]=
+			--print("Создан туман по y="..k)
+			local eff =AddSpecialEffect("bluegas4",xPos,yPos) --WaterOrb --bluegas
+			SetEffectAlphaNearHero(eff)
+		end
+	end
+end
+
+function SetEffectAlphaNearHero(eff)
+	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+	TimerStart(CreateTimer(), 0.3, true, function()
+		if PointContentUnit(x,y,450) then
+			BlzSetSpecialEffectAlpha(eff,100)
+			--print("alpha")
+			BlzPlaySpecialEffect(eff,ANIM_TYPE_DEATH)
+			DestroyEffect(eff)
+			DestroyTimer(GetExpiredTimer())
+			--BlzSetSpecialEffectTime(eff,2300)
+			BlzSetSpecialEffectPosition(eff,4000,4000,0)
+		else
+			BlzSetSpecialEffectAlpha(eff,0)
+			BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
+			BlzSetSpecialEffectPosition(eff,x,y,0)
+		end
 	end)
 end
+
 
 
 
@@ -2827,7 +2877,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -768.0, 3712.0)
+    DefineStartLocation(0, 576.0, 7360.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end
