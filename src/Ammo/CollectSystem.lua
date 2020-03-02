@@ -5,7 +5,7 @@
 
 function RegisterAllAmmoBoxes(hero)
 	local gg_trg_RANGE = CreateTrigger()
-	TriggerRegisterUnitInRangeSimple(gg_trg_RANGE, 100, hero)
+	TriggerRegisterUnitInRangeSimple(gg_trg_RANGE, 150, hero)
 
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()

@@ -84,6 +84,8 @@ function HealUnit(hero,amount)
 	local TotalHeal=amount
 	if LoosingHP<=amount then TotalHeal=LoosingHP	end
 	SetUnitState(hero,UNIT_STATE_LIFE,CurrentHP+TotalHeal)
-	FlyTextTagLumberBounty(hero,"+"..R2I(TotalHeal),p)
+	if TotalHeal>1 then
+		FlyTextTagLumberBounty(hero,"+"..R2I(TotalHeal),p)
+	end
 	return OverHeal
 end

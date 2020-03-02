@@ -206,7 +206,7 @@ function CreateRegions()
     we = AddWeatherEffect(gg_rct_Region_011, FourCC("LRaa"))
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
-    gg_rct_TestFog = Rect(-3264.0, 6816.0, 1728.0, 8640.0)
+    gg_rct_TestFog = Rect(96.0, 6752.0, 1728.0, 8576.0)
 end
 
 function CreateCameras()
@@ -380,7 +380,7 @@ end
 
 function RegisterAllAmmoBoxes(hero)
 	local gg_trg_RANGE = CreateTrigger()
-	TriggerRegisterUnitInRangeSimple(gg_trg_RANGE, 100, hero)
+	TriggerRegisterUnitInRangeSimple(gg_trg_RANGE, 150, hero)
 
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()
@@ -508,7 +508,9 @@ function HealUnit(hero,amount)
 	local TotalHeal=amount
 	if LoosingHP<=amount then TotalHeal=LoosingHP	end
 	SetUnitState(hero,UNIT_STATE_LIFE,CurrentHP+TotalHeal)
-	FlyTextTagLumberBounty(hero,"+"..R2I(TotalHeal),p)
+	if TotalHeal>1 then
+		FlyTextTagLumberBounty(hero,"+"..R2I(TotalHeal),p)
+	end
 	return OverHeal
 end
 ---
@@ -523,7 +525,7 @@ function CreateTorrent(x,y,size,zMax)
 	if size==nil then size=1 end
 	if zMax==nil then zMax=100 end
 	if z<=-80 then
-		torrent=AddSpecialEffect("Torrent1.mdl",x,y)
+		torrent=AddSpecialEffect("Torrent.mdl",x,y)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
@@ -544,9 +546,14 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
 			UnitCollisionOFF(e)
+
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
 				data.OnTorrent=true
+				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
+				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
+				UnitAddForce(e,angle,distance/16,zMax)
+				print(distance)
 			end
 		end
 		GroupRemoveUnit(perebor,e)
@@ -1197,7 +1204,7 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 	end)
 end
 
-function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
+function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 	local sec=duration
 	local infinity=false
 	if duration==nil or duration==0 then infinity=true end
@@ -1214,9 +1221,11 @@ function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
 					RemoveEffect(eff)
 					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
 					DestroyTimer(GetExpiredTimer())
-				elseif flag==2 then
-					if IsUnitEnemy(e,GetOwningPlayer(UnitEffectOwner)) then
-						UnitDamageArea(UnitEffectOwner,100,x,y,200,z)
+					HealUnit(hero,100)
+
+				elseif flag==2 then-- глубоководная мина
+					if IsUnitEnemy(e,GetOwningPlayer(hero)) then
+						UnitDamageArea(hero,100,x,y,200,z)
 					end
 				end
 			end
@@ -1767,7 +1776,7 @@ function InitGameCore()
 				end
 			end
 
-			UnitCheckPathingInRound(hero,50)--Фунция выталкивания
+			--UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -1788,17 +1797,17 @@ function InitGameCore()
 			if data.ReleaseS then
 			end
 
-			if data.ReleaseD then
+			if data.ReleaseD and data.OnTorrent==false  then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-turnrate)
 			end
-			if data.ReleaseA then
+			if data.ReleaseA and data.OnTorrent==false then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+turnrate)
 			end
 
 			data.CurrentSpeed=data.Acceleration
-			if data.CurrentSpeed>0 then--попытка сделать разгон
+			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--попытка сделать разгон
 					--print("текущая скорость = "..data.CurrentSpeed)
 				local x,y=GetUnitX(hero),GetUnitY(hero)
 				local angle=GetUnitFacing(hero)
@@ -1902,7 +1911,7 @@ function UnitAddForce(hero,angle,speed,distance)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
 		SetUnitX(hero,newX)
 		SetUnitY(hero,newY)
-		if currentdistance>=distance then
+		if currentdistance>=distance or data.OnTorrent==false then
 			data.IsDisabled=false
 			DestroyTimer(GetExpiredTimer())
 			--print("stop")
@@ -2854,7 +2863,7 @@ function InitCustomTeams()
 end
 
 function main()
-    SetCameraBounds(-3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -3328.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+    SetCameraBounds(-11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
     SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
     NewSoundEnvironment("Default")
     SetAmbientDaySound("SunkenRuinsDay")
@@ -2877,7 +2886,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, 576.0, 7360.0)
+    DefineStartLocation(0, -2880.0, 1088.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

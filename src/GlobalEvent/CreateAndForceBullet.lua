@@ -238,7 +238,7 @@ function JumpEffect(eff,speed, maxHeight,angle,distance,hero,flag,ZStart)
 	end)
 end
 
-function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
+function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 	local sec=duration
 	local infinity=false
 	if duration==nil or duration==0 then infinity=true end
@@ -255,9 +255,11 @@ function EffectAddRegistrationCollision(eff,UnitEffectOwner,range,duration,flag)
 					RemoveEffect(eff)
 					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
 					DestroyTimer(GetExpiredTimer())
-				elseif flag==2 then
-					if IsUnitEnemy(e,GetOwningPlayer(UnitEffectOwner)) then
-						UnitDamageArea(UnitEffectOwner,100,x,y,200,z)
+					HealUnit(hero,100)
+
+				elseif flag==2 then-- глубоководная мина
+					if IsUnitEnemy(e,GetOwningPlayer(hero)) then
+						UnitDamageArea(hero,100,x,y,200,z)
 					end
 				end
 			end

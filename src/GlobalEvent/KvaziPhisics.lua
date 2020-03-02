@@ -65,7 +65,7 @@ function UnitAddForce(hero,angle,speed,distance)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
 		SetUnitX(hero,newX)
 		SetUnitY(hero,newY)
-		if currentdistance>=distance then
+		if currentdistance>=distance or data.OnTorrent==false then
 			data.IsDisabled=false
 			DestroyTimer(GetExpiredTimer())
 			--print("stop")

@@ -378,7 +378,7 @@ function InitGameCore()
 				end
 			end
 
-			UnitCheckPathingInRound(hero,50)--Фунция выталкивания
+			--UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -399,17 +399,17 @@ function InitGameCore()
 			if data.ReleaseS then
 			end
 
-			if data.ReleaseD then
+			if data.ReleaseD and data.OnTorrent==false  then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)-turnrate)
 			end
-			if data.ReleaseA then
+			if data.ReleaseA and data.OnTorrent==false then
 				turnrate=data.Acceleration<=5 and 5 or (5-data.Acceleration/3)+3
 				BlzSetUnitFacingEx(hero,GetUnitFacing(hero)+turnrate)
 			end
 
 			data.CurrentSpeed=data.Acceleration
-			if data.CurrentSpeed>0 then--попытка сделать разгон
+			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--попытка сделать разгон
 					--print("текущая скорость = "..data.CurrentSpeed)
 				local x,y=GetUnitX(hero),GetUnitY(hero)
 				local angle=GetUnitFacing(hero)

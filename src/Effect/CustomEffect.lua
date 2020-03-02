@@ -10,7 +10,7 @@ function CreateTorrent(x,y,size,zMax)
 	if size==nil then size=1 end
 	if zMax==nil then zMax=100 end
 	if z<=-80 then
-		torrent=AddSpecialEffect("Torrent1.mdl",x,y)
+		torrent=AddSpecialEffect("Torrent.mdl",x,y)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
@@ -31,9 +31,14 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
 			UnitCollisionOFF(e)
+
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
 				data.OnTorrent=true
+				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
+				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
+				UnitAddForce(e,angle,distance/16,zMax)
+				print(distance)
 			end
 		end
 		GroupRemoveUnit(perebor,e)
