@@ -36,5 +36,9 @@ function InitUnitDeath()
 				end
 			end
 		end
+		if GetUnitTypeId(DeadUnit)==FourCC('h001') then
+			ShowUnit(DeadUnit,false)
+			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl",GetUnitXY(DeadUnit)))
+		end
 	end)
 end

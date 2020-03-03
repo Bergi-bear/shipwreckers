@@ -35,15 +35,15 @@ VisualCharges={}
 
 function CreateWeaponFrame()
 	local texture={
-		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle",
+		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNClusterRockets.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNFireRocks.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp",
+		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive",
+		"ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp",
 	}
 	local weaponName= {
 		"[1] Носовое ордие",

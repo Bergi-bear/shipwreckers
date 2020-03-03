@@ -1,3 +1,5 @@
 [Misc]
+GrantHeroXPFormulaC=0.0
 MaxHeroLevel=99
+NeedHeroXP=0
 

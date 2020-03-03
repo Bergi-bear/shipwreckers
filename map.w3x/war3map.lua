@@ -11,6 +11,7 @@ gg_rct_Region_010 = nil
 gg_rct_Region_011 = nil
 gg_rct_Combat1Zone = nil
 gg_rct_TestFog = nil
+gg_rct_DeapZone1 = nil
 gg_cam_CameraHATE = nil
 gg_snd_AAA = nil
 gg_snd_AAA1 = nil
@@ -86,10 +87,13 @@ function CreateUnitsForPlayer0()
     local unitID
     local t
     local life
-    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2985.8, 5702.8, 53.022, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2833.6, 5698.4, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 1977.1, 6059.0, 12.140, FourCC("e005"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2211.5, 6046.9, 12.140, FourCC("e005"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 1997.9, 5837.9, 12.140, FourCC("e005"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2216.5, 5844.6, 12.140, FourCC("e005"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -120,6 +124,7 @@ function CreateBuildingsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("n003"), 704.0, 6080.0, 270.000, FourCC("n003"))
     gg_unit_h002_0023 = BlzCreateUnitWithSkin(p, FourCC("h002"), 832.0, -1472.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), 1216.0, -832.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("n004"), -2368.0, 7808.0, 270.000, FourCC("n004"))
 end
 
 function CreateUnitsForPlayer10()
@@ -152,6 +157,8 @@ function CreateNeutralPassive()
     local unitID
     local t
     local life
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2985.8, 5702.8, 53.022, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2833.6, 5698.4, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2213.9, 3535.3, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1541.1, -898.2, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1541.6, -678.4, 251.580, FourCC("e002"))
@@ -171,6 +178,15 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e003"), 1011.0, 161.7, 200.070, FourCC("e003"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1009.5, -3207.5, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1202.0, -3198.8, 18.886, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1416.3, 4627.9, 308.210, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2420.0, 3644.5, 357.748, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2619.5, 3644.5, 3.283, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2818.8, 3639.8, 345.796, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2431.7, 3848.2, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2603.5, 3837.4, 335.332, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2817.4, 3840.5, 69.411, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e001"), 1705.3, 6258.4, -89.035, FourCC("e001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e001"), 1751.7, 6259.8, 270.965, FourCC("e001"))
 end
 
 function CreatePlayerBuildings()
@@ -207,6 +223,7 @@ function CreateRegions()
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
     gg_rct_TestFog = Rect(96.0, 6752.0, 1728.0, 8576.0)
+    gg_rct_DeapZone1 = Rect(2016.0, 4896.0, 3104.0, 5440.0)
 end
 
 function CreateCameras()
@@ -683,15 +700,15 @@ VisualCharges={}
 
 function CreateWeaponFrame()
 	local texture={
-		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle",
+		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNClusterRockets.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNFireBolt.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNFireRocks.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
-		"ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp",
+		"ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp",
+		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive",
+		"ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp",
 	}
 	local weaponName= {
 		"[1] Носовое ордие",
@@ -1997,6 +2014,10 @@ function InitUnitDeath()
 				end
 			end
 		end
+		if GetUnitTypeId(DeadUnit)==FourCC('h001') then
+			ShowUnit(DeadUnit,false)
+			DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl",GetUnitXY(DeadUnit)))
+		end
 	end)
 end
 
@@ -2863,7 +2884,7 @@ function InitCustomTeams()
 end
 
 function main()
-    SetCameraBounds(-11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -3584.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
+    SetCameraBounds(-11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), -11776.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), -11520.0 + GetCameraMargin(CAMERA_MARGIN_LEFT), 11264.0 - GetCameraMargin(CAMERA_MARGIN_TOP), 11520.0 - GetCameraMargin(CAMERA_MARGIN_RIGHT), -11776.0 + GetCameraMargin(CAMERA_MARGIN_BOTTOM))
     SetDayNightModels("Environment\\DNC\\DNCLordaeron\\DNCLordaeronTerrain\\DNCLordaeronTerrain.mdl", "Environment\\DNC\\DNCLordaeron\\DNCLordaeronUnit\\DNCLordaeronUnit.mdl")
     NewSoundEnvironment("Default")
     SetAmbientDaySound("SunkenRuinsDay")
@@ -2886,7 +2907,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -2880.0, 1088.0)
+    DefineStartLocation(0, 1472.0, 5888.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

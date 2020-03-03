@@ -194,3 +194,51 @@ STRING 42
 Дамми имитирующий
 }
 
+STRING 43
+// Units: e004 (Глубоководная мина), Name (Name)
+{
+Глубоководная мина
+}
+
+STRING 44
+// Units: e004 (Глубоководная мина), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 45
+// Units: e004 (Глубоководная мина), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 46
+// Units: n004 (Кракен), Name (Name)
+{
+Кракен
+}
+
+STRING 47
+// Units: e005 (Запас - универсальный ящик), Name (Name)
+{
+Запас - универсальный ящик
+}
+
+STRING 48
+// Units: e005 (Запас - универсальный ящик), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 49
+// Units: e005 (Запас - универсальный ящик), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 50
+// Abilities: A001 (Наклейка 1), Name (Name)
+{
+Наклейка 1
+}
+
