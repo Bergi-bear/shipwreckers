@@ -42,7 +42,7 @@ function CreateWeaponFrame()
 		"ReplaceableTextures\\CommandButtons\\BTNFireRocks.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp",
-		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive",
+		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp",
 	}
 	local weaponName= {
@@ -87,8 +87,6 @@ function CreateWeaponFrame()
 		local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", charges, "", 0)
 		BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, charges, FRAMEPOINT_CENTER, 0.,0.)
 		BlzFrameSetText(new_FrameChargesText, "0")
-
-
 		BlzFrameSetAllPoints(faceHover, face)
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)

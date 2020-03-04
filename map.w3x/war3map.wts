@@ -218,20 +218,14 @@ STRING 46
 Кракен
 }
 
-STRING 47
-// Units: e005 (Запас - универсальный ящик), Name (Name)
-{
-Запас - универсальный ящик
-}
-
 STRING 48
-// Units: e005 (Запас - универсальный ящик), Tip (Tooltip - Basic)
+// Units: e005 (Запас - ядра бортовые), Tip (Tooltip - Basic)
 {
 дамми
 }
 
 STRING 49
-// Units: e005 (Запас - универсальный ящик), Ubertip (Tooltip - Extended)
+// Units: e005 (Запас - ядра бортовые), Ubertip (Tooltip - Extended)
 {
 Это даммми юнит
 }
@@ -240,5 +234,221 @@ STRING 50
 // Abilities: A001 (Наклейка 1), Name (Name)
 {
 Наклейка 1
+}
+
+STRING 51
+// Units: e005 (Запас - ядра бортовые), Name (Name)
+{
+Запас - ядра бортовые
+}
+
+STRING 52
+// Units: e006 (Запас - ракеты (ящик)), Name (Name)
+{
+Запас - ракеты (ящик)
+}
+
+STRING 53
+// Units: e006 (Запас - ракеты (ящик)), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 54
+// Units: e006 (Запас - ракеты (ящик)), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 55
+// Units: e007 (Запас - Огонь), Name (Name)
+{
+Запас - Огонь
+}
+
+STRING 56
+// Units: e007 (Запас - Огонь), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 57
+// Units: e007 (Запас - Огонь), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 58
+// Units: e008 (Запас - Навес), Name (Name)
+{
+Запас - Навес
+}
+
+STRING 59
+// Units: e008 (Запас - Навес), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 60
+// Units: e008 (Запас - Навес), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 61
+// Units: e009 (Запас - Бочка), Name (Name)
+{
+Запас - Бочка
+}
+
+STRING 62
+// Units: e009 (Запас - Бочка), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 63
+// Units: e009 (Запас - Бочка), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 64
+// Units: e00A (Запас - Молния), Name (Name)
+{
+Запас - Молния
+}
+
+STRING 65
+// Units: e00A (Запас - Молния), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 66
+// Units: e00A (Запас - Молния), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 67
+// Units: e00B (Запас - Нефть), Name (Name)
+{
+Запас - Нефть
+}
+
+STRING 68
+// Units: e00B (Запас - Нефть), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 69
+// Units: e00B (Запас - Нефть), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 70
+// Abilities: A001 (Наклейка 1), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 71
+// Abilities: A002 (Наклейка 2), Name (Name)
+{
+Наклейка 2
+}
+
+STRING 72
+// Abilities: A002 (Наклейка 2), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 73
+// Abilities: A004 (Наклейка 3), Name (Name)
+{
+Наклейка 3
+}
+
+STRING 74
+// Abilities: A004 (Наклейка 3), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 75
+// Abilities: A005 (Наклейка 4), Name (Name)
+{
+Наклейка 4
+}
+
+STRING 76
+// Abilities: A005 (Наклейка 4), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 77
+// Abilities: A006 (Наклейка 5), Name (Name)
+{
+Наклейка 5
+}
+
+STRING 78
+// Abilities: A006 (Наклейка 5), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 79
+// Abilities: A007 (Наклейка 6), Name (Name)
+{
+Наклейка 6
+}
+
+STRING 80
+// Abilities: A007 (Наклейка 6), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 81
+// Abilities: A008 (Наклейка 7), Name (Name)
+{
+Наклейка 7
+}
+
+STRING 82
+// Abilities: A008 (Наклейка 7), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 83
+// Abilities: A009 (Наклейка 8), Name (Name)
+{
+Наклейка 8
+}
+
+STRING 84
+// Abilities: A009 (Наклейка 8), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
+}
+
+STRING 85
+// Abilities: A00A (Наклейка 9), Name (Name)
+{
+Наклейка 9
+}
+
+STRING 86
+// Abilities: A00A (Наклейка 9), EditorSuffix (Editor Suffix)
+{
+(клеим на верх)
 }
 

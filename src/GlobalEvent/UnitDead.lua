@@ -3,7 +3,7 @@
 --- Created by Bergi.
 --- DateTime: 23.01.2020 20:11
 function InitUnitDeath()
-	gg_trg_DEADGUI = CreateTrigger()
+	local gg_trg_DEADGUI = CreateTrigger()
 	TriggerRegisterAnyUnitEventBJ(gg_trg_DEADGUI, EVENT_PLAYER_UNIT_DEATH)--меня полностью устраивает это событие
 	TriggerAddAction(gg_trg_DEADGUI, function()
 		local DeadUnit=GetTriggerUnit()--умерший

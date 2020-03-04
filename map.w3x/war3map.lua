@@ -88,12 +88,17 @@ function CreateUnitsForPlayer0()
     local t
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 1977.1, 6059.0, 12.140, FourCC("e005"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e009"), 1882.7, 6118.8, 123.930, FourCC("e009"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2211.5, 6046.9, 12.140, FourCC("e005"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 1997.9, 5837.9, 12.140, FourCC("e005"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2216.5, 5844.6, 12.140, FourCC("e005"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00A"), 2058.6, 6118.8, 242.432, FourCC("e00A"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e008"), 2219.3, 6123.1, 296.003, FourCC("e008"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00B"), 1848.1, 5880.5, 266.756, FourCC("e00B"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e007"), 2010.1, 5864.9, 75.259, FourCC("e007"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e003"), 2189.0, 5864.9, 223.535, FourCC("e003"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e006"), 2361.6, 5888.4, 135.685, FourCC("e006"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 2498.2, 5876.6, 73.127, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2466.3, 6094.8, 211.460, FourCC("e005"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -185,8 +190,6 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2431.7, 3848.2, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2603.5, 3837.4, 335.332, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2817.4, 3840.5, 69.411, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e001"), 1705.3, 6258.4, -89.035, FourCC("e001"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e001"), 1751.7, 6259.8, 270.965, FourCC("e001"))
 end
 
 function CreatePlayerBuildings()
@@ -707,7 +710,7 @@ function CreateWeaponFrame()
 		"ReplaceableTextures\\CommandButtons\\BTNFireRocks.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNBarrel.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNChainLightning.blp",
-		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive",
+		"ReplaceableTextures\\PassiveButtons\\PASBTNUpgradeMoonGlaive.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNUnstableConcoction.blp",
 	}
 	local weaponName= {
@@ -1981,7 +1984,7 @@ end
 --- Created by Bergi.
 --- DateTime: 23.01.2020 20:11
 function InitUnitDeath()
-	gg_trg_DEADGUI = CreateTrigger()
+	local gg_trg_DEADGUI = CreateTrigger()
 	TriggerRegisterAnyUnitEventBJ(gg_trg_DEADGUI, EVENT_PLAYER_UNIT_DEATH)--меня полностью устраивает это событие
 	TriggerAddAction(gg_trg_DEADGUI, function()
 		local DeadUnit=GetTriggerUnit()--умерший
