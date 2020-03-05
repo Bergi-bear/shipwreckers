@@ -88,17 +88,8 @@ function CreateUnitsForPlayer0()
     local t
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e009"), 1882.7, 6118.8, 123.930, FourCC("e009"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e00A"), 2058.6, 6118.8, 242.432, FourCC("e00A"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e008"), 2219.3, 6123.1, 296.003, FourCC("e008"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e00B"), 1848.1, 5880.5, 266.756, FourCC("e00B"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e007"), 2010.1, 5864.9, 75.259, FourCC("e007"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e003"), 2189.0, 5864.9, 223.535, FourCC("e003"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e006"), 2361.6, 5888.4, 135.685, FourCC("e006"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 2498.2, 5876.6, 73.127, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2466.3, 6094.8, 211.460, FourCC("e005"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -414,13 +405,32 @@ function RegisterAllAmmoBoxes(hero)
 				HeroUpdateWeaponCharges(hero,2,-100)
 				IsResurrected=true
 				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e003') then
-				--print("ракета")
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e003') or GetUnitTypeId(AmmoBox)==FourCC('e006') then
 				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket==false then
 					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket=true
-				--	print("Доступно новое оружие")
 				end
 				HeroUpdateWeaponCharges(hero,3,-50)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e007') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire=true
+				end
+				HeroUpdateWeaponCharges(hero,4,-100)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e008') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss=true
+				end
+				HeroUpdateWeaponCharges(hero,5,-15)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e009') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel=true
+				end
+				HeroUpdateWeaponCharges(hero,6,-10)
 				IsResurrected=false
 				IsKill=true
 			end
@@ -755,8 +765,6 @@ function CreateWeaponFrame()
 		local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", charges, "", 0)
 		BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, charges, FRAMEPOINT_CENTER, 0.,0.)
 		BlzFrameSetText(new_FrameChargesText, "0")
-
-
 		BlzFrameSetAllPoints(faceHover, face)
 		BlzFrameSetTooltip(faceHover, tooltip)
 		BlzFrameSetTexture(face, texture[i+1],0, true)
@@ -1035,7 +1043,9 @@ function SingleCannon(hero)
 	local angle=GetUnitFacing(hero)
 	local x=MoveX(GetUnitX(hero),110,angle)
 	local y=MoveY(GetUnitY(hero),110,angle)
-	CreateAndForceBullet(hero,angle,30,"Abilities/Weapons/BoatMissile/BoatMissile.mdl",x,y)
+	local modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl"
+	--local modelEff="bluegas4"
+	CreateAndForceBullet(hero,angle,30,modelEff,x,y)
 end
 
 ---@param board real
@@ -1641,8 +1651,10 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
-		data.ReleaseD=true
-		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+		if not data.ReleaseD then
+			BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+			data.ReleaseD=true
+		end
 	end)
 	local TrigDePressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -1663,8 +1675,10 @@ function InitGameCore()
 	TriggerAddAction(TrigPressA, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.ReleaseA=true
-		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		if not data.ReleaseA then
+			data.ReleaseA=true
+			BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		end
 	end)
 	local TrigDePressA = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -2567,7 +2581,7 @@ function CreateFogInRect(rect)
 			yPos=MoveY(yMax,-step*k,90)
 			--fog[i]=
 			--print("Создан туман по y="..k)
-			local eff =AddSpecialEffect("bluegas4",xPos,yPos) --WaterOrb --bluegas
+			local eff =AddSpecialEffect("smoke",xPos,yPos) --WaterOrb --bluegas
 			SetEffectAlphaNearHero(eff)
 		end
 	end
@@ -2910,7 +2924,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, 1472.0, 5888.0)
+    DefineStartLocation(0, -2688.0, -3008.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

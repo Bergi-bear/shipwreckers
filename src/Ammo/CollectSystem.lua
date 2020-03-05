@@ -19,13 +19,32 @@ function RegisterAllAmmoBoxes(hero)
 				HeroUpdateWeaponCharges(hero,2,-100)
 				IsResurrected=true
 				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e003') then
-				--print("ракета")
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e003') or GetUnitTypeId(AmmoBox)==FourCC('e006') then
 				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket==false then
 					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket=true
-				--	print("Доступно новое оружие")
 				end
 				HeroUpdateWeaponCharges(hero,3,-50)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e007') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire=true
+				end
+				HeroUpdateWeaponCharges(hero,4,-100)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e008') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss=true
+				end
+				HeroUpdateWeaponCharges(hero,5,-15)
+				IsResurrected=false
+				IsKill=true
+			elseif GetUnitTypeId(AmmoBox)==FourCC('e009') then
+				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel==false then
+					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel=true
+				end
+				HeroUpdateWeaponCharges(hero,6,-10)
 				IsResurrected=false
 				IsKill=true
 			end

@@ -49,7 +49,9 @@ function SingleCannon(hero)
 	local angle=GetUnitFacing(hero)
 	local x=MoveX(GetUnitX(hero),110,angle)
 	local y=MoveY(GetUnitY(hero),110,angle)
-	CreateAndForceBullet(hero,angle,30,"Abilities/Weapons/BoatMissile/BoatMissile.mdl",x,y)
+	local modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl"
+	--local modelEff="bluegas4"
+	CreateAndForceBullet(hero,angle,30,modelEff,x,y)
 end
 
 ---@param board real

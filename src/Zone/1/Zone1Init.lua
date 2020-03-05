@@ -31,7 +31,7 @@ function CreateFogInRect(rect)
 			yPos=MoveY(yMax,-step*k,90)
 			--fog[i]=
 			--print("Создан туман по y="..k)
-			local eff =AddSpecialEffect("bluegas4",xPos,yPos) --WaterOrb --bluegas
+			local eff =AddSpecialEffect("smoke",xPos,yPos) --WaterOrb --bluegas
 			SetEffectAlphaNearHero(eff)
 		end
 	end

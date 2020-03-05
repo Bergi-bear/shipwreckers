@@ -223,8 +223,10 @@ function InitGameCore()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
 		--BlzStartUnitAbilityCooldown(data.UnitHero,FourCC('A002'),5)
-		data.ReleaseD=true
-		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+		if not data.ReleaseD then
+			BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)-5)
+			data.ReleaseD=true
+		end
 	end)
 	local TrigDePressD = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -245,8 +247,10 @@ function InitGameCore()
 	TriggerAddAction(TrigPressA, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		data.ReleaseA=true
-		--BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		if not data.ReleaseA then
+			data.ReleaseA=true
+			BlzSetUnitFacingEx(data.UnitHero,GetUnitFacing(data.UnitHero)+5)
+		end
 	end)
 	local TrigDePressA = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
