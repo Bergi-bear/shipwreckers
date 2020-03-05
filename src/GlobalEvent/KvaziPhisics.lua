@@ -32,7 +32,9 @@ function UnitCheckPathingInRound(hero,range)
 				if current>=max then max=current end
 				if current<=min then min=current end
 				--print("a="..a*i)
-				DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+				if UnitAlive(hero) then
+					DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+				end
 			end
 		end
 		if k>0 then
@@ -50,7 +52,7 @@ function UnitCheckPathingInRound(hero,range)
 			end
 			data.IsDisabled=true
 			if dif>=90 then med=med-180 end
-			UnitAddForce(hero,med-180,5,80)
+			UnitAddForce(hero,med-180,10,80)
 		end
 	end
 end
@@ -63,8 +65,15 @@ function UnitAddForce(hero,angle,speed,distance)
 		currentdistance=currentdistance+speed
 		local x,y=GetUnitX(hero),GetUnitY(hero)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
-		SetUnitX(hero,newX)
-		SetUnitY(hero,newY)
+		local dx=math.abs(x-newX)
+		if dx>=50 then
+			print("телепорт баг в адд форсе")
+		else
+			--print(dx)
+			SetUnitX(hero,newX)
+			SetUnitY(hero,newY)
+		end
+
 		if currentdistance>=distance or data.OnTorrent==false then
 			data.IsDisabled=false
 			DestroyTimer(GetExpiredTimer())

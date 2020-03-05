@@ -575,7 +575,8 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if e == nil then break end
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
-			UnitCollisionOFF(e)
+
+			SetUnitPathing(e,false)
 
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
@@ -583,7 +584,9 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
 				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
 				UnitAddForce(e,angle,distance/16,zMax)
-				print(distance)
+				--print(distance)
+			else
+				UnitCollisionOFF(e)
 			end
 		end
 		GroupRemoveUnit(perebor,e)
@@ -614,7 +617,9 @@ function FlyUnitOnTorrent(hero,MaxHeight)
 			UnitRemoveAbility(hero,FourCC('B000'))
 			if IsUnitType(hero,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(hero)]
+				--IssueImmediateOrder(hero,"stop")
 				data.OnTorrent=false
+				SetUnitPathing(hero,true)
 				--print("false")
 			end
 			--print("end")
@@ -1473,7 +1478,9 @@ function InitGameCore()
 		Alive=true,
 		IsAttackReadyR=true,
 		IsAttackReadyL=true,
-		AttackCD=0.5
+		AttackCD=0.5,
+		XPos=0,
+		YPos=0
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	Ammo[0]={
@@ -1795,6 +1802,9 @@ function InitGameCore()
 			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
 
+
+
+
 			if data.IsAttackReadyR==false then
 				acdr=acdr+TIMER_PERIOD
 				if acdr>=data.AttackCD then
@@ -1810,7 +1820,7 @@ function InitGameCore()
 				end
 			end
 
-			--UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -1841,9 +1851,22 @@ function InitGameCore()
 			end
 
 			data.CurrentSpeed=data.Acceleration
-			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--попытка сделать разгон
+
+
+			local dx=math.abs(GetUnitX(hero)-data.XPos)
+			local tbag=false
+			if dx>100 then
+				--SetUnitX(hero,data.XPos)
+				--SetUnitY(hero,data.YPos)
+				tbag=true
+				print("Телепорт баг в функции тика таймера "..dx)
+			end
+
+
+			if data.CurrentSpeed>0 and data.Alive and not tbag and data.OnTorrent==false then--
 					--print("текущая скорость = "..data.CurrentSpeed)
 				local x,y=GetUnitX(hero),GetUnitY(hero)
+
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
 				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
@@ -1851,26 +1874,62 @@ function InitGameCore()
 				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
+
 				local Perepad=zhero-z2
 				--print("Perepad="..Perepad)
 				--if z3<=-80 and z2<=-80  then
 				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
+				dx=math.abs(GetUnitX(hero)-data.XPos)
+				if dx>100 then
+					print("Телепорт баг в функции Нью "..dx)
+				end
+
+
 				if Perepad<1  then
-					SetUnitPositionSmooth(hero,newX,newY)
+
+
+					dx=math.abs(GetUnitX(hero)-data.XPos)
+					if dx>100 then
+						print("Телепорт баг в функции 1 "..dx)
+					else
+						SetUnitPositionSmooth(hero,newX,newY)
+					end
 					--SetUnitX(hero,newX)
 					--SetUnitY(hero,newY)
 				else
 					--print("Высоко, надо пройти "..Perepad)
 					if Perepad>110 then
 						--print("Большой перепад="..Perepad)
+						dx=math.abs(GetUnitX(hero)-data.XPos)
+						if dx>100 then
+							print("Телепорт баг в функции 2 "..dx)
+						end
 						SetUnitX(hero,newX)
 						SetUnitY(hero,newY)
 					else
+						dx=math.abs(GetUnitX(hero)-data.XPos)
+						if dx>100 then
+							print("Телепорт баг в функции 3"..dx)
+						end
 						SetUnitPositionSmooth(hero,newX,newY)
+						--SetUnitX(hero,newX)
+						--SetUnitY(hero,newY)
 					end
 				end
 			end
+
+			--[[local dx=math.abs(GetUnitX(hero)-data.XPos)
+
+			if dx>100 then
+				SetUnitX(hero,data.XPos)
+				SetUnitY(hero,data.YPos)
+				print("Телепорт баг в функции тика таймера "..dx)
+			end
+			]]
+			data.XPos=GetUnitX(hero)
+			data.YPos=GetUnitY(hero)
+
 		end
 	end)
 end
@@ -1912,7 +1971,9 @@ function UnitCheckPathingInRound(hero,range)
 				if current>=max then max=current end
 				if current<=min then min=current end
 				--print("a="..a*i)
-				DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+				if UnitAlive(hero) then
+					DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
+				end
 			end
 		end
 		if k>0 then
@@ -1930,7 +1991,7 @@ function UnitCheckPathingInRound(hero,range)
 			end
 			data.IsDisabled=true
 			if dif>=90 then med=med-180 end
-			UnitAddForce(hero,med-180,5,80)
+			UnitAddForce(hero,med-180,10,80)
 		end
 	end
 end
@@ -1943,8 +2004,15 @@ function UnitAddForce(hero,angle,speed,distance)
 		currentdistance=currentdistance+speed
 		local x,y=GetUnitX(hero),GetUnitY(hero)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
-		SetUnitX(hero,newX)
-		SetUnitY(hero,newY)
+		local dx=math.abs(x-newX)
+		if dx>=50 then
+			print("телепорт баг в адд форсе")
+		else
+			--print(dx)
+			SetUnitX(hero,newX)
+			SetUnitY(hero,newY)
+		end
+
 		if currentdistance>=distance or data.OnTorrent==false then
 			data.IsDisabled=false
 			DestroyTimer(GetExpiredTimer())
@@ -2271,12 +2339,20 @@ function SetUnitPositionSmooth(source, x, y)
 	local last_y = GetUnitY(source)
 	local bx
 	local by
+	--print("Смус выполнена")
 	SetUnitPosition(source, x, y)
 	if (RAbsBJ(GetUnitX(source) - x) > 0.5) or (RAbsBJ(GetUnitY(source) - y) > 0.5) then
 		SetUnitPosition(source, x, last_y)
 		bx = RAbsBJ(GetUnitX(source) - x) <= 0.5
 		SetUnitPosition(source, last_x, y)
 		by = RAbsBJ(GetUnitY(source) - y) <= 0.5
+
+		---
+		local dx=math.abs(x-last_x)
+		if dx>=100 then
+			print("Телепорт бак в функции Smooth"..dx )
+		end
+		---
 		if bx then
 			SetUnitPosition(source, x, last_y)
 		elseif by then
@@ -2924,7 +3000,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -2688.0, -3008.0)
+    DefineStartLocation(0, -2240.0, 1216.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

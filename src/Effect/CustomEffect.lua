@@ -30,7 +30,8 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if e == nil then break end
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
-			UnitCollisionOFF(e)
+
+			SetUnitPathing(e,false)
 
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
@@ -38,7 +39,9 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
 				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
 				UnitAddForce(e,angle,distance/16,zMax)
-				print(distance)
+				--print(distance)
+			else
+				UnitCollisionOFF(e)
 			end
 		end
 		GroupRemoveUnit(perebor,e)
@@ -69,7 +72,9 @@ function FlyUnitOnTorrent(hero,MaxHeight)
 			UnitRemoveAbility(hero,FourCC('B000'))
 			if IsUnitType(hero,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(hero)]
+				--IssueImmediateOrder(hero,"stop")
 				data.OnTorrent=false
+				SetUnitPathing(hero,true)
 				--print("false")
 			end
 			--print("end")

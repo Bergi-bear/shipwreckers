@@ -175,12 +175,20 @@ function SetUnitPositionSmooth(source, x, y)
 	local last_y = GetUnitY(source)
 	local bx
 	local by
+	--print("Смус выполнена")
 	SetUnitPosition(source, x, y)
 	if (RAbsBJ(GetUnitX(source) - x) > 0.5) or (RAbsBJ(GetUnitY(source) - y) > 0.5) then
 		SetUnitPosition(source, x, last_y)
 		bx = RAbsBJ(GetUnitX(source) - x) <= 0.5
 		SetUnitPosition(source, last_x, y)
 		by = RAbsBJ(GetUnitY(source) - y) <= 0.5
+
+		---
+		local dx=math.abs(x-last_x)
+		if dx>=100 then
+			print("Телепорт бак в функции Smooth"..dx )
+		end
+		---
 		if bx then
 			SetUnitPosition(source, x, last_y)
 		elseif by then

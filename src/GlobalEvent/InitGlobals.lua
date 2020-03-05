@@ -45,7 +45,9 @@ function InitGameCore()
 		Alive=true,
 		IsAttackReadyR=true,
 		IsAttackReadyL=true,
-		AttackCD=0.5
+		AttackCD=0.5,
+		XPos=0,
+		YPos=0
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	Ammo[0]={
@@ -367,6 +369,9 @@ function InitGameCore()
 			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
 
+
+
+
 			if data.IsAttackReadyR==false then
 				acdr=acdr+TIMER_PERIOD
 				if acdr>=data.AttackCD then
@@ -382,7 +387,7 @@ function InitGameCore()
 				end
 			end
 
-			--UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -413,9 +418,22 @@ function InitGameCore()
 			end
 
 			data.CurrentSpeed=data.Acceleration
-			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--попытка сделать разгон
+
+
+			local dx=math.abs(GetUnitX(hero)-data.XPos)
+			local tbag=false
+			if dx>100 then
+				--SetUnitX(hero,data.XPos)
+				--SetUnitY(hero,data.YPos)
+				tbag=true
+				print("Телепорт баг в функции тика таймера "..dx)
+			end
+
+
+			if data.CurrentSpeed>0 and data.Alive and not tbag and data.OnTorrent==false then--
 					--print("текущая скорость = "..data.CurrentSpeed)
 				local x,y=GetUnitX(hero),GetUnitY(hero)
+
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
 				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
@@ -423,26 +441,62 @@ function InitGameCore()
 				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
+
 				local Perepad=zhero-z2
 				--print("Perepad="..Perepad)
 				--if z3<=-80 and z2<=-80  then
 				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
+				dx=math.abs(GetUnitX(hero)-data.XPos)
+				if dx>100 then
+					print("Телепорт баг в функции Нью "..dx)
+				end
+
+
 				if Perepad<1  then
-					SetUnitPositionSmooth(hero,newX,newY)
+
+
+					dx=math.abs(GetUnitX(hero)-data.XPos)
+					if dx>100 then
+						print("Телепорт баг в функции 1 "..dx)
+					else
+						SetUnitPositionSmooth(hero,newX,newY)
+					end
 					--SetUnitX(hero,newX)
 					--SetUnitY(hero,newY)
 				else
 					--print("Высоко, надо пройти "..Perepad)
 					if Perepad>110 then
 						--print("Большой перепад="..Perepad)
+						dx=math.abs(GetUnitX(hero)-data.XPos)
+						if dx>100 then
+							print("Телепорт баг в функции 2 "..dx)
+						end
 						SetUnitX(hero,newX)
 						SetUnitY(hero,newY)
 					else
+						dx=math.abs(GetUnitX(hero)-data.XPos)
+						if dx>100 then
+							print("Телепорт баг в функции 3"..dx)
+						end
 						SetUnitPositionSmooth(hero,newX,newY)
+						--SetUnitX(hero,newX)
+						--SetUnitY(hero,newY)
 					end
 				end
 			end
+
+			--[[local dx=math.abs(GetUnitX(hero)-data.XPos)
+
+			if dx>100 then
+				SetUnitX(hero,data.XPos)
+				SetUnitY(hero,data.YPos)
+				print("Телепорт баг в функции тика таймера "..dx)
+			end
+			]]
+			data.XPos=GetUnitX(hero)
+			data.YPos=GetUnitY(hero)
+
 		end
 	end)
 end
