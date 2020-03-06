@@ -37,6 +37,9 @@ gg_dest_B000_0118 = nil
 gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
+gg_rct_Zone04In = nil
+gg_trg_Button3IsDead = nil
+gg_dest_B000_0963 = nil
 function InitGlobals()
 end
 
@@ -75,8 +78,9 @@ function CreateAllDestructables()
     local t
     local life
     gg_dest_B000_0118 = BlzCreateDestructableWithSkin(FourCC("B000"), -2432.0, -1600.0, 84.000, 1.000, 0, FourCC("B000"))
-    gg_dest_B000_0273 = BlzCreateDestructableWithSkin(FourCC("B000"), -3264.0, 128.0, 174.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0963 = BlzCreateDestructableWithSkin(FourCC("B000"), 3840.0, 2880.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0275 = BlzCreateDestructableWithSkin(FourCC("B000"), -1472.0, 0.0, 354.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0273 = BlzCreateDestructableWithSkin(FourCC("B000"), -3264.0, 128.0, 174.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0131 = BlzCreateDestructableWithSkin(FourCC("B000"), -1600.0, 3008.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B006_0274 = BlzCreateDestructableZWithSkin(FourCC("B006"), -2368.0, 640.0, -108.0, 270.000, 1.500, 0, FourCC("B006"))
 end
@@ -89,7 +93,7 @@ function CreateUnitsForPlayer0()
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e007"), 2449.9, -1278.2, 272.568, FourCC("e007"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -106,6 +110,10 @@ function CreateBuildingsForPlayer9()
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), 704.0, -2624.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -576.0, -3264.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -1216.0, -3008.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -3904.0, 2240.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4416.0, 2240.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4224.0, 2880.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4864.0, 2880.0, 270.000, FourCC("h001"))
 end
 
 function CreateBuildingsForPlayer10()
@@ -121,6 +129,12 @@ function CreateBuildingsForPlayer10()
     gg_unit_h002_0023 = BlzCreateUnitWithSkin(p, FourCC("h002"), 832.0, -1472.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), 1216.0, -832.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("n004"), -2368.0, 7808.0, 270.000, FourCC("n004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6208.0, 6400.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6272.0, 5696.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6080.0, 5056.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -5632.0, 6848.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -4800.0, 6784.0, 270.000, FourCC("h002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h002"), -4352.0, 6464.0, 270.000, FourCC("h002"))
 end
 
 function CreateUnitsForPlayer10()
@@ -145,6 +159,7 @@ function CreateNeutralPassiveBuildings()
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), 384.0, -640.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -1152.0, -704.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -2368.0, -2880.0, 270.000, FourCC("o000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("o000"), -5952.0, 5504.0, 270.000, FourCC("o000"))
 end
 
 function CreateNeutralPassive()
@@ -181,6 +196,9 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2431.7, 3848.2, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2603.5, 3837.4, 335.332, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2817.4, 3840.5, 69.411, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.210, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e007"), 3940.2, 2463.8, 250.782, FourCC("e007"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e007"), 3941.5, 2201.7, 218.624, FourCC("e007"))
 end
 
 function CreatePlayerBuildings()
@@ -218,6 +236,7 @@ function CreateRegions()
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
     gg_rct_TestFog = Rect(96.0, 6752.0, 1728.0, 8576.0)
     gg_rct_DeapZone1 = Rect(2016.0, 4896.0, 3104.0, 5440.0)
+    gg_rct_Zone04In = Rect(3232.0, 2496.0, 3520.0, 2880.0)
 end
 
 function CreateCameras()
@@ -2012,7 +2031,7 @@ function UnitAddForce(hero,angle,speed,distance)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		currentdistance=currentdistance+speed
-		print(currentdistance)
+		--print(currentdistance)
 		local x,y=GetUnitX(hero),GetUnitY(hero)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
 		local dx=math.abs(x-newX)
@@ -2028,7 +2047,7 @@ function UnitAddForce(hero,angle,speed,distance)
 			data.IsDisabled=false
 			data.OnWater=false
 			DestroyTimer(GetExpiredTimer())
-			print("stop cur="..currentdistance.." dist="..distance)
+			--print("stop cur="..currentdistance.." dist="..distance)
 		end
 	end)
 end
@@ -2749,6 +2768,20 @@ OrcSkeletonPool={
 	nil,
 }
 --CUSTOM_CODE
+function Trig_Button3IsDead_Func001A()
+    KillDestructable(GetEnumDestructable())
+end
+
+function Trig_Button3IsDead_Actions()
+    EnumDestructablesInRectAll(gg_rct_Zone04In, Trig_Button3IsDead_Func001A)
+end
+
+function InitTrig_Button3IsDead()
+    gg_trg_Button3IsDead = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_Button3IsDead, gg_dest_B000_0963)
+    TriggerAddAction(gg_trg_Button3IsDead, Trig_Button3IsDead_Actions)
+end
+
 function Trig_InitZone_Func001A()
     KillDestructable(GetEnumDestructable())
 end
@@ -2957,6 +2990,7 @@ function InitTrig_sec1()
 end
 
 function InitCustomTriggers()
+    InitTrig_Button3IsDead()
     InitTrig_InitZone()
     InitTrig_Button0IsDead()
     InitTrig_Button12IsDead()
@@ -3012,7 +3046,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -2240.0, 1216.0)
+    DefineStartLocation(0, 1792.0, 5888.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end
