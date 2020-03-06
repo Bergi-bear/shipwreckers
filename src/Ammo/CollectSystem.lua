@@ -30,7 +30,7 @@ function RegisterAllAmmoBoxes(hero)
 				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire==false then
 					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire=true
 				end
-				HeroUpdateWeaponCharges(hero,4,-100)
+				HeroUpdateWeaponCharges(hero,4,-300)
 				IsResurrected=false
 				IsKill=true
 			elseif GetUnitTypeId(AmmoBox)==FourCC('e008') then

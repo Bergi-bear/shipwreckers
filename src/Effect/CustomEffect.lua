@@ -8,7 +8,7 @@ function CreateTorrent(x,y,size,zMax)
 	local z=GetTerrainZ(x,y)
 	local IsWater=false
 	if size==nil then size=1 end
-	if zMax==nil then zMax=100 end
+	if zMax==nil then zMax=size*50 end
 	if z<=-80 then
 		torrent=AddSpecialEffect("Torrent.mdl",x,y)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)

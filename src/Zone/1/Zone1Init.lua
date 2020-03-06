@@ -12,6 +12,7 @@ function InitZone1()
 	end)
 	--print("0")
 	CreateFogInRect(gg_rct_TestFog)
+	MineReplacer()
 end
 
 function CreateFogInRect(rect)
@@ -23,7 +24,7 @@ function CreateFogInRect(rect)
 	local Height=R2I(math.abs(yMax-yMin)/step)
 	local xPos,yPos=xMax,yMax
 	local fog={}
-	print("x="..Wide.." y="..Height)
+	--print("x="..Wide.." y="..Height)
 	for i=0,Wide do
 		xPos=MoveX(xMax,-step*i,0)
 		--print("Создан туман по х="..i)
@@ -31,7 +32,7 @@ function CreateFogInRect(rect)
 			yPos=MoveY(yMax,-step*k,90)
 			--fog[i]=
 			--print("Создан туман по y="..k)
-			local eff =AddSpecialEffect("smoke",xPos,yPos) --WaterOrb --bluegas
+			local eff =AddSpecialEffect("bluegas4",xPos,yPos) --WaterOrb --bluegas
 			SetEffectAlphaNearHero(eff)
 		end
 	end
@@ -39,19 +40,51 @@ end
 
 function SetEffectAlphaNearHero(eff)
 	local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
-	TimerStart(CreateTimer(), 0.3, true, function()
-		if PointContentUnit(x,y,450) then
-			BlzSetSpecialEffectAlpha(eff,100)
+	local t=CreateTimer()
+	TimerStart(t,0.3, true, function()
+		local IsContent, hero=PointContentUnit(x,y,450)
+
+		if IsContent then
+			local xh,yh=GetUnitXY(hero)
+			local xe,ye=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+			local angle=(AngleBetweenXY(xe,ye,xh,yh)/bj_DEGTORAD)-180
+			--EffectAddForce(eff,angle,30,500,t)
+
+			--print(angle)
+			BlzSetSpecialEffectAlpha(eff,80)
 			--print("alpha")
 			BlzPlaySpecialEffect(eff,ANIM_TYPE_DEATH)
-			DestroyEffect(eff)
-			DestroyTimer(GetExpiredTimer())
+			--DestroyEffect(eff)
+			--BlzSetSpecialEffectPosition(eff,xn,yn,0)
+			--DestroyTimer(GetExpiredTimer())
 			--BlzSetSpecialEffectTime(eff,2300)
-			BlzSetSpecialEffectPosition(eff,4000,4000,0)
+			--BlzSetSpecialEffectPosition(eff,4000,4000,0)
 		else
-			BlzSetSpecialEffectAlpha(eff,0)
+			BlzSetSpecialEffectAlpha(eff,20)
 			BlzPlaySpecialEffect(eff,ANIM_TYPE_STAND)
-			BlzSetSpecialEffectPosition(eff,x,y,0)
+			--BlzSetSpecialEffectPosition(eff,x,y,0)
+		end
+		if not eff then
+			DestroyTimer(GetExpiredTimer())
+			print("ссылка таймера уничтожена")
+		end
+
+	end)
+end
+
+
+function EffectAddForce(eff,angle,speed,distance,t)
+	local currentdistance=0
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		currentdistance=currentdistance+speed
+		local x,y=BlzGetLocalSpecialEffectX(eff),BlzGetLocalSpecialEffectY(eff)
+		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
+		BlzSetSpecialEffectPosition(eff,newX,newY,0)
+		--print("forceeff"..currentdistance)
+		if currentdistance>=distance   then
+			DestroyTimer(GetExpiredTimer())
+			DestroyTimer(t)
+			DestroyEffect(eff)
 		end
 	end)
 end
@@ -93,7 +126,7 @@ function InitZombies()--ужасно, больше так не буду дела
 			end
 			GroupRemoveUnit(perebor,e)
 		end
-		--print("Запущено пил: "..k)
+		--print("Запущено юнитов: "..k)
 		OrcSkeletonPool[5]=k
 	end
 end
