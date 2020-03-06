@@ -32,7 +32,7 @@ function UnitCheckPathingInRound(hero,range)
 				if current>=max then max=current end
 				if current<=min then min=current end
 				--print("a="..a*i)
-				if UnitAlive(hero) then
+				if UnitAlive(hero)  and k>=10 then
 					DestroyEffect(AddSpecialEffect("Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl",nx,ny))
 				end
 			end
@@ -41,18 +41,26 @@ function UnitCheckPathingInRound(hero,range)
 			dif=max-min
 			if dif>=90 then
 				--print("dif="..dif.."при минимуме="..min)
-				for i=min,0,-10 do
+				for _=min,0,-10 do
 					total=total+360
 				end
 			end
 			med=total/k
-			if k>=7 then
+			if k>=10 then
 				--print("selfdamage")
-				UnitDamageTarget( hero, hero, 10*(k-7), true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
+				UnitDamageTarget( hero, hero, 5*(k-7), true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			end
-			data.IsDisabled=true
-			if dif>=90 then med=med-180 end
-			UnitAddForce(hero,med-180,10,80)
+			if k>=30 then
+				KillUnit(hero)
+			end
+
+			if dif>=90 then med=med-180  end
+
+			if  UnitAlive(hero) and k>=10 then
+				data.IsDisabled=true
+				--print("force ="..k)
+				UnitAddForce(hero,med-180,5+k,80+5*k)
+			end
 		end
 	end
 end
@@ -63,6 +71,7 @@ function UnitAddForce(hero,angle,speed,distance)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
 	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
 		currentdistance=currentdistance+speed
+		--print(currentdistance)
 		local x,y=GetUnitX(hero),GetUnitY(hero)
 		local newX,newY=MoveX(x,speed,angle),MoveY(y,speed,angle)
 		local dx=math.abs(x-newX)
@@ -74,10 +83,11 @@ function UnitAddForce(hero,angle,speed,distance)
 			SetUnitY(hero,newY)
 		end
 
-		if currentdistance>=distance or data.OnTorrent==false then
+		if currentdistance>=distance  or (data.OnWater and data.OnTorrent==false) then --or data.OnTorrent==false--or not UnitAlive(hero)
 			data.IsDisabled=false
+			data.OnWater=false
 			DestroyTimer(GetExpiredTimer())
-			--print("stop")
+			--print("stop cur="..currentdistance.." dist="..distance)
 		end
 	end)
 end

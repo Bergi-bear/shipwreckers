@@ -47,7 +47,8 @@ function InitGameCore()
 		IsAttackReadyL=true,
 		AttackCD=0.5,
 		XPos=0,
-		YPos=0
+		YPos=0,
+		OnWater=false
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	Ammo[0]={
@@ -387,7 +388,7 @@ function InitGameCore()
 				end
 			end
 
-			UnitCheckPathingInRound(hero,50)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,60)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 

@@ -74,6 +74,7 @@ function FlyUnitOnTorrent(hero,MaxHeight)
 				local data=HERO[UnitGetPid(hero)]
 				--IssueImmediateOrder(hero,"stop")
 				data.OnTorrent=false
+				data.OnWater=true
 				SetUnitPathing(hero,true)
 				--print("false")
 			end
