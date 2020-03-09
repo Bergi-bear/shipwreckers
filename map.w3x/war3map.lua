@@ -13,6 +13,7 @@ gg_rct_Combat1Zone = nil
 gg_rct_TestFog = nil
 gg_rct_DeapZone1 = nil
 gg_rct_Zone04In = nil
+gg_rct_WaterTreem = nil
 gg_cam_CameraHATE = nil
 gg_snd_AAA = nil
 gg_snd_AAA1 = nil
@@ -93,6 +94,7 @@ function CreateUnitsForPlayer0()
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("uubs"), 1811.7, 6196.8, 272.600, FourCC("uubs"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -113,6 +115,8 @@ function CreateBuildingsForPlayer9()
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4416.0, 2240.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4224.0, 2880.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4864.0, 2880.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4864.0, 2944.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4864.0, 2304.0, 270.000, FourCC("h001"))
 end
 
 function CreateBuildingsForPlayer10()
@@ -145,6 +149,8 @@ function CreateUnitsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2984.9, 101.9, 2.767, FourCC("hbot"))
     gg_unit_o001_0002 = BlzCreateUnitWithSkin(p, FourCC("o001"), 2801.5, 2496.1, 177.920, FourCC("o001"))
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1729.2, 69.6, 171.573, FourCC("hbot"))
+    u = BlzCreateUnitWithSkin(p, FourCC("u000"), 2700.1, 5907.3, 277.690, FourCC("u000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("uubs"), 2270.4, 5867.3, 272.599, FourCC("uubs"))
 end
 
 function CreateNeutralPassiveBuildings()
@@ -170,6 +176,7 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2985.8, 5702.8, 53.022, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2833.6, 5698.4, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2213.9, 3535.3, 251.580, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2913.7, 3607.7, 345.796, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1541.1, -898.2, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1541.6, -678.4, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1638.8, -1032.0, 251.580, FourCC("e002"))
@@ -189,16 +196,20 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1009.5, -3207.5, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1202.0, -3198.8, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1416.3, 4627.9, 308.210, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2420.0, 3644.5, 357.748, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2619.5, 3644.5, 3.283, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2818.8, 3639.8, 345.796, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2431.7, 3848.2, 108.625, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2603.5, 3837.4, 335.332, FourCC("e004"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2817.4, 3840.5, 69.411, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2339.7, 3620.9, 357.748, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2532.9, 3615.3, 3.283, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2719.6, 3604.2, 345.796, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2351.4, 3824.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2516.9, 3808.2, 335.332, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2718.1, 3804.9, 69.411, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 524.7, 2255.7, 308.210, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e007"), 2449.9, -1278.2, 272.570, FourCC("e007"))
     u = BlzCreateUnitWithSkin(p, FourCC("e007"), 3940.2, 2463.8, 250.782, FourCC("e007"))
     u = BlzCreateUnitWithSkin(p, FourCC("e007"), 3941.5, 2201.7, 218.624, FourCC("e007"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2912.3, 3808.4, 69.411, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2428.8, 3721.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2620.7, 3716.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2815.7, 3703.1, 108.625, FourCC("e004"))
 end
 
 function CreatePlayerBuildings()
@@ -235,8 +246,9 @@ function CreateRegions()
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
     gg_rct_TestFog = Rect(96.0, 6752.0, 1728.0, 8576.0)
-    gg_rct_DeapZone1 = Rect(2016.0, 4896.0, 3104.0, 5440.0)
+    gg_rct_DeapZone1 = Rect(2016.0, 3872.0, 3104.0, 5440.0)
     gg_rct_Zone04In = Rect(3232.0, 2496.0, 3520.0, 2880.0)
+    gg_rct_WaterTreem = Rect(1312.0, -4416.0, 5792.0, -4032.0)
 end
 
 function CreateCameras()
@@ -808,6 +820,17 @@ function CreateWeaponFrame()
 		BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
 		FrameSelecter[i+1]=buttonsprite
 		VisualCharges[i+1]=new_FrameChargesText
+		--ТАЛАНТЫ
+
+		for k=1,3 do
+			local TalantBut=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+			BlzFrameSetTexture(TalantBut, texture[i+1], 0, true)
+			BlzFrameSetSize(TalantBut, 0.013, 0.013)
+			print(k)
+			BlzFrameSetAbsPoint(TalantBut, FRAMEPOINT_TOPLEFT, next*1.75+next*i+next*k*.3, 0.013)
+		end
+
+		--
 		qerf=next+next+next*i
 		if i>= 1 then
 			BlzFrameSetVisible(buttonsprite,false)
@@ -824,11 +847,12 @@ function CreateWeaponFrame()
 		end)
 	end
 	--Создаём кнопки QERF
-
-	local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
-	BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
-	BlzFrameSetSize(SkillButton, 0.04, 0.04)
-	BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next, next*1.3)
+	for i=1,4 do
+		local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+		BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
+		BlzFrameSetSize(SkillButton, 0.04, 0.04)
+		BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next*i, next*1.3)
+	end
 
 end
 
@@ -1904,7 +1928,11 @@ function InitGameCore()
 
 			end
 
-				--if GetTerrainZ(GetUnitXY(hero))<=-80 then newPos=newPos+Vector3:new(0, 10, 0) end
+
+			if RectContainsCoords(gg_rct_WaterTreem,GetUnitXY(hero)) then
+				newPos=newPos+Vector3:new(10, 0, 0)
+				--print("поток")
+			end
 				local f=0
 				for i=1,k do
 					if data.ForceRemain[i]>0 then
@@ -1996,7 +2024,7 @@ function UnitCheckPathingInRound(hero,range)
 			if  UnitAlive(hero) and k>=10 then
 				data.IsDisabled=true
 				--print("force ="..k)
-				UnitAddForce(hero,med-180,5+k,80+5*k)
+				UnitAddVectorForce(hero,med-180,5+k,80+5*k)
 			end
 		end
 	end
@@ -2086,7 +2114,7 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 		print("НЕГЕРОЙ толкаемый")
 	end
 	if not HERO[h] then
-		print("первый толчек для "..GetUnitName(hero))
+		--print("первый толчек для "..GetUnitName(hero))
 		HERO[h]={
 			ForcesCount=0,
 			ForceRemain={},
@@ -2104,7 +2132,7 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 	data.ForceSpeed[k]=Speed
 	data.ForceAngle[k]=Angle
 	data.IsForce[k]=true
-	print("параметры заданы"..GetUnitName(hero)..k)
+	--print("параметры заданы"..GetUnitName(hero)..k)
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -3536,6 +3564,7 @@ function Enter00()
 		TimerStart(CreateTimer(), 1, true, function()
 			if IsUnitGroupDeadBJ(temp) then
 				DestroyTimer(GetExpiredTimer())
+				DestroyGroup(temp)
 				--print("мертвы, открываем ворота")
 				QuestMessageBJ(GetPlayersAllies(Player(0)), bj_QUESTMESSAGE_UNITAVAILABLE, "|cffffff00Враги уничтожены:|r путь свободен")
 				EnumDestructablesInRectAll(gg_rct_Zone02In, function()
@@ -3608,6 +3637,88 @@ end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
+--- DateTime: 23.02.2020 20:49
+
+function DeeperShip()
+	local ThisTrigger = CreateTrigger()
+	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_DeapZone1)
+	TriggerAddAction(ThisTrigger, function()
+		print("Создаём перевернутые корабли")
+		DisableTrigger(GetTriggeringTrigger())
+		local x,y
+		for i=1, 5 do
+			x,y=GetRandomReal(GetRectMinX(gg_rct_DeapZone1), GetRectMaxX(gg_rct_DeapZone1)), GetRandomReal(GetRectMinY(gg_rct_DeapZone1), GetRectMaxY(gg_rct_DeapZone1))
+			local new=CreateUnit(Player(11), FourCC('u001'), x, y, 0)
+			MakeShipDeep(new)
+		end
+
+	end)
+end
+
+
+function MakeShipDeep(hero)
+	SetUnitAnimation(hero,"Death")
+	SetUnitTimeScale(hero,10)
+	TimerStart(CreateTimer(), 3/10, false, function()
+		SetUnitTimeScale(hero,0)
+
+		TimerStart(CreateTimer(), 3.7, false, function()
+
+			StartSheepAIDeepAggressor(hero)
+		end)
+	end)
+end
+
+function StartSheepAIDeepAggressor(hero)
+	if UnitAI[GetHandleId(hero)]==nil then
+		--	print("Запущен первый прототип ИИ")
+	else
+		print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ")
+	end
+	UnitAI[GetHandleId(hero)]={
+		IsMove=true,
+		IsAttack=false,
+		--IsEscape=false,
+		RandomTimeFactor=GetRandomReal(-.5,0)
+	}
+	local data=UnitAI[GetHandleId(hero)]
+	TimerStart(CreateTimer(), ReactionAI+data.RandomTimeFactor, true, function()--поиск врага 1 секунда по умлочанию
+		local e=nil
+		local x,y=GetUnitXY(hero)
+		local enemy=nil
+		GroupEnumUnitsInRange(perebor,x,y,600,nil)
+		while true do
+			e = FirstOfGroup(perebor)
+			if e == nil then break end
+			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero))  then--and IsUnitVisible(e,GetOwningPlayer(hero))
+				enemy=e
+
+				if data.IsAttack==false then
+					SetUnitTimeScale(hero,-0.5)
+					SetUnitAnimation(hero,"Death")
+				end
+				data.IsAttack=true
+				--print("Найден враг "..GetUnitName())
+			end
+			GroupRemoveUnit(perebor,e)
+		end
+		if enemy~=nil then
+			--local xe,ye=GetUnitXY(enemy)
+			--IssuePointOrder(hero,"move",xe,ye)
+			IssueTargetOrder(hero,"move",enemy)
+			SingleCannon(hero)
+		end
+		if UnitAlive(hero)==false then
+			DestroyTimer(GetExpiredTimer())
+			SetUnitTimeScale(hero,1)
+			SetUnitAnimation(hero,"Death")
+			--	print("умираю....")
+		end
+	end)
+end
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
 --- DateTime: 07.03.2020 0:35
 ---
 
@@ -3659,6 +3770,7 @@ function InitZone1()
 	--print("0")
 	CreateFogInRect(gg_rct_TestFog)
 	MineReplacer()
+	DeeperShip()
 end
 
 function CreateFogInRect(rect)
@@ -4068,7 +4180,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -2752.0, 1152.0)
+    DefineStartLocation(0, 1472.0, 5888.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

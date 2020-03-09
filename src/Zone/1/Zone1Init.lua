@@ -13,6 +13,7 @@ function InitZone1()
 	--print("0")
 	CreateFogInRect(gg_rct_TestFog)
 	MineReplacer()
+	DeeperShip()
 end
 
 function CreateFogInRect(rect)

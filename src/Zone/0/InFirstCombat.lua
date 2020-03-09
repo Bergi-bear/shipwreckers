@@ -19,6 +19,7 @@ function Enter00()
 		TimerStart(CreateTimer(), 1, true, function()
 			if IsUnitGroupDeadBJ(temp) then
 				DestroyTimer(GetExpiredTimer())
+				DestroyGroup(temp)
 				--print("мертвы, открываем ворота")
 				QuestMessageBJ(GetPlayersAllies(Player(0)), bj_QUESTMESSAGE_UNITAVAILABLE, "|cffffff00Враги уничтожены:|r путь свободен")
 				EnumDestructablesInRectAll(gg_rct_Zone02In, function()

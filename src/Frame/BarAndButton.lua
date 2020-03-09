@@ -105,6 +105,17 @@ function CreateWeaponFrame()
 		BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
 		FrameSelecter[i+1]=buttonsprite
 		VisualCharges[i+1]=new_FrameChargesText
+		--ТАЛАНТЫ
+
+		for k=1,3 do
+			local TalantBut=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+			BlzFrameSetTexture(TalantBut, texture[i+1], 0, true)
+			BlzFrameSetSize(TalantBut, 0.013, 0.013)
+			print(k)
+			BlzFrameSetAbsPoint(TalantBut, FRAMEPOINT_TOPLEFT, next*1.75+next*i+next*k*.3, 0.013)
+		end
+
+		--
 		qerf=next+next+next*i
 		if i>= 1 then
 			BlzFrameSetVisible(buttonsprite,false)
@@ -121,11 +132,12 @@ function CreateWeaponFrame()
 		end)
 	end
 	--Создаём кнопки QERF
-
-	local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
-	BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
-	BlzFrameSetSize(SkillButton, 0.04, 0.04)
-	BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next, next*1.3)
+	for i=1,4 do
+		local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+		BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
+		BlzFrameSetSize(SkillButton, 0.04, 0.04)
+		BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next*i, next*1.3)
+	end
 
 end
 

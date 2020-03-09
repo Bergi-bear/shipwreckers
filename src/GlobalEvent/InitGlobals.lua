@@ -458,7 +458,11 @@ function InitGameCore()
 
 			end
 
-				--if GetTerrainZ(GetUnitXY(hero))<=-80 then newPos=newPos+Vector3:new(0, 10, 0) end
+
+			if RectContainsCoords(gg_rct_WaterTreem,GetUnitXY(hero)) then
+				newPos=newPos+Vector3:new(10, 0, 0)
+				--print("поток")
+			end
 				local f=0
 				for i=1,k do
 					if data.ForceRemain[i]>0 then

@@ -59,7 +59,7 @@ function UnitCheckPathingInRound(hero,range)
 			if  UnitAlive(hero) and k>=10 then
 				data.IsDisabled=true
 				--print("force ="..k)
-				UnitAddForce(hero,med-180,5+k,80+5*k)
+				UnitAddVectorForce(hero,med-180,5+k,80+5*k)
 			end
 		end
 	end
@@ -149,7 +149,7 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 		print("НЕГЕРОЙ толкаемый")
 	end
 	if not HERO[h] then
-		print("первый толчек для "..GetUnitName(hero))
+		--print("первый толчек для "..GetUnitName(hero))
 		HERO[h]={
 			ForcesCount=0,
 			ForceRemain={},
@@ -167,5 +167,5 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 	data.ForceSpeed[k]=Speed
 	data.ForceAngle[k]=Angle
 	data.IsForce[k]=true
-	print("параметры заданы"..GetUnitName(hero)..k)
+	--print("параметры заданы"..GetUnitName(hero)..k)
 end
