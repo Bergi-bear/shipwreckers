@@ -48,7 +48,12 @@ function InitGameCore()
 		AttackCD=0.5,
 		XPos=0,
 		YPos=0,
-		OnWater=false
+		OnWater=false,
+		ForcesCount=0,
+		ForceRemain={},
+		ForceAngle={},
+		ForceSpeed={},
+		IsForce={}
 		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 	}
 	Ammo[0]={
@@ -367,11 +372,9 @@ function InitGameCore()
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
 			local turnrate=0
+			local Vector3 = wGeometry.Vector3
 			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
-
-
-
 
 			if data.IsAttackReadyR==false then
 				acdr=acdr+TIMER_PERIOD
@@ -420,21 +423,9 @@ function InitGameCore()
 
 			data.CurrentSpeed=data.Acceleration
 
-
-			local dx=math.abs(GetUnitX(hero)-data.XPos)
-			local tbag=false
-			if dx>100 then
-				--SetUnitX(hero,data.XPos)
-				--SetUnitY(hero,data.YPos)
-				tbag=true
-				print("Телепорт баг в функции тика таймера "..dx)
-			end
-
-
-			if data.CurrentSpeed>0 and data.Alive and not tbag and data.OnTorrent==false then--
+			--if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--
 					--print("текущая скорость = "..data.CurrentSpeed)
-				local x,y=GetUnitX(hero),GetUnitY(hero)
-
+				--[[local x,y=GetUnitX(hero),GetUnitY(hero)
 				local angle=GetUnitFacing(hero)
 				data.AngleForce=angle
 				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
@@ -442,59 +433,52 @@ function InitGameCore()
 				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
 				local z3=GetTerrainZ(newX3,newY3)
 				local z2=GetTerrainZ(newX2,newY2)
-
 				local Perepad=zhero-z2
-				--print("Perepad="..Perepad)
-				--if z3<=-80 and z2<=-80  then
 				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
-				dx=math.abs(GetUnitX(hero)-data.XPos)
-				if dx>100 then
-					print("Телепорт баг в функции Нью "..dx)
-				end
-
-
 				if Perepad<1  then
-
-
-					dx=math.abs(GetUnitX(hero)-data.XPos)
-					if dx>100 then
-						print("Телепорт баг в функции 1 "..dx)
-					else
-						SetUnitPositionSmooth(hero,newX,newY)
-					end
-					--SetUnitX(hero,newX)
-					--SetUnitY(hero,newY)
+					SetUnitPositionSmooth(hero,newX,newY)
 				else
-					--print("Высоко, надо пройти "..Perepad)
 					if Perepad>110 then
-						--print("Большой перепад="..Perepad)
-						dx=math.abs(GetUnitX(hero)-data.XPos)
-						if dx>100 then
-							print("Телепорт баг в функции 2 "..dx)
-						end
 						SetUnitX(hero,newX)
 						SetUnitY(hero,newY)
 					else
-						dx=math.abs(GetUnitX(hero)-data.XPos)
-						if dx>100 then
-							print("Телепорт баг в функции 3"..dx)
-						end
 						SetUnitPositionSmooth(hero,newX,newY)
-						--SetUnitX(hero,newX)
-						--SetUnitY(hero,newY)
 					end
 				end
+				]]
+------
+				local k=data.ForcesCount
+				local WASDMoving = Vector3:copyFromUnit(hero)
+				local angle=GetUnitFacing(hero)
+				local newPos=WASDMoving
+			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then
+				newPos=WASDMoving+WASDMoving:yawPitchOffset( data.CurrentSpeed, angle * ( math.pi / 180 ), 0.0 )
+			else
+
 			end
 
-			--[[local dx=math.abs(GetUnitX(hero)-data.XPos)
+				--if GetTerrainZ(GetUnitXY(hero))<=-80 then newPos=newPos+Vector3:new(0, 10, 0) end
+				local f=0
+				for i=1,k do
+					if data.ForceRemain[i]>0 then
+						--print("Внешняя сила="..data.ForceRemain[i])
+						f=f+1
+						newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
+						data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
+					else
+						if data.IsForce[i] then
+							data.IsForce[i]=false
+						end
+					end
+				end
+				if f==0 then data.ForcesCount=0	end
+				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				--SetUnitX( hero, newPos.x )
+				--SetUnitY( hero, newPos.y )
+				-----------
+			--end
 
-			if dx>100 then
-				SetUnitX(hero,data.XPos)
-				SetUnitY(hero,data.YPos)
-				print("Телепорт баг в функции тика таймера "..dx)
-			end
-			]]
 			data.XPos=GetUnitX(hero)
 			data.YPos=GetUnitY(hero)
 

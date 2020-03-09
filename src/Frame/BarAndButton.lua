@@ -67,24 +67,22 @@ function CreateWeaponFrame()
 		"Урон касанием, перемещает пилу по корпусу [RMB]",
 		"Оставляет позади себя нефтяное пятно, можно поджечь [RMB]"
 	}
---[[
-	local new_Frame = BlzCreateFrameByType("SPRITE", "justAName", frame_owner, "WarCraftIIILogo", 0)
-	BlzFrameSetPoint(new_Frame, FRAMEPOINT_BOTTOMLEFT, frame_relative, FRAMEPOINT_BOTTOMLEFT, 0.02, 0.02)
-	BlzFrameSetSize(new_Frame, 1., 1.)
-	BlzFrameSetScale(new_Frame, 1.)
-	BlzFrameSetModel(new_Frame, "selecter1.mdx", 0)
-]]
-
 
 
 	--NewButton()
 	local next=0.039
+	local qerf=0
 	for i = 0, 8 do
 		local face = BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		local faceHover = BlzCreateFrameByType("FRAME", "FaceFrame", face,"", 0)
 		local tooltip = BlzCreateFrame("BoxedText", face, 0, 0)
 		local charges= BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", charges, "", 0)
+
+		local TextNumber = BlzCreateFrameByType("TEXT", "ButtonChargesText", face, "", 0)
+		BlzFrameSetPoint(TextNumber, FRAMEPOINT_CENTER, face, FRAMEPOINT_CENTER, 0.,0.)
+		BlzFrameSetText(TextNumber, i+1)
+
 		BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, charges, FRAMEPOINT_CENTER, 0.,0.)
 		BlzFrameSetText(new_FrameChargesText, "0")
 		BlzFrameSetAllPoints(faceHover, face)
@@ -93,8 +91,8 @@ function CreateWeaponFrame()
 		BlzFrameSetTexture(charges, "ChargesTexture.blp", 0, true)
 		BlzFrameSetSize(face, 0.04, 0.04)
 		BlzFrameSetSize(charges, 0.04, 0.012)
-		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next+next*i, next)
-		BlzFrameSetAbsPoint(charges, FRAMEPOINT_TOPLEFT, next+next+next*i, next*1.3)
+		BlzFrameSetAbsPoint(face, FRAMEPOINT_TOPLEFT, next+next+next*i, next*1.3)
+		BlzFrameSetAbsPoint(charges, FRAMEPOINT_TOPLEFT, next+next+next*i, next*1.6)
 		BlzFrameSetAbsPoint(tooltip, FRAMEPOINT_TOP, next+next+next*i, next*3)
 		BlzFrameSetSize(tooltip, 0.15, 0.08)
 		BlzFrameSetText(BlzGetFrameByName("BoxedTextValue",0), description[i+1])
@@ -107,33 +105,28 @@ function CreateWeaponFrame()
 		BlzFrameSetModel(buttonsprite, "selecter1.mdx", 0)
 		FrameSelecter[i+1]=buttonsprite
 		VisualCharges[i+1]=new_FrameChargesText
+		qerf=next+next+next*i
 		if i>= 1 then
 			BlzFrameSetVisible(buttonsprite,false)
 		end
-
-			--[[проблемный блок зарядов
-			local new_Frame = BlzCreateFrame('ScriptDialogButton', face, 0, 0)
-			local new_FrameImage = BlzCreateFrameByType("BACKDROP", "ButtonIcon", new_Frame, "", 0)
-			local new_FrameCharges = BlzCreateFrameByType("BACKDROP", "ButtonCharges", new_Frame, "", 0)
-			local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", new_FrameCharges, "", 0)
-			BlzFrameSetPoint(new_FrameCharges, FRAMEPOINT_BOTTOMRIGHT, new_FrameImage, FRAMEPOINT_BOTTOMRIGHT, -0.002, 0.002-next)
-			BlzFrameSetSize(new_FrameCharges, 0.012, 0.012)
-			BlzFrameSetTexture(new_FrameCharges, "ChargesTexture.blp", 0, true)
-			BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, new_FrameCharges, FRAMEPOINT_CENTER, 0.,0.)
-			BlzFrameSetVisible(new_FrameCharges, false)
-			BlzFrameSetText(new_FrameChargesText, "0")]]
-
-
-		--end
 
 		local t = CreateTrigger()
 		BlzTriggerRegisterFrameEvent(t, tooltip, FRAMEEVENT_CONTROL_CLICK)
 		BlzTriggerRegisterFrameEvent(t, faceHover, FRAMEEVENT_CONTROL_CLICK)
 		BlzTriggerRegisterFrameEvent(t, face, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, buttonsprite, FRAMEEVENT_CONTROL_CLICK)
+		BlzTriggerRegisterFrameEvent(t, charges, FRAMEEVENT_CONTROL_CLICK)
 		TriggerAddAction(t,function()
 			print("click "..i) -- вот тут не работает
 		end)
 	end
+	--Создаём кнопки QERF
+
+	local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+	BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
+	BlzFrameSetSize(SkillButton, 0.04, 0.04)
+	BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next, next*1.3)
+
 end
 
 function SwitchWeaponVisual(pid,index)

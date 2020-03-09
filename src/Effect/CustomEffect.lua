@@ -38,8 +38,8 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 				data.OnTorrent=true
 				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
 				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
-				UnitAddForce(e,angle,distance/16,zMax)
-				--print(distance)
+				UnitAddVectorForce(e,angle,distance/16,distance*3)
+				print(distance..GetUnitName(e))
 			else
 				UnitCollisionOFF(e)
 			end
