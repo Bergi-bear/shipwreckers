@@ -14,6 +14,8 @@ function InitZone1()
 	CreateFogInRect(gg_rct_TestFog)
 	MineReplacer()
 	DeeperShip()
+	BossZoneInit()
+	--Открыть ворота к боссу
 end
 
 function CreateFogInRect(rect)

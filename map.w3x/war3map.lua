@@ -41,6 +41,8 @@ gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
 gg_dest_B000_0963 = nil
+gg_rct_BossZone1 = nil
+gg_rct_Boss1Gate = nil
 function InitGlobals()
 end
 
@@ -94,7 +96,6 @@ function CreateUnitsForPlayer0()
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("uubs"), 1811.7, 6196.8, 272.600, FourCC("uubs"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -113,10 +114,10 @@ function CreateBuildingsForPlayer9()
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -1216.0, -3008.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -3904.0, 2240.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4416.0, 2240.0, 270.000, FourCC("h001"))
-    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4224.0, 2880.0, 270.000, FourCC("h001"))
-    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4864.0, 2880.0, 270.000, FourCC("h001"))
-    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4864.0, 2944.0, 270.000, FourCC("h001"))
-    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4864.0, 2304.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4800.0, 2880.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4160.0, 2880.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4928.0, 3008.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4928.0, 2304.0, 270.000, FourCC("h001"))
 end
 
 function CreateBuildingsForPlayer10()
@@ -149,8 +150,6 @@ function CreateUnitsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2984.9, 101.9, 2.767, FourCC("hbot"))
     gg_unit_o001_0002 = BlzCreateUnitWithSkin(p, FourCC("o001"), 2801.5, 2496.1, 177.920, FourCC("o001"))
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1729.2, 69.6, 171.573, FourCC("hbot"))
-    u = BlzCreateUnitWithSkin(p, FourCC("u000"), 2700.1, 5907.3, 277.690, FourCC("u000"))
-    u = BlzCreateUnitWithSkin(p, FourCC("uubs"), 2270.4, 5867.3, 272.599, FourCC("uubs"))
 end
 
 function CreateNeutralPassiveBuildings()
@@ -210,6 +209,39 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2428.8, 3721.6, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2620.7, 3716.0, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2815.7, 3703.1, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1346.0, 6759.2, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1506.0, 7104.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1408.9, 7576.1, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1041.8, 8158.4, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1323.1, 8256.5, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1932.8, 8325.1, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 251.2, 7132.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1029.0, 9661.5, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 319.0, 9848.7, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1317.4, 10044.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1478.7, 9749.3, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1674.2, 9915.1, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1622.4, 8742.5, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 660.4, 8969.4, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1655.4, 8322.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 607.2, 7163.3, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 294.3, 6517.8, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 101.9, 6510.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -732.8, 10679.5, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -747.1, 10419.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1089.9, 10715.6, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 70.5, 10867.1, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -321.2, 10904.9, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1939.3, 11116.9, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 41.7, 9088.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -271.4, 8403.2, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 42.7, 8102.8, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -254.8, 8082.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1.7, 7627.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -265.0, 7396.4, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -132.0, 7860.4, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -237.6, 6883.0, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e004"), -32.1, 7386.2, 108.625, FourCC("e004"))
 end
 
 function CreatePlayerBuildings()
@@ -245,10 +277,12 @@ function CreateRegions()
     we = AddWeatherEffect(gg_rct_Region_011, FourCC("LRaa"))
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
-    gg_rct_TestFog = Rect(96.0, 6752.0, 1728.0, 8576.0)
-    gg_rct_DeapZone1 = Rect(2016.0, 3872.0, 3104.0, 5440.0)
+    gg_rct_TestFog = Rect(-448.0, 6752.0, 1856.0, 11232.0)
+    gg_rct_DeapZone1 = Rect(2048.0, 4000.0, 3072.0, 5440.0)
     gg_rct_Zone04In = Rect(3232.0, 2496.0, 3520.0, 2880.0)
     gg_rct_WaterTreem = Rect(1312.0, -4416.0, 5792.0, -4032.0)
+    gg_rct_BossZone1 = Rect(-3232.0, 6816.0, -1536.0, 8608.0)
+    gg_rct_Boss1Gate = Rect(-1536.0, 6720.0, -1280.0, 8512.0)
 end
 
 function CreateCameras()
@@ -615,7 +649,7 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 				local distance=DistanceBetweenXY(x,y,GetUnitX(e),GetUnitY(e))
 				local angle=AngleBetweenXY(x,y,GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
 				UnitAddVectorForce(e,angle,distance/16,distance*3)
-				print(distance..GetUnitName(e))
+				--print(distance..GetUnitName(e))
 			else
 				UnitCollisionOFF(e)
 			end
@@ -3643,7 +3677,7 @@ function DeeperShip()
 	local ThisTrigger = CreateTrigger()
 	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_DeapZone1)
 	TriggerAddAction(ThisTrigger, function()
-		print("Создаём перевернутые корабли")
+		--print("Создаём перевернутые корабли")
 		DisableTrigger(GetTriggeringTrigger())
 		local x,y
 		for i=1, 5 do
@@ -3659,11 +3693,9 @@ end
 function MakeShipDeep(hero)
 	SetUnitAnimation(hero,"Death")
 	SetUnitTimeScale(hero,10)
-	TimerStart(CreateTimer(), 3/10, false, function()
+	TimerStart(CreateTimer(), 2.1/10, false, function()
 		SetUnitTimeScale(hero,0)
-
 		TimerStart(CreateTimer(), 3.7, false, function()
-
 			StartSheepAIDeepAggressor(hero)
 		end)
 	end)
@@ -3673,46 +3705,77 @@ function StartSheepAIDeepAggressor(hero)
 	if UnitAI[GetHandleId(hero)]==nil then
 		--	print("Запущен первый прототип ИИ")
 	else
-		print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ")
+		--print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ или добавить повторно")
+		return
 	end
 	UnitAI[GetHandleId(hero)]={
 		IsMove=true,
 		IsAttack=false,
 		--IsEscape=false,
-		RandomTimeFactor=GetRandomReal(-.5,0)
+		RandomTimeFactor=GetRandomReal(-.5,0),
+		xai=GetUnitX(hero),
+		yai=GetUnitY(hero),
+		enemy=nil
 	}
 	local data=UnitAI[GetHandleId(hero)]
 	TimerStart(CreateTimer(), ReactionAI+data.RandomTimeFactor, true, function()--поиск врага 1 секунда по умлочанию
 		local e=nil
 		local x,y=GetUnitXY(hero)
 		local enemy=nil
+		--local HasTarget=false
 		GroupEnumUnitsInRange(perebor,x,y,600,nil)
 		while true do
 			e = FirstOfGroup(perebor)
 			if e == nil then break end
-			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero))  then--and IsUnitVisible(e,GetOwningPlayer(hero))
-				enemy=e
-
+			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitType(e,UNIT_TYPE_HERO) and not data.enemy and IsUnitVisible(e,GetOwningPlayer(hero)) then--
+					enemy=e
+					--print("поиск всех целей под условиями")
 				if data.IsAttack==false then
+
 					SetUnitTimeScale(hero,-0.5)
 					SetUnitAnimation(hero,"Death")
+					--
+					data.enemy=enemy
 				end
 				data.IsAttack=true
-				--print("Найден враг "..GetUnitName())
+
 			end
 			GroupRemoveUnit(perebor,e)
 		end
-		if enemy~=nil then
+
+
+
+
+		if data.enemy~=nil then
+			--print(GetUnitName(data.enemy).." цель атаки")
+			if IsUnitInRange(hero,data.enemy,1000)==false then
+				data.enemy=nil
+			end
 			--local xe,ye=GetUnitXY(enemy)
 			--IssuePointOrder(hero,"move",xe,ye)
-			IssueTargetOrder(hero,"move",enemy)
+			if IsUnitInRange(hero,data.enemy,300) then
+				SetUnitFacing(hero,-180+AngleBetweenXY(x,y,GetUnitX(data.enemy),GetUnitY(data.enemy))/bj_DEGTORAD)
+			else
+				IssueTargetOrder(hero,"move",data.enemy)
+			end
 			SingleCannon(hero)
+		else
+
+			if data.IsAttack and data.enemy==nil then
+				data.IsAttack=false
+				MakeShipDeep(hero)
+			end
+
 		end
 		if UnitAlive(hero)==false then
 			DestroyTimer(GetExpiredTimer())
 			SetUnitTimeScale(hero,1)
 			SetUnitAnimation(hero,"Death")
 			--	print("умираю....")
+			TimerStart(CreateTimer(), 10, false, function()
+				local new=CreateUnit(Player(11), FourCC('u001'), data.xai, data.yai, 0)
+				MakeShipDeep(new)
+			end)
 		end
 	end)
 end

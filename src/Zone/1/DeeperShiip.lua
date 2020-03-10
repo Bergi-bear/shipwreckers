@@ -7,7 +7,7 @@ function DeeperShip()
 	local ThisTrigger = CreateTrigger()
 	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_DeapZone1)
 	TriggerAddAction(ThisTrigger, function()
-		print("Создаём перевернутые корабли")
+		--print("Создаём перевернутые корабли")
 		DisableTrigger(GetTriggeringTrigger())
 		local x,y
 		for i=1, 5 do
@@ -23,11 +23,9 @@ end
 function MakeShipDeep(hero)
 	SetUnitAnimation(hero,"Death")
 	SetUnitTimeScale(hero,10)
-	TimerStart(CreateTimer(), 3/10, false, function()
+	TimerStart(CreateTimer(), 2.1/10, false, function()
 		SetUnitTimeScale(hero,0)
-
 		TimerStart(CreateTimer(), 3.7, false, function()
-
 			StartSheepAIDeepAggressor(hero)
 		end)
 	end)
@@ -37,46 +35,74 @@ function StartSheepAIDeepAggressor(hero)
 	if UnitAI[GetHandleId(hero)]==nil then
 		--	print("Запущен первый прототип ИИ")
 	else
-		print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ")
+		--print("ОШИБКА, НЕВОЗМОЖНО ИЗМЕНИТЬ ТИП ИИ или добавить повторно")
+		return
 	end
 	UnitAI[GetHandleId(hero)]={
 		IsMove=true,
 		IsAttack=false,
 		--IsEscape=false,
-		RandomTimeFactor=GetRandomReal(-.5,0)
+		RandomTimeFactor=GetRandomReal(-.5,.5),
+		xai=GetUnitX(hero),
+		yai=GetUnitY(hero),
+		enemy=nil
 	}
 	local data=UnitAI[GetHandleId(hero)]
 	TimerStart(CreateTimer(), ReactionAI+data.RandomTimeFactor, true, function()--поиск врага 1 секунда по умлочанию
 		local e=nil
 		local x,y=GetUnitXY(hero)
 		local enemy=nil
+		--local HasTarget=false
 		GroupEnumUnitsInRange(perebor,x,y,600,nil)
 		while true do
 			e = FirstOfGroup(perebor)
 			if e == nil then break end
-			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero))  then--and IsUnitVisible(e,GetOwningPlayer(hero))
-				enemy=e
-
+			if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitType(e,UNIT_TYPE_HERO) and not data.enemy and IsUnitVisible(e,GetOwningPlayer(hero)) then--
+					enemy=e
+					--print("поиск всех целей под условиями")
 				if data.IsAttack==false then
+
 					SetUnitTimeScale(hero,-0.5)
 					SetUnitAnimation(hero,"Death")
+					--
+					data.enemy=enemy
 				end
 				data.IsAttack=true
-				--print("Найден враг "..GetUnitName())
+
 			end
 			GroupRemoveUnit(perebor,e)
 		end
-		if enemy~=nil then
+
+		if data.enemy~=nil then
+			--print(GetUnitName(data.enemy).." цель атаки")
+			if IsUnitInRange(hero,data.enemy,1000)==false then
+				data.enemy=nil
+			end
 			--local xe,ye=GetUnitXY(enemy)
 			--IssuePointOrder(hero,"move",xe,ye)
-			IssueTargetOrder(hero,"move",enemy)
+			if IsUnitInRange(hero,data.enemy,300) then
+				SetUnitFacing(hero,-180+AngleBetweenXY(x,y,GetUnitX(data.enemy),GetUnitY(data.enemy))/bj_DEGTORAD)
+			else
+				IssueTargetOrder(hero,"move",data.enemy)
+			end
 			SingleCannon(hero)
+		else
+
+			if data.IsAttack and data.enemy==nil then
+				data.IsAttack=false
+				MakeShipDeep(hero)
+			end
+
 		end
 		if UnitAlive(hero)==false then
 			DestroyTimer(GetExpiredTimer())
 			SetUnitTimeScale(hero,1)
 			SetUnitAnimation(hero,"Death")
 			--	print("умираю....")
+			TimerStart(CreateTimer(), 60, false, function()
+				local new=CreateUnit(Player(11), FourCC('u001'), data.xai, data.yai, 0)
+				MakeShipDeep(new)
+			end)
 		end
 	end)
 end
