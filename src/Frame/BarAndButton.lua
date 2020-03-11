@@ -111,7 +111,7 @@ function CreateWeaponFrame()
 			local TalantBut=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 			BlzFrameSetTexture(TalantBut, texture[i+1], 0, true)
 			BlzFrameSetSize(TalantBut, 0.013, 0.013)
-			print(k)
+			--print(k)
 			BlzFrameSetAbsPoint(TalantBut, FRAMEPOINT_TOPLEFT, next*1.75+next*i+next*k*.3, 0.013)
 		end
 

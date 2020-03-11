@@ -3,20 +3,25 @@
 --- Created by Bergi.
 --- DateTime: 11.03.2020 1:03
 function BossZoneInit()
-	local ThisTrigger = CreateTrigger()
-	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_AAAAAAAA)
-	TriggerAddAction(ThisTrigger, function()
-		print("Запускаем ИИ босса")
-		local boss=nil -- определение босса
-		DisableTrigger(GetTriggeringTrigger())
-		--Закрываем ворота
-		StartTentacleBossAI(boss)
+	ThisTriggerBoss1 = CreateTrigger()
+	TriggerRegisterEnterRectSimple(ThisTriggerBoss1, gg_rct_BossZone1)
+	local FirstEnter=false
+	TriggerAddAction(ThisTriggerBoss1, function()
+		print("Запускаем Триггер")
+		local boss=FindUnitOfType(FourCC('n004')) -- определение босса
+		--DisableTrigger(GetTriggeringTrigger())
+		EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	DestructableRestoreLife(GetEnumDestructable(), GetDestructableMaxLife(GetEnumDestructable()), true) end)
+		if not FirstEnter then
+			FirstEnter=true
+			StartTentacleBossAI(boss)
+			print("Запускаем ИИ босса")
+		end
 	end)
 end
 
-function BossZoneInit(hero)
+function StartTentacleBossAI(hero)
 	local faze=0
-	TimerStart(CreateTimer(), 5, false, function()
+	TimerStart(CreateTimer(), 5, true, function()
 		faze=faze+1
 		print("Фаза "..faze)
 		if faze==1 then
@@ -27,9 +32,15 @@ function BossZoneInit(hero)
 
 		elseif faze==4 then
 			faze=0
-			print("Сброс фаз "..faze)
+			--print("Сброс фаз "..faze)
 		end
+		if not UnitAlive(hero) then
+			--print("Босс умер")
+			DestroyTrigger(ThisTriggerBoss1)
+			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
+			DestroyTimer(GetExpiredTimer())
 
+		end
 
 	end)
 end

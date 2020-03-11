@@ -258,7 +258,7 @@ function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
 					DestroyTimer(GetExpiredTimer())
 					HealUnit(hero,100)
-
+					print("Лечение подбор орка")
 				elseif flag==2 then-- глубоководная мина
 					if IsUnitEnemy(e,GetOwningPlayer(hero)) then
 						UnitDamageArea(hero,100,x,y,200,z)
