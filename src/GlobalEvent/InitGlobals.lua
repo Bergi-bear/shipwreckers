@@ -391,7 +391,7 @@ function InitGameCore()
 				end
 			end
 
-			UnitCheckPathingInRound(hero,60)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,80)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -452,7 +452,8 @@ function InitGameCore()
 				local WASDMoving = Vector3:copyFromUnit(hero)
 				local angle=GetUnitFacing(hero)
 				local newPos=WASDMoving
-			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then
+			if data.CurrentSpeed>0 and data.Alive and not data.OnTorrent and not data.IsDisabled then--движение при нажатиии кнопок
+
 				newPos=WASDMoving+WASDMoving:yawPitchOffset( data.CurrentSpeed, angle * ( math.pi / 180 ), 0.0 )
 			else
 
@@ -476,7 +477,11 @@ function InitGameCore()
 						end
 					end
 				end
-				if f==0 then data.ForcesCount=0	end
+				if f==0 then
+					data.ForcesCount=0
+					data.IsDisabled=false
+					--print("нет больше сил")
+				end
 				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
 				--SetUnitX( hero, newPos.x )
 				--SetUnitY( hero, newPos.y )

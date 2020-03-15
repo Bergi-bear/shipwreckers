@@ -16,6 +16,8 @@ gg_rct_Zone04In = nil
 gg_rct_WaterTreem = nil
 gg_rct_BossZone1 = nil
 gg_rct_Boss1Gate = nil
+gg_rct_VisiblePoint0 = nil
+gg_rct_Boss1Gate1 = nil
 gg_cam_CameraHATE = nil
 gg_snd_AAA = nil
 gg_snd_AAA1 = nil
@@ -29,20 +31,19 @@ gg_trg_ResLeft = nil
 gg_trg_ResRight = nil
 gg_trg_InCombatZone = nil
 gg_trg_Button0to1 = nil
-gg_trg_Barga = nil
+gg_trg_Visiblepoint = nil
+gg_trg_InitZone1BossOpenGate = nil
 gg_trg_EVENTMMB = nil
 gg_trg_NonAttack = nil
 gg_trg_sec1 = nil
 gg_trg_StartMainTheme = nil
 gg_unit_h002_0023 = nil
-gg_unit_o001_0002 = nil
 gg_dest_B000_0131 = nil
 gg_dest_B000_0118 = nil
 gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
 gg_dest_B000_0963 = nil
-gg_trg_InitZone1BossOpenGate = nil
 function InitGlobals()
 end
 
@@ -118,6 +119,10 @@ function CreateBuildingsForPlayer9()
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), -4160.0, 2880.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4928.0, 3008.0, 270.000, FourCC("h001"))
     u = BlzCreateUnitWithSkin(p, FourCC("h001"), 4928.0, 2304.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 8064.0, 2688.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 7296.0, 3200.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 8064.0, 3200.0, 270.000, FourCC("h001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("h001"), 7296.0, 2688.0, 270.000, FourCC("h001"))
 end
 
 function CreateBuildingsForPlayer10()
@@ -132,7 +137,7 @@ function CreateBuildingsForPlayer10()
     u = BlzCreateUnitWithSkin(p, FourCC("n003"), 704.0, 6080.0, 270.000, FourCC("n003"))
     gg_unit_h002_0023 = BlzCreateUnitWithSkin(p, FourCC("h002"), 832.0, -1472.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), 1216.0, -832.0, 270.000, FourCC("h002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("n004"), -2560.0, 7808.0, 270.000, FourCC("n004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("n004"), -2432.0, 7680.0, 270.000, FourCC("n004"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6208.0, 6400.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6272.0, 5696.0, 270.000, FourCC("h002"))
     u = BlzCreateUnitWithSkin(p, FourCC("h002"), -6080.0, 5056.0, 270.000, FourCC("h002"))
@@ -148,7 +153,7 @@ function CreateUnitsForPlayer10()
     local t
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -2984.9, 101.9, 2.767, FourCC("hbot"))
-    gg_unit_o001_0002 = BlzCreateUnitWithSkin(p, FourCC("o001"), 2801.5, 2496.1, 177.920, FourCC("o001"))
+    u = BlzCreateUnitWithSkin(p, FourCC("o001"), 2801.5, 2496.1, 177.920, FourCC("o001"))
     u = BlzCreateUnitWithSkin(p, FourCC("hbot"), -1729.2, 69.6, 171.573, FourCC("hbot"))
 end
 
@@ -164,6 +169,7 @@ function CreateNeutralPassiveBuildings()
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -1152.0, -704.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -2368.0, -2880.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -5952.0, 5504.0, 270.000, FourCC("o000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("o000"), -1088.0, 10560.0, 270.000, FourCC("o000"))
 end
 
 function CreateNeutralPassive()
@@ -210,6 +216,7 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2620.7, 3716.0, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 2815.7, 3703.1, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1346.0, 6759.2, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2962.1, 7154.5, 53.022, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1506.0, 7104.0, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1408.9, 7576.1, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), 1041.8, 8158.4, 108.625, FourCC("e004"))
@@ -242,6 +249,10 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), -132.0, 7860.4, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), -237.6, 6883.0, 108.625, FourCC("e004"))
     u = BlzCreateUnitWithSkin(p, FourCC("e004"), -32.1, 7386.2, 108.625, FourCC("e004"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1918.5, 7149.9, 53.022, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1919.1, 8219.2, 53.022, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2946.7, 8245.2, 53.022, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e007"), -3488.3, 8823.0, 218.624, FourCC("e007"))
 end
 
 function CreatePlayerBuildings()
@@ -277,12 +288,14 @@ function CreateRegions()
     we = AddWeatherEffect(gg_rct_Region_011, FourCC("LRaa"))
     EnableWeatherEffect(we, true)
     gg_rct_Combat1Zone = Rect(-2080.0, 4160.0, 800.0, 6176.0)
-    gg_rct_TestFog = Rect(-448.0, 6752.0, 1856.0, 11232.0)
+    gg_rct_TestFog = Rect(-448.0, 6464.0, 1856.0, 11232.0)
     gg_rct_DeapZone1 = Rect(2048.0, 4000.0, 3072.0, 5440.0)
-    gg_rct_Zone04In = Rect(3232.0, 2496.0, 3520.0, 2880.0)
+    gg_rct_Zone04In = Rect(3136.0, 2400.0, 3584.0, 3040.0)
     gg_rct_WaterTreem = Rect(1312.0, -4416.0, 5792.0, -4032.0)
-    gg_rct_BossZone1 = Rect(-3232.0, 6816.0, -1600.0, 8608.0)
-    gg_rct_Boss1Gate = Rect(-1536.0, 6720.0, -1280.0, 8512.0)
+    gg_rct_BossZone1 = Rect(-3328.0, 6688.0, -1536.0, 8704.0)
+    gg_rct_Boss1Gate = Rect(-1600.0, 6720.0, -1216.0, 8512.0)
+    gg_rct_VisiblePoint0 = Rect(-1696.0, 2848.0, -1536.0, 2976.0)
+    gg_rct_Boss1Gate1 = Rect(-3040.0, 8576.0, -2400.0, 8928.0)
 end
 
 function CreateCameras()
@@ -460,6 +473,7 @@ function RegisterAllAmmoBoxes(hero)
 
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()
+		--hero - юнит к которому подошли
 		local IsResurrected=false
 		local IsKill=false
 		--print("any")
@@ -1115,12 +1129,11 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	end)
 end
 
-function SingleCannon(hero)
-	local angle=GetUnitFacing(hero)
+function SingleCannon(hero,angle,modelEff)
+	if not angle then angle=GetUnitFacing(hero) end
 	local x=MoveX(GetUnitX(hero),110,angle)
 	local y=MoveY(GetUnitY(hero),110,angle)
-	local modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl"
-	--local modelEff="bluegas4"
+	if not modelEff then modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl" end
 	CreateAndForceBullet(hero,angle,30,modelEff,x,y)
 end
 
@@ -1324,11 +1337,13 @@ function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 			if UnitAlive(e) and IsUnitZCollision(e,z) then
 				--print("Эффет столкнулся с "..GetUnitName(e))
 				if flag==1 then-- орк в уточке
-					RemoveEffect(eff)
-					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
-					DestroyTimer(GetExpiredTimer())
-					HealUnit(hero,100)
-					print("Лечение подбор орка")
+					if IsUnitType(hero,UNIT_TYPE_HERO) then
+						RemoveEffect(eff)
+						PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
+						DestroyTimer(GetExpiredTimer())
+						HealUnit(hero,100)
+						--print("Лечение подбор орка для"..GetUnitName(hero))
+					end
 				elseif flag==2 then-- глубоководная мина
 					if IsUnitEnemy(e,GetOwningPlayer(hero)) then
 						UnitDamageArea(hero,100,x,y,200,z)
@@ -1895,7 +1910,7 @@ function InitGameCore()
 				end
 			end
 
-			UnitCheckPathingInRound(hero,60)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,80)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -1956,7 +1971,8 @@ function InitGameCore()
 				local WASDMoving = Vector3:copyFromUnit(hero)
 				local angle=GetUnitFacing(hero)
 				local newPos=WASDMoving
-			if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then
+			if data.CurrentSpeed>0 and data.Alive and not data.OnTorrent and not data.IsDisabled then--движение при нажатиии кнопок
+
 				newPos=WASDMoving+WASDMoving:yawPitchOffset( data.CurrentSpeed, angle * ( math.pi / 180 ), 0.0 )
 			else
 
@@ -1980,7 +1996,11 @@ function InitGameCore()
 						end
 					end
 				end
-				if f==0 then data.ForcesCount=0	end
+				if f==0 then
+					data.ForcesCount=0
+					data.IsDisabled=false
+					--print("нет больше сил")
+				end
 				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
 				--SetUnitX( hero, newPos.x )
 				--SetUnitY( hero, newPos.y )
@@ -2057,7 +2077,7 @@ function UnitCheckPathingInRound(hero,range)
 
 			if  UnitAlive(hero) and k>=10 then
 				data.IsDisabled=true
-				--print("force ="..k)
+				print("force ="..k)
 				UnitAddVectorForce(hero,med-180,5+k,80+5*k)
 			end
 		end
@@ -3865,45 +3885,170 @@ end
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
 --- DateTime: 11.03.2020 1:03
+FirstEnterBoss=false
 function BossZoneInit()
-	local ThisTrigger = CreateTrigger()
-	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_BossZone1)
-	local FirstEnter=false
-	TriggerAddAction(ThisTrigger, function()
-		print("Запускаем Триггер")
-		local boss=FindUnitOfType(FourCC('n004')) -- определение босса
-		--DisableTrigger(GetTriggeringTrigger())
-		EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	DestructableRestoreLife(GetEnumDestructable(), GetDestructableMaxLife(GetEnumDestructable()), true) end)
-		if not FirstEnter then
-			FirstEnter=true
-			StartTentacleBossAI(boss)
-			print("Запускаем ИИ босса")
+	ThisTriggerBoss1 = CreateTrigger()
+	TriggerRegisterEnterRectSimple(ThisTriggerBoss1, gg_rct_BossZone1)
+	--local FirstEnter=false
+	TriggerAddAction(ThisTriggerBoss1, function()
+		local hero=GetTriggerUnit()
+		if IsUnitType(hero,UNIT_TYPE_HERO) then
+			--print("Запускаем Триггер")
+			local boss=FindUnitOfType(FourCC('n004')) -- определение босса
+			CreateFogModifierRectBJ(true, GetOwningPlayer(hero), FOG_OF_WAR_VISIBLE, gg_rct_BossZone1)
+			BlzSetUnitMaxHP(boss,10000)
+			HealUnit(boss,10000)
+			--DisableTrigger(GetTriggeringTrigger())
+			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	DestructableRestoreLife(GetEnumDestructable(), GetDestructableMaxLife(GetEnumDestructable()), true) end)
+			if not FirstEnterBoss then
+				FirstEnterBoss=true
+				StartTentacleBossAI(boss)
+			--	print("Запускаем ИИ босса")
+			end
+		end
+	end)
+end
+faze=0
+function StartTentacleBossAI(hero)
+	--local faze=0
+	local bossX,bossY=GetUnitXY(hero)
+	local p=GetOwningPlayer(hero)
+
+
+
+	TimerStart(CreateTimer(), 10, true, function()
+		faze=faze+1
+		--print("Фаза "..faze)
+		if not AnyHeroContainInRect(gg_rct_BossZone1) then
+			--print("Все герои вышли из зоны, восстановление зоны")
+			FirstEnterBoss=false
+			faze=0
+			DestroyTimer(GetExpiredTimer())
+			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
+			CreateFogModifierRectBJ(false, GetOwningPlayer(HERO[0].UnitHero), FOG_OF_WAR_VISIBLE, rect)
+
+		end
+		if faze==1 then -- тентакли из воды
+			TimerStart(CreateTimer(), 2, true, function()
+				--print("Маркер оплетения точки")
+				local e=nil
+				GroupEnumUnitsInRange(perebor, bossX, bossY,1200,nil)
+				while true do
+					e = FirstOfGroup(perebor)
+					if e == nil then break end
+					if UnitAlive(e) and IsUnitEnemy(e,p) then
+						local nx,ny=0,0
+						for i=0,5 do
+							nx,ny=MoveXY(GetUnitX(e),GetUnitY(e),200,60*i)
+							CreateTorrent(nx,ny,2)
+							CreateTentacle(hero,nx,ny,5,1)
+						end
+					end
+					GroupRemoveUnit(perebor,e)
+				end
+				if faze~=1 or not UnitAlive(hero)  then
+					DestroyTimer(GetExpiredTimer())
+				end
+			end)
+		elseif faze==2 then
+			TimerStart(CreateTimer(), 1, true, function()
+				--print("Попытки притянуть героев")
+				local e=nil
+				GroupEnumUnitsInRange(perebor, bossX, bossY,1300,nil)
+				while true do
+					e = FirstOfGroup(perebor)
+					if e == nil then break end
+					if UnitAlive(e) and IsUnitEnemy(e,p) then
+						local angle=-180+AngleBetweenXY(GetUnitX(hero),GetUnitY(hero),GetUnitX(e),GetUnitY(e))/bj_DEGTORAD
+						UnitAddVectorForce(e,angle,5,DistanceBetweenXY(GetUnitX(hero),GetUnitY(hero),GetUnitX(e),GetUnitY(e)))
+					end
+					GroupRemoveUnit(perebor,e)
+				end
+				if faze~=2  then -- тут так задумано or not UnitAlive(hero)
+				--	print("конец фазы притягивания")
+					DestroyTimer(GetExpiredTimer())
+				end
+			end)
+		elseif faze==3 then --большая шупальца
+			--Units\Creeps\ForgottenOne\ForgottenOneTent
+			local big=AddSpecialEffect("Units\\Creeps\\ForgottenOne\\ForgottenOneTent",bossX,bossY)
+			BlzSetSpecialEffectScale(big,1.7)
+			BlzPlaySpecialEffect(big,ANIM_TYPE_ATTACK)
+			local k=GetRandomInt(0,11)
+			TimerStart(CreateTimer(), 0.7, false, function()--задержка
+				TimerStart(CreateTimer(), 1, true, function()-- анимация ударов
+					--print("play")
+					BlzPlaySpecialEffect(big,ANIM_TYPE_ATTACK)
+					if faze~=3 or not UnitAlive(hero)  then
+						DestroyTimer(GetExpiredTimer())
+						DestroyEffect(big)
+					end
+				end)
+			end)
+			TimerStart(CreateTimer(), 1, true, function()--удары
+				BlzSetSpecialEffectYaw(big,math.rad(k*30))
+				local ax,ay=MoveXY(bossX,bossY,330,k*30)
+				CreateTorrent(ax,ay,3)
+				UnitDamageArea(hero,250,ax,ay,150)
+
+				--BlzPlaySpecialEffect(big,ANIM_TYPE_ATTACK)
+
+				k=k+1
+				--print(k)
+				if faze~=3 or not UnitAlive(hero)  then
+					DestroyTimer(GetExpiredTimer())
+					DestroyEffect(big)
+				end
+			end)
+		elseif faze==4 then-- буллет хелл
+			faze=0
+			TimerStart(CreateTimer(), 1, true, function()
+				--local angle=GetRandomInt(0,360)
+				local factor= GetRandomInt(30,50)
+				for i=1,12 do
+					SingleCannon(hero,factor*i,"Abilities\\Weapons\\FireBallMissile\\FireBallMissile.mdl")
+				end
+				if faze~=0 or not UnitAlive(hero)  then
+					DestroyTimer(GetExpiredTimer())
+				end
+			end)
+		end
+		if not UnitAlive(hero) then
+			print("Босс умер")
+			faze=0
+			DestroyTrigger(ThisTriggerBoss1)
+			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
+			EnumDestructablesInRectAll(gg_rct_Boss1Gate1, function() KillDestructable(GetEnumDestructable()) end)
+			DestroyTimer(GetExpiredTimer())
 		end
 	end)
 end
 
-function StartTentacleBossAI(hero)
-	local faze=0
-	TimerStart(CreateTimer(), 5, true, function()
-		faze=faze+1
-		print("Фаза "..faze)
-		if faze==1 then
-
-		elseif faze==2 then
-
-		elseif faze==3 then
-
-		elseif faze==4 then
-			faze=0
-			print("Сброс фаз "..faze)
-		end
-		if not UnitAlive(hero) then
-			print("Босс умер")
-			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
-			DestroyTimer(GetExpiredTimer())
-		end
-
+function CreateTentacle(boss,x,y,time, delay)
+	local new
+	TimerStart(CreateTimer(), delay, false, function()
+		new=CreateUnit(GetOwningPlayer(boss), FourCC('nfgt'), x ,y, GetRandomInt(0,360))
+		SetUnitAnimation(new,"birth")
+		UnitApplyTimedLife(new,GetUnitTypeId(new),time)
 	end)
+
+	return new
+end
+
+
+function AnyHeroContainInRect(rect)
+	local contain=false
+	local PIG=1--Player In Game
+	for i=0,PIG-1 do
+		if  RectContainsUnit(rect,HERO[i].UnitHero) then
+			contain=true
+		else
+			CreateFogModifierRectBJ(false, GetOwningPlayer(HERO[i].UnitHero), FOG_OF_WAR_VISIBLE, rect)
+			CreateFogModifierRectBJ(true, GetOwningPlayer(HERO[i].UnitHero), FOG_OF_WAR_MASKED, rect)
+			CreateFogModifierRectBJ(true, GetOwningPlayer(HERO[i].UnitHero), FOG_OF_WAR_FOGGED, rect)
+		end
+	end
+	return contain
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -4199,13 +4344,15 @@ function InitTrig_Button0to1()
     TriggerAddAction(gg_trg_Button0to1, Trig_Button0to1_Actions)
 end
 
-function Trig_Barga_Actions()
+function Trig_Visiblepoint_Actions()
+    DisableTrigger(GetTriggeringTrigger())
+    CreateFogModifierRectBJ(true, GetOwningPlayer(GetTriggerUnit()), FOG_OF_WAR_VISIBLE, gg_rct_VisiblePoint0)
 end
 
-function InitTrig_Barga()
-    gg_trg_Barga = CreateTrigger()
-    TriggerRegisterUnitInRangeSimple(gg_trg_Barga, 256, gg_unit_o001_0002)
-    TriggerAddAction(gg_trg_Barga, Trig_Barga_Actions)
+function InitTrig_Visiblepoint()
+    gg_trg_Visiblepoint = CreateTrigger()
+    TriggerRegisterEnterRectSimple(gg_trg_Visiblepoint, gg_rct_Zone03Out)
+    TriggerAddAction(gg_trg_Visiblepoint, Trig_Visiblepoint_Actions)
 end
 
 function Trig_InitZone1BossOpenGate_Func001A()
@@ -4288,7 +4435,7 @@ function InitCustomTriggers()
     InitTrig_ResRight()
     InitTrig_InCombatZone()
     InitTrig_Button0to1()
-    InitTrig_Barga()
+    InitTrig_Visiblepoint()
     InitTrig_InitZone1BossOpenGate()
     InitTrig_EVENTMMB()
     InitTrig_NonAttack()
@@ -4337,7 +4484,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -832.0, 7680.0)
+    DefineStartLocation(0, -3968.0, 9728.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

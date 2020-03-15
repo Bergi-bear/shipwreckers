@@ -45,12 +45,11 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 	end)
 end
 
-function SingleCannon(hero)
-	local angle=GetUnitFacing(hero)
+function SingleCannon(hero,angle,modelEff)
+	if not angle then angle=GetUnitFacing(hero) end
 	local x=MoveX(GetUnitX(hero),110,angle)
 	local y=MoveY(GetUnitY(hero),110,angle)
-	local modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl"
-	--local modelEff="bluegas4"
+	if not modelEff then modelEff="Abilities/Weapons/BoatMissile/BoatMissile.mdl" end
 	CreateAndForceBullet(hero,angle,30,modelEff,x,y)
 end
 
@@ -254,11 +253,13 @@ function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 			if UnitAlive(e) and IsUnitZCollision(e,z) then
 				--print("Эффет столкнулся с "..GetUnitName(e))
 				if flag==1 then-- орк в уточке
-					RemoveEffect(eff)
-					PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
-					DestroyTimer(GetExpiredTimer())
-					HealUnit(hero,100)
-					print("Лечение подбор орка")
+					if IsUnitType(hero,UNIT_TYPE_HERO) then
+						RemoveEffect(eff)
+						PlaySoundAtPointBJ( gg_snd_Load, 100, Location(x,y), 0 )
+						DestroyTimer(GetExpiredTimer())
+						HealUnit(hero,100)
+						--print("Лечение подбор орка для"..GetUnitName(hero))
+					end
 				elseif flag==2 then-- глубоководная мина
 					if IsUnitEnemy(e,GetOwningPlayer(hero)) then
 						UnitDamageArea(hero,100,x,y,200,z)

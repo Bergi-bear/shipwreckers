@@ -9,6 +9,7 @@ function RegisterAllAmmoBoxes(hero)
 
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()
+		--hero - юнит к которому подошли
 		local IsResurrected=false
 		local IsKill=false
 		--print("any")
