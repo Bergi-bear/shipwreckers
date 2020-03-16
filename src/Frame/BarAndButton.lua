@@ -31,6 +31,7 @@ end
 
 FrameSelecter={}
 VisualCharges={}
+MiniMap={}
 
 
 function CreateWeaponFrame()

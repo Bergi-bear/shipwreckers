@@ -133,10 +133,14 @@ function StartTentacleBossAI(hero)
 		if not UnitAlive(hero) then
 			print("Босс умер")
 			faze=0
+			local new=CreateUnit(GetOwningPlayer(boss), FourCC('o000'),bossX ,bossY , GetRandomInt(0,360))
+			SetUnitTimeScale(new,-1)
+			SetUnitAnimation(new,"Death")
 			DestroyTrigger(ThisTriggerBoss1)
 			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
 			EnumDestructablesInRectAll(gg_rct_Boss1Gate1, function() KillDestructable(GetEnumDestructable()) end)
 			DestroyTimer(GetExpiredTimer())
+
 		end
 	end)
 end

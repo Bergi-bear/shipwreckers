@@ -794,6 +794,7 @@ end
 
 FrameSelecter={}
 VisualCharges={}
+MiniMap={}
 
 
 function CreateWeaponFrame()
@@ -1036,10 +1037,23 @@ function hideEverything()
 	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
 	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
-	BlzHideOriginFrames(true)
+	BlzHideOriginFrames(true)--скрыть всё
 	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
-	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
+	--BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), false)
+	--скрываем по одиночке
 	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+
+	local map=BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP, 0)
+	BlzFrameClearAllPoints(map)
+	BlzFrameSetVisible(map, true)
+	BlzFrameSetSize(map, 0.35, 0.35)
+	BlzFrameSetAbsPoint(map,FRAMEPOINT_CENTER,0.3,0.4)
+	BlzFrameSetVisible(map, false)
+	MiniMap[0]=map
+	MiniMap[1]=map
+	MiniMap[2]=map
+	MiniMap[3]=map
+
 end
 
 ---
@@ -1546,35 +1560,39 @@ function InitGameCore()
 	--BlzEnableSelections(false,false)
 	EnableDragSelect(false,false)
 	--EnablePreSelect(false,false)--выделение
-	HERO[0]={
-		ReleaseW=false,
-		ReleaseS=false,
-		ReleaseA=false,
-		ReleaseD=false,
-		Acceleration=0,
-		ReleaseLMB=false,
-		ReleaseRMB=false,
-		SpeedBase=14,
-		UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
-		CurrentSpeed=0,
-		WeaponIndex=1,
-		AngleForce=0, --типа какой-то уго для отталкивания
-		IsDisabled=false,
-		OnTorrent=false,
-		Alive=true,
-		IsAttackReadyR=true,
-		IsAttackReadyL=true,
-		AttackCD=0.5,
-		XPos=0,
-		YPos=0,
-		OnWater=false,
-		ForcesCount=0,
-		ForceRemain={},
-		ForceAngle={},
-		ForceSpeed={},
-		IsForce={}
-		--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
-	}
+	for i=0,0 do
+		HERO[i]={
+			ReleaseW=false,
+			ReleaseS=false,
+			ReleaseA=false,
+			ReleaseD=false,
+			Acceleration=0,
+			ReleaseSpace=false,
+			ReleaseLMB=false,
+			ReleaseRMB=false,
+			SpeedBase=14,
+			UnitHero=CreateUnit(Player(0), FourCC('H000'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0),
+			CurrentSpeed=0,
+			WeaponIndex=1,
+			AngleForce=0, --типа какой-то уго для отталкивания
+			IsDisabled=false,
+			OnTorrent=false,
+			Alive=true,
+			IsAttackReadyR=true,
+			IsAttackReadyL=true,
+			AttackCD=0.5,
+			XPos=0,
+			YPos=0,
+			pid=i,
+			OnWater=false,
+			ForcesCount=0,
+			ForceRemain={},
+			ForceAngle={},
+			ForceSpeed={},
+			IsForce={}
+			--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
+		}
+	end
 	Ammo[0]={
 		Available ={
 			Single=true,
@@ -1789,6 +1807,27 @@ function InitGameCore()
 		local data=HERO[pid]
 		data.ReleaseA=false
 	end)
+	-----------------------------------------------------------------OSKEY_Space
+	local gg_trg_EventUpSpace = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(gg_trg_EventUpSpace,Player(i),OSKEY_SPACE,0,true)
+	end
+	TriggerAddAction(gg_trg_EventUpSpace, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.ReleaseSpace=true
+	end)
+	local TrigDepressSpace = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigDepressSpace,Player(i),OSKEY_SPACE,0,false)
+	end
+	TriggerAddAction(TrigDepressSpace, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		data.ReleaseSpace=false
+	end)
 	-----------------------------------------------------------------LMB
 	local TrigPressLMB=CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
@@ -1908,6 +1947,13 @@ function InitGameCore()
 					data.IsAttackReadyL=true
 					acdl=0
 				end
+			end
+
+			if data.ReleaseSpace then
+				---print("показываем миникарту")
+				BlzFrameSetVisible(MiniMap[data.pid], true)
+			else
+				BlzFrameSetVisible(MiniMap[data.pid], false)
 			end
 
 			UnitCheckPathingInRound(hero,80)--Фунция выталкивания --временно отрубил
@@ -4016,10 +4062,14 @@ function StartTentacleBossAI(hero)
 		if not UnitAlive(hero) then
 			print("Босс умер")
 			faze=0
+			local new=CreateUnit(GetOwningPlayer(boss), FourCC('o000'),bossX ,bossY , GetRandomInt(0,360))
+			SetUnitTimeScale(new,-1)
+			SetUnitAnimation(new,"Death")
 			DestroyTrigger(ThisTriggerBoss1)
 			EnumDestructablesInRectAll(gg_rct_Boss1Gate, function()	KillDestructable(GetEnumDestructable())	end)
 			EnumDestructablesInRectAll(gg_rct_Boss1Gate1, function() KillDestructable(GetEnumDestructable()) end)
 			DestroyTimer(GetExpiredTimer())
+
 		end
 	end)
 end

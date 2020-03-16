@@ -12,8 +12,21 @@ function hideEverything()
 	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
 	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
-	BlzHideOriginFrames(true)
+	BlzHideOriginFrames(true)--скрыть всё
 	BlzFrameSetAllPoints(WORLD_FRAME, GAME_UI)
-	BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), true)
+	--BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), false)
+	--скрываем по одиночке
 	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+
+	local map=BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP, 0)
+	BlzFrameClearAllPoints(map)
+	BlzFrameSetVisible(map, true)
+	BlzFrameSetSize(map, 0.35, 0.35)
+	BlzFrameSetAbsPoint(map,FRAMEPOINT_CENTER,0.3,0.4)
+	BlzFrameSetVisible(map, false)
+	MiniMap[0]=map
+	MiniMap[1]=map
+	MiniMap[2]=map
+	MiniMap[3]=map
+
 end
