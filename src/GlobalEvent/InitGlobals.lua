@@ -526,6 +526,3 @@ function InitGameCore()
 		end
 	end)
 end
-
-
-

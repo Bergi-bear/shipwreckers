@@ -80,9 +80,14 @@ function CreateWeaponFrame()
 		local charges= BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		local new_FrameChargesText = BlzCreateFrameByType("TEXT", "ButtonChargesText", charges, "", 0)
 
-		local TextNumber = BlzCreateFrameByType("TEXT", "ButtonChargesText", face, "", 0)
+		--[[]local TextNumber = BlzCreateFrameByType("TEXT", "ButtonChargesText", face, "", 0)
 		BlzFrameSetPoint(TextNumber, FRAMEPOINT_CENTER, face, FRAMEPOINT_CENTER, 0.,0.)
-		BlzFrameSetText(TextNumber, i+1)
+		BlzFrameSetText(TextNumber, i+1)]]
+
+		local hot=BlzCreateFrameByType("BACKDROP", "Face", face, "", 0)
+		BlzFrameSetTexture(hot, "DDSSymbols\\"..(i+1)..".dds", 0, true)
+		BlzFrameSetSize(hot, 0.02, 0.02)
+		BlzFrameSetPoint(hot, FRAMEPOINT_CENTER, face, FRAMEPOINT_CENTER, 0.,0.)
 
 		BlzFrameSetPoint(new_FrameChargesText, FRAMEPOINT_CENTER, charges, FRAMEPOINT_CENTER, 0.,0.)
 		BlzFrameSetText(new_FrameChargesText, "0")
@@ -138,6 +143,19 @@ function CreateWeaponFrame()
 		BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
 		BlzFrameSetSize(SkillButton, 0.04, 0.04)
 		BlzFrameSetAbsPoint(SkillButton, FRAMEPOINT_TOPLEFT, qerf+next*i, next*1.3)
+
+		local hot=BlzCreateFrameByType("BACKDROP", "Face", SkillButton, "", 0)
+		if i==1 then
+			BlzFrameSetTexture(hot, "DDSSymbols\\q.dds", 0, true)
+		elseif i==2 then
+			BlzFrameSetTexture(hot, "DDSSymbols\\e.dds", 0, true)
+		elseif i==3 then
+			BlzFrameSetTexture(hot, "DDSSymbols\\r.dds", 0, true)
+		elseif i==4 then
+			BlzFrameSetTexture(hot, "DDSSymbols\\f.dds", 0, true)
+		end
+		BlzFrameSetSize(hot, 0.03, 0.03)
+		BlzFrameSetPoint(hot, FRAMEPOINT_CENTER, SkillButton, FRAMEPOINT_CENTER, 0.,0.)
 	end
 
 end
