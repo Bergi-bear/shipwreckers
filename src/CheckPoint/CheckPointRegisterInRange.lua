@@ -26,48 +26,52 @@ function RegisterAnyCheckpointSave()
 		local x,y=GetUnitXY(hero)
 		local e
 		local id=FourCC('o000')--верфь
+		local data=HERO[UnitGetPid(hero)]
 		--print(GetUnitName(hero).." 1")
 		HealUnit(hero,9999)
 		GroupEnumUnitsInRange(perebor,x,y,500,nil)
 		while true do
 			e = FirstOfGroup(perebor)
 			if e == nil then break end
-			if UnitAlive(e) and GetUnitTypeId(e)==id and GetOwningPlayer(e)~=GetOwningPlayer(hero)  then
+			if UnitAlive(e) and GetUnitTypeId(e)==id and data.ChkPointID~=GetHandleId(e) then  --
 				local pid=GetPlayerId(GetOwningPlayer(hero))
 				SetUnitOwner(e,GetOwningPlayer(hero),true)
 				SaveGameCheckpoint("Ship",true)
+				data.ChkPointID=GetHandleId(e)
 				--print(GetUnitName(hero))
 				DefineStartLocation(0, x, y)
 				SetPlayerStartLocation(GetOwningPlayer(hero),0)
 
 				--добавляем, чуть чуть чуть боеприпасов для каждого разблокированного оружия
-				if Ammo[pid].Available.Single then
-					HeroUpdateWeaponCharges(hero,1,-50)
-				end
-				if Ammo[pid].Available.Board then
-					HeroUpdateWeaponCharges(hero,2,-50)
-				end
-				if Ammo[pid].Available.Rocket then
-					HeroUpdateWeaponCharges(hero,3,-10)
-				end
-				if Ammo[pid].Available.Fire then
-					HeroUpdateWeaponCharges(hero,4,-100)
-				end
-				if Ammo[pid].Available.Toss then
-					HeroUpdateWeaponCharges(hero,5,-5)
-				end
-				if Ammo[pid].Available.Barrel then
-					HeroUpdateWeaponCharges(hero,6,-5)
-				end
-				if Ammo[pid].Available.Light then
-					HeroUpdateWeaponCharges(hero,7,-10)
-				end
-				if Ammo[pid].Available.Saw then
-					--HeroUpdateWeaponCharges(hero,2,-10)
-					--ничего, это оружие бесконечное
-				end
-				if Ammo[pid].Available.Oil then
-					HeroUpdateWeaponCharges(hero,9,-10)
+				if GetOwningPlayer(e)~=GetOwningPlayer(hero) then
+					if Ammo[pid].Available.Single then
+						HeroUpdateWeaponCharges(hero,1,-50)
+					end
+					if Ammo[pid].Available.Board then
+						HeroUpdateWeaponCharges(hero,2,-50)
+					end
+					if Ammo[pid].Available.Rocket then
+						HeroUpdateWeaponCharges(hero,3,-10)
+					end
+					if Ammo[pid].Available.Fire then
+						HeroUpdateWeaponCharges(hero,4,-100)
+					end
+					if Ammo[pid].Available.Toss then
+						HeroUpdateWeaponCharges(hero,5,-5)
+					end
+					if Ammo[pid].Available.Barrel then
+						HeroUpdateWeaponCharges(hero,6,-5)
+					end
+					if Ammo[pid].Available.Light then
+						HeroUpdateWeaponCharges(hero,7,-10)
+					end
+					if Ammo[pid].Available.Saw then
+						--HeroUpdateWeaponCharges(hero,2,-10)
+						--ничего, это оружие бесконечное
+					end
+					if Ammo[pid].Available.Oil then
+						HeroUpdateWeaponCharges(hero,9,-10)
+					end
 				end
 			end
 			GroupRemoveUnit(perebor,e)

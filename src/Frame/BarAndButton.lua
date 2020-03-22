@@ -138,6 +138,10 @@ function CreateWeaponFrame()
 		end)
 	end
 	--Создаём кнопки QERF
+	--[[local gold=BlzCreateFrameByType("TEXT", "ButtonChargesText", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+	BlzFrameSetAbsPoint(gold, FRAMEPOINT_CENTER,  0.4,0.3)
+	BlzFrameSetText(gold, "Недостаточно золота")]]
+
 	for i=1,4 do
 		local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)

@@ -29,7 +29,7 @@ function CastArea(caster,id,x,y,range, xPoz,yPoz)
 		--print("перебор юнитов в радиусе "..range.." "..GetUnitName(e))
 		if e == nil then break end
 		if UnitAlive(e) and e~=dummy then -- and GetUnitCurrentOrder(unit)~="attack" then
-			print(GetUnitName(e).." в переборе")
+			--print(GetUnitName(e).." в переборе")
 			--IssueTargetOrder(dummy,"antimagicshell",e)-- на юнита
 			--IssueTargetOrder(dummy,"acidbomb",e)-- на юнита
 			Cast(dummy,0,0,e)

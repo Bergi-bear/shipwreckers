@@ -90,9 +90,9 @@ function CreateAllDestructables()
     local life
     gg_dest_B000_0118 = BlzCreateDestructableWithSkin(FourCC("B000"), -2432.0, -1600.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0963 = BlzCreateDestructableWithSkin(FourCC("B000"), 3840.0, 2880.0, 84.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0906 = BlzCreateDestructableWithSkin(FourCC("B000"), 2944.0, 8256.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0275 = BlzCreateDestructableWithSkin(FourCC("B000"), -1472.0, 0.0, 354.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0273 = BlzCreateDestructableWithSkin(FourCC("B000"), -3264.0, 128.0, 174.000, 1.000, 0, FourCC("B000"))
-    gg_dest_B000_0906 = BlzCreateDestructableWithSkin(FourCC("B000"), 2944.0, 8256.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0131 = BlzCreateDestructableWithSkin(FourCC("B000"), -1600.0, 3008.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B006_0274 = BlzCreateDestructableZWithSkin(FourCC("B006"), -2368.0, 640.0, -108.0, 270.000, 1.500, 0, FourCC("B006"))
     gg_dest_DTfx_1224 = BlzCreateDestructableZWithSkin(FourCC("DTfx"), -3776.0, 7872.0, -139.9, 270.000, 1.000, 0, FourCC("DTfx"))
@@ -106,6 +106,15 @@ function CreateUnitsForPlayer0()
     local life
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1236.2, 4326.5, 308.209, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -218.2, 5280.3, 308.209, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e005"), 2412.5, 7463.1, 248.200, FourCC("e005"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 6987.8, 3603.6, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 7795.5, 3614.4, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 6176.1, 3612.6, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 8565.6, 3553.7, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 8487.1, 2276.0, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 7680.2, 2344.8, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 6905.4, 2385.8, 342.641, FourCC("e00C"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e00C"), 6884.4, 2980.5, 342.641, FourCC("e00C"))
 end
 
 function CreateBuildingsForPlayer9()
@@ -179,6 +188,7 @@ function CreateNeutralPassiveBuildings()
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -2368.0, -2880.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -5952.0, 5504.0, 270.000, FourCC("o000"))
     u = BlzCreateUnitWithSkin(p, FourCC("o000"), -1088.0, 10560.0, 270.000, FourCC("o000"))
+    u = BlzCreateUnitWithSkin(p, FourCC("o000"), 5696.0, 5248.0, 270.000, FourCC("o000"))
 end
 
 function CreateNeutralPassive()
@@ -206,7 +216,7 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2543.9, -2240.3, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 855.1, 323.7, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1125.6, 305.2, 18.886, FourCC("e002"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e003"), 1011.0, 161.7, 200.070, FourCC("e003"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e003"), 950.8, 203.7, 200.070, FourCC("e003"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1009.5, -3207.5, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1202.0, -3198.8, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1416.3, 4627.9, 308.210, FourCC("e002"))
@@ -262,6 +272,7 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1919.1, 8219.2, 53.022, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2946.7, 8245.2, 53.022, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e007"), -3488.3, 8823.0, 218.624, FourCC("e007"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e003"), 2277.5, 7422.6, 200.070, FourCC("e003"))
 end
 
 function CreatePlayerBuildings()
@@ -486,61 +497,76 @@ function RegisterAllAmmoBoxes(hero)
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()
 		--hero - юнит к которому подошли
-		local IsResurrected=false
-		local IsKill=false
-		--print("any")
-		if IsUnitZCollision(hero,GetUnitZ(AmmoBox)) then
-			if  GetUnitTypeId(AmmoBox)==FourCC('e002') then-- простой ящик
-				--print("мммм")
-				HeroUpdateWeaponCharges(hero,1,-100)
-				HeroUpdateWeaponCharges(hero,2,-100)
-				IsResurrected=true
-				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e003') or GetUnitTypeId(AmmoBox)==FourCC('e006') then
-				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket==false then
-					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket=true
-				end
-				HeroUpdateWeaponCharges(hero,3,-50)
-				IsResurrected=false
-				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e007') then
-				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire==false then
-					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire=true
-				end
-				HeroUpdateWeaponCharges(hero,4,-300)
-				IsResurrected=false
-				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e008') then
-				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss==false then
-					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss=true
-				end
-				HeroUpdateWeaponCharges(hero,5,-15)
-				IsResurrected=false
-				IsKill=true
-			elseif GetUnitTypeId(AmmoBox)==FourCC('e009') then
-				if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel==false then
-					Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel=true
-				end
-				HeroUpdateWeaponCharges(hero,6,-10)
-				IsResurrected=false
-				IsKill=true
+		TimerStart(CreateTimer(), 0.5, true, function()
+			CallCollect(hero,AmmoBox)
+			if not IsUnitInRange(hero,AmmoBox,300) then
+				DestroyTimer(GetExpiredTimer())
 			end
+			if not UnitAlive(AmmoBox) then
+				DestroyTimer(GetExpiredTimer())
+			end
+		end)
+	end)
+end
 
-			if UnitAlive(AmmoBox) and IsKill then
-				local x,y=GetUnitXY(AmmoBox)
-				local p=GetOwningPlayer(AmmoBox)
-				local id=GetUnitTypeId(AmmoBox)
-				KillUnit(AmmoBox)
-				PlaySoundAtPointBJ( gg_snd_CollectOB1, 100, Location(GetUnitXY(hero)), 0 )
-				if IsResurrected then
-					TimerStart(CreateTimer(), 60, false, function()
-						local new=CreateUnit(p,id,x,y,0)
-						SetUnitAnimation(new,"Birth")
-					end)
-				end
+function CallCollect (hero,AmmoBox)
+	local IsResurrected=false
+	local IsKill=false
+	--print("any")
+	if not AmmoBox then
+
+	end
+	if IsUnitZCollision(hero,GetUnitZ(AmmoBox)) then
+		if  GetUnitTypeId(AmmoBox)==FourCC('e002') then-- простой ящик
+			--print("мммм")
+			HeroUpdateWeaponCharges(hero,1,-100)
+			HeroUpdateWeaponCharges(hero,2,-100)
+			IsResurrected=true
+			IsKill=true
+		elseif GetUnitTypeId(AmmoBox)==FourCC('e003') or GetUnitTypeId(AmmoBox)==FourCC('e006') then
+			if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket==false then
+				Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Rocket=true
+			end
+			HeroUpdateWeaponCharges(hero,3,-50)
+			IsResurrected=false
+			IsKill=true
+		elseif GetUnitTypeId(AmmoBox)==FourCC('e007') then
+			if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire==false then
+				Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Fire=true
+			end
+			HeroUpdateWeaponCharges(hero,4,-300)
+			IsResurrected=false
+			IsKill=true
+		elseif GetUnitTypeId(AmmoBox)==FourCC('e008') then
+			if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss==false then
+				Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Toss=true
+			end
+			HeroUpdateWeaponCharges(hero,5,-15)
+			IsResurrected=false
+			IsKill=true
+		elseif GetUnitTypeId(AmmoBox)==FourCC('e009') then
+			if Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel==false then
+				Ammo[GetPlayerId(GetOwningPlayer(hero))].Available.Barrel=true
+			end
+			HeroUpdateWeaponCharges(hero,6,-10)
+			IsResurrected=false
+			IsKill=true
+		end
+
+		if UnitAlive(AmmoBox) and IsKill then
+			local x,y=GetUnitXY(AmmoBox)
+			local p=GetOwningPlayer(AmmoBox)
+			local id=GetUnitTypeId(AmmoBox)
+			KillUnit(AmmoBox)
+			PlaySoundAtPointBJ( gg_snd_CollectOB1, 100, Location(GetUnitXY(hero)), 0 )
+			if IsResurrected then
+				TimerStart(CreateTimer(), 60, false, function()
+					local new=CreateUnit(p,id,x,y,0)
+					SetUnitAnimation(new,"Birth")
+				end)
 			end
 		end
-	end)
+	end
 end
 
 ---
@@ -571,48 +597,52 @@ function RegisterAnyCheckpointSave()
 		local x,y=GetUnitXY(hero)
 		local e
 		local id=FourCC('o000')--верфь
+		local data=HERO[UnitGetPid(hero)]
 		--print(GetUnitName(hero).." 1")
 		HealUnit(hero,9999)
 		GroupEnumUnitsInRange(perebor,x,y,500,nil)
 		while true do
 			e = FirstOfGroup(perebor)
 			if e == nil then break end
-			if UnitAlive(e) and GetUnitTypeId(e)==id and GetOwningPlayer(e)~=GetOwningPlayer(hero)  then
+			if UnitAlive(e) and GetUnitTypeId(e)==id and data.ChkPointID~=GetHandleId(e) then  --
 				local pid=GetPlayerId(GetOwningPlayer(hero))
 				SetUnitOwner(e,GetOwningPlayer(hero),true)
 				SaveGameCheckpoint("Ship",true)
+				data.ChkPointID=GetHandleId(e)
 				--print(GetUnitName(hero))
 				DefineStartLocation(0, x, y)
 				SetPlayerStartLocation(GetOwningPlayer(hero),0)
 
 				--добавляем, чуть чуть чуть боеприпасов для каждого разблокированного оружия
-				if Ammo[pid].Available.Single then
-					HeroUpdateWeaponCharges(hero,1,-50)
-				end
-				if Ammo[pid].Available.Board then
-					HeroUpdateWeaponCharges(hero,2,-50)
-				end
-				if Ammo[pid].Available.Rocket then
-					HeroUpdateWeaponCharges(hero,3,-10)
-				end
-				if Ammo[pid].Available.Fire then
-					HeroUpdateWeaponCharges(hero,4,-100)
-				end
-				if Ammo[pid].Available.Toss then
-					HeroUpdateWeaponCharges(hero,5,-5)
-				end
-				if Ammo[pid].Available.Barrel then
-					HeroUpdateWeaponCharges(hero,6,-5)
-				end
-				if Ammo[pid].Available.Light then
-					HeroUpdateWeaponCharges(hero,7,-10)
-				end
-				if Ammo[pid].Available.Saw then
-					--HeroUpdateWeaponCharges(hero,2,-10)
-					--ничего, это оружие бесконечное
-				end
-				if Ammo[pid].Available.Oil then
-					HeroUpdateWeaponCharges(hero,9,-10)
+				if GetOwningPlayer(e)~=GetOwningPlayer(hero) then
+					if Ammo[pid].Available.Single then
+						HeroUpdateWeaponCharges(hero,1,-50)
+					end
+					if Ammo[pid].Available.Board then
+						HeroUpdateWeaponCharges(hero,2,-50)
+					end
+					if Ammo[pid].Available.Rocket then
+						HeroUpdateWeaponCharges(hero,3,-10)
+					end
+					if Ammo[pid].Available.Fire then
+						HeroUpdateWeaponCharges(hero,4,-100)
+					end
+					if Ammo[pid].Available.Toss then
+						HeroUpdateWeaponCharges(hero,5,-5)
+					end
+					if Ammo[pid].Available.Barrel then
+						HeroUpdateWeaponCharges(hero,6,-5)
+					end
+					if Ammo[pid].Available.Light then
+						HeroUpdateWeaponCharges(hero,7,-10)
+					end
+					if Ammo[pid].Available.Saw then
+						--HeroUpdateWeaponCharges(hero,2,-10)
+						--ничего, это оружие бесконечное
+					end
+					if Ammo[pid].Available.Oil then
+						HeroUpdateWeaponCharges(hero,9,-10)
+					end
 				end
 			end
 			GroupRemoveUnit(perebor,e)
@@ -667,7 +697,7 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
 
-			--SetUnitPathing(e,false)--отключени
+			SetUnitPathing(e,false)--отключени
 
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
@@ -913,6 +943,10 @@ function CreateWeaponFrame()
 		end)
 	end
 	--Создаём кнопки QERF
+	--[[local gold=BlzCreateFrameByType("TEXT", "ButtonChargesText", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
+	BlzFrameSetAbsPoint(gold, FRAMEPOINT_CENTER,  0.4,0.3)
+	BlzFrameSetText(gold, "Недостаточно золота")]]
+
 	for i=1,4 do
 		local SkillButton=BlzCreateFrameByType("BACKDROP", "Face", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), "", 0)
 		BlzFrameSetTexture(SkillButton, "ChargesTexture.blp", 0, true)
@@ -1123,7 +1157,7 @@ function CastArea(caster,id,x,y,range, xPoz,yPoz)
 		--print("перебор юнитов в радиусе "..range.." "..GetUnitName(e))
 		if e == nil then break end
 		if UnitAlive(e) and e~=dummy then -- and GetUnitCurrentOrder(unit)~="attack" then
-			print(GetUnitName(e).." в переборе")
+			--print(GetUnitName(e).." в переборе")
 			--IssueTargetOrder(dummy,"antimagicshell",e)-- на юнита
 			--IssueTargetOrder(dummy,"acidbomb",e)-- на юнита
 			Cast(dummy,0,0,e)
@@ -1158,7 +1192,8 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
-		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,200,true)-- Небольгая подсветка
+		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,300,true)-- Небольгая подсветка
+
 		--local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		--BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
 		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
@@ -1411,6 +1446,88 @@ function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 	end)
 end
 
+function CreateLightingCharges(hero)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	--print("1")
+	TimerStart(CreateTimer(), 0.7, true, function()
+		if data.ReleaseRMB then
+			HeroUpdateWeaponCharges(hero,7,-1)
+			FindEnemyForLighting(hero,500)
+		else
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function FindEnemyForLighting(hero, range)
+	local e=nil
+	local x,y=GetUnitXY(hero)
+
+	GroupEnumUnitsInRange(perebor,x,y,range,nil)
+	--print("2")
+	while true do
+		e = FirstOfGroup(perebor)
+		if e == nil then break end
+		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitVisible(e,GetOwningPlayer(hero))  then
+			--print("найден враг")
+			if HeroUpdateWeaponCharges(hero,7,1) then
+				local dummy=CreateUnit(GetOwningPlayer(hero), DummyID, GetUnitX(hero), GetUnitY(hero), 0)
+				SetUnitZ(dummy,GetUnitZ(hero)+90)
+				UnitAddAbility(dummy,FourCC('A00B'))-- молния
+				UnitApplyTimedLife(dummy,DummyID,1)
+				if not Cast(dummy,0,0,e) then
+					HeroUpdateWeaponCharges(hero,7,-1)
+				end
+			else
+				DestroyTimer(GetExpiredTimer())
+			end
+		end
+		GroupRemoveUnit(perebor,e)
+	end
+end
+
+function SawActivated(hero)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local saw=AddSpecialEffect(SawDiskModel,GetUnitXY(hero))
+	local id=UnitGetPid(hero)
+	BlzSetSpecialEffectScale(saw,0.7)
+	--HeroUpdateWeaponCharges(hero,8,-1)
+	--print("пила активирована")
+	local CurAngle=GetUnitFacing(hero)
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local x,y=GetUnitXY(hero)
+		local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
+		--angle=math.abs(angle)
+		--print(angle)
+		--if CurAngle>=angle-10 and CurAngle<=angle+10 then
+		if data.ReleaseRMB then
+			if CurAngle <=angle then
+				if CurAngle<angle-10 then
+					CurAngle=CurAngle+5
+				end
+			else
+				CurAngle=CurAngle-5
+			end
+		end
+
+		local nx,ny=MoveXY(x,y,130,angle)
+
+		if UnitDamageArea(hero,30,nx,ny,150,GetUnitZ(hero)+50,"Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl") then
+			--[[if HeroUpdateWeaponCharges(hero,8,1) then
+			else
+				DestroyTimer(GetExpiredTimer())
+				DestroyEffect(saw)
+			end]]
+		end
+
+
+		BlzSetSpecialEffectPosition(saw,nx,ny,GetUnitZ(hero)+20)
+		if  data.WeaponIndex~=8 then
+			DestroyTimer(GetExpiredTimer())
+			DestroyEffect(saw)
+		end
+	end)
+end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
@@ -1494,9 +1611,11 @@ end
 function IsUnitZCollision(hero,ZDamageSource)
 	local zcollision=false
 	local z=GetUnitZ(hero)
-	--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
+
 	if  ZDamageSource+60>=z and ZDamageSource-60<=z then
 		zcollision=true
+	else
+		--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
 	end
 	return zcollision
 end
@@ -1626,7 +1745,8 @@ function InitGameCore()
 			ForceRemain={},
 			ForceAngle={},
 			ForceSpeed={},
-			IsForce={}
+			IsForce={},
+			ChkPointID=0,
 			--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 		}
 	end
@@ -1635,7 +1755,7 @@ function InitGameCore()
 			Single=true,
 			Board=true,
 			Rocket=false,
-			Fire=false,
+			Fire=true,
 			Toss=true,
 			Barrel=true,
 			Light=true,
@@ -1646,11 +1766,11 @@ function InitGameCore()
 			Single=150,
 			Board=100,
 			Rocket=0,
-			Fire=0,
+			Fire=500,
 			Toss=10,
 			Barrel=10,
 			Light=100,
-			Saw=999,
+			Saw=99,
 			Oil=100
 		}
 	}
@@ -1762,7 +1882,7 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch7, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Light then
 			data.WeaponIndex=7
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
@@ -1776,21 +1896,22 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch8, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Saw and  data.WeaponIndex~=8 then
 			data.WeaponIndex=8
 			SwitchWeaponVisual(pid,data.WeaponIndex)
+			SawActivated(data.UnitHero)
 		end
 	end)
 	-----------------------------------------------------------------OSKEY_9
 	local TrigWeaponSwitch9 = CreateTrigger()
 	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
 		local player = Player(i)
-		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch6,Player(i),OSKEY_9,0,true)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch9,Player(i),OSKEY_9,0,true)
 	end
 	TriggerAddAction(TrigWeaponSwitch9, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Oil then
 			data.WeaponIndex=9
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
@@ -1895,6 +2016,7 @@ function InitGameCore()
 	TriggerAddAction(gg_trg_EventUpSpace, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
+		BlzFrameSetVisible(MiniMap[data.pid], true)
 		data.ReleaseSpace=true
 	end)
 	local TrigDepressSpace = CreateTrigger()
@@ -1977,6 +2099,9 @@ function InitGameCore()
 				end
 				if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateBarrel(hero)
+				end
+				if data.WeaponIndex==7 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateLightingCharges(hero)
 				end
 			end
 		end
@@ -2068,34 +2193,34 @@ function InitGameCore()
 			data.CurrentSpeed=data.Acceleration
 
 			--if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--
-					--print("текущая скорость = "..data.CurrentSpeed)
-				--[[local x,y=GetUnitX(hero),GetUnitY(hero)
-				local angle=GetUnitFacing(hero)
-				data.AngleForce=angle
-				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
-				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
-				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
-				local z3=GetTerrainZ(newX3,newY3)
-				local z2=GetTerrainZ(newX2,newY2)
-				local Perepad=zhero-z2
-				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+			--print("текущая скорость = "..data.CurrentSpeed)
+			--[[local x,y=GetUnitX(hero),GetUnitY(hero)
+			local angle=GetUnitFacing(hero)
+			data.AngleForce=angle
+			local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
+			local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
+			local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
+			local z3=GetTerrainZ(newX3,newY3)
+			local z2=GetTerrainZ(newX2,newY2)
+			local Perepad=zhero-z2
+			local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
-				if Perepad<1  then
-					SetUnitPositionSmooth(hero,newX,newY)
+			if Perepad<1  then
+				SetUnitPositionSmooth(hero,newX,newY)
+			else
+				if Perepad>110 then
+					SetUnitX(hero,newX)
+					SetUnitY(hero,newY)
 				else
-					if Perepad>110 then
-						SetUnitX(hero,newX)
-						SetUnitY(hero,newY)
-					else
-						SetUnitPositionSmooth(hero,newX,newY)
-					end
+					SetUnitPositionSmooth(hero,newX,newY)
 				end
-				]]
-------
-				local k=data.ForcesCount
-				local WASDMoving = Vector3:copyFromUnit(hero)
-				local angle=GetUnitFacing(hero)
-				local newPos=WASDMoving
+			end
+			]]
+			------
+			local k=data.ForcesCount
+			local WASDMoving = Vector3:copyFromUnit(hero)
+			local angle=GetUnitFacing(hero)
+			local newPos=WASDMoving
 			if data.CurrentSpeed>0 and data.Alive and not data.OnTorrent and not data.IsDisabled then--движение при нажатиии кнопок
 
 				newPos=WASDMoving+WASDMoving:yawPitchOffset( data.CurrentSpeed, angle * ( math.pi / 180 ), 0.0 )
@@ -2108,54 +2233,44 @@ function InitGameCore()
 				newPos=newPos+Vector3:new(10, 0, 0)
 				--print("поток")
 			end
-				local f=0
-				for i=1,k do
-					if data.ForceRemain[i]>0 then
-						--print("Внешняя сила="..data.ForceRemain[i])
-						f=f+1
-						newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
-						--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
-						data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
-					else
-						if data.IsForce[i] then
-							data.IsForce[i]=false
-						end
+			local f=0
+			for i=1,k do
+				if data.ForceRemain[i]>0 then
+					--print("Внешняя сила="..data.ForceRemain[i])
+					f=f+1
+					newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
+					--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
+					data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
+				else
+					if data.IsForce[i] then
+						data.IsForce[i]=false
 					end
 				end
-				if f==0 then
-					data.ForcesCount=0
-					data.IsDisabled=false
-					SetUnitPathing(hero,true)
-					--print("нет больше сил")
-				end
+			end
+			if f==0 then
+				data.ForcesCount=0
+				data.IsDisabled=false
+				SetUnitPathing(hero,true)
+				--print("нет больше сил")
+			end
 
 
-
-			local tempZ=NexPointZ(GetUnitX(hero),GetUnitY(hero), GetUnitFacing(hero),60) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
+			--print("1")
+			--local tempZ=PerepadZ(hero) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
 			--data.AngleForce=angle
-			--print("perepad="..tempZ)
-			--[[
-			if tempZ<=10 then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-			end
-
+			--local NexX,NexY=
+			local NexZ=0
 			if data.ForcesCount==0 then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				--print("простое движение")
-			end]]
-
-			if tempZ<1  then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				NexZ=GetTerrainZ(MoveXY(GetUnitX(hero),GetUnitY(hero),200,GetUnitFacing(hero)))
 			else
-				if tempZ>110 then
-					SetUnitX(hero,newPos.x)
-					SetUnitY(hero,newPos.y)
-				else
-					SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				end
+				NexZ=GetTerrainZ(MoveXY(GetUnitX(hero),GetUnitY(hero),200,data.AngleForce))
 			end
-
-
+		--print("Z="..NexZ)
+		if NexZ<=50 then
+		SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+		else
+			--print("Высоко не перелететь")
+		end
 			data.XPos=GetUnitX(hero)
 			data.YPos=GetUnitY(hero)
 
@@ -2163,11 +2278,11 @@ function InitGameCore()
 	end)
 end
 
-function NexPointZ(x,y,angle,next)
+function PerepadZ(hero)
+	--print("2")
 	local perepad=0
-	local zhero=GetTerrainZ(x,y)
-	local newX2,newY2=MoveX(x,next,angle),MoveY(y,next,angle)
-	local z2=GetTerrainZ(newX2,newY2)
+	local zhero=GetUnitZ(hero)
+	local z2=GetTerrainZ(GetUnitXY(hero))
 	perepad=zhero-z2
 	return math.abs(perepad)
 end
@@ -2341,6 +2456,7 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 	data.ForceSpeed[k]=Speed
 	data.ForceAngle[k]=Angle
 	data.IsForce[k]=true
+	data.AngleForce=Angle
 	--print("параметры заданы"..GetUnitName(hero)..k)
 end
 ---
@@ -3891,6 +4007,7 @@ function InitZone0()
 	InMineWay()
 	InitZone1()--- временно потом перенести в другое место
 	InitZone2()
+	InitZone3()
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -4035,6 +4152,9 @@ function CreateDeepMine(x,y)
 			UnitDamageTarget( hero, hero, 100, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			ExplodeEffect(eff,3)
 			DestroyTimer(GetExpiredTimer())
+			TimerStart(CreateTimer(), 60, false, function()
+				CreateDeepMine(x,y)
+			end)
 		end
 	end)
 end
@@ -4044,6 +4164,7 @@ end
 --- Created by Bergi.
 --- DateTime: 11.03.2020 1:03
 FirstEnterBoss=false
+
 function BossZoneInit()
 	ThisTriggerBoss1 = CreateTrigger()
 	TriggerRegisterEnterRectSimple(ThisTriggerBoss1, gg_rct_BossZone1)
@@ -4052,7 +4173,7 @@ function BossZoneInit()
 		local hero=GetTriggerUnit()
 		if IsUnitType(hero,UNIT_TYPE_HERO) then
 			--print("Запускаем Триггер")
-			local boss=FindUnitOfType(FourCC('n004')) -- определение босса
+			local boss=Kraken--FindUnitOfType(FourCC('n004')) -- определение босса
 			CreateFogModifierRectBJ(true, GetOwningPlayer(hero), FOG_OF_WAR_VISIBLE, gg_rct_BossZone1)
 			BlzSetUnitMaxHP(boss,10000)
 			HealUnit(boss,10000)
@@ -4212,6 +4333,25 @@ function AnyHeroContainInRect(rect)
 	end
 	return contain
 end
+
+function TentacleInFog()
+	TimerStart(CreateTimer(), 10,true, function()
+		--print("период")
+		if not UnitAlive(Kraken) then
+			DestroyTimer(GetExpiredTimer())
+		end
+		for i=0,3 do
+			local hero=HERO[i].UnitHero
+			--print("i="..i..GetUnitName(hero))
+			if not Kraken then print("Кракен не определён") end
+			if IsUnitInRange(Kraken,hero,2800) or RectContainsCoords(gg_rct_TestFog,GetUnitXY(hero)) then
+				--print("призыв")
+				CreateTorrent(GetUnitXY(hero))
+				CreateTentacle(Kraken,GetUnitX(hero),GetUnitY(hero),10,0.5)
+			end
+		end
+	end)
+end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
@@ -4228,7 +4368,9 @@ function InitZone1()
 	CreateFogInRect(gg_rct_TestFog)
 	MineReplacer()
 	DeeperShip()
+	Kraken=FindUnitOfType(FourCC('n004'))
 	BossZoneInit()
+	TentacleInFog()
 	--Открыть ворота к боссу
 end
 
@@ -4360,6 +4502,7 @@ OrcSkeletonPool={
 	nil,
 	nil,
 }
+
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
 --- Created by Bergi.
@@ -4397,6 +4540,51 @@ end
 function CreateArrow()
 	print("Выпускаем стрелу")
 end
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 07.03.2020 0:35
+---
+
+function TorrentReplacer()
+	local e=nil
+	local k=0
+	local id=FourCC('e00C')--!!!!!--Глифы торрентовdddc
+		GroupEnumUnitsInRect(perebor,bj_mapInitialPlayableArea,nil)
+		while true do
+			e = FirstOfGroup(perebor)
+			if e == nil then break end
+			if UnitAlive(e) and GetUnitTypeId(e)==id then
+				local x,y=GetUnitXY(e)
+				KillUnit(e)
+				k=k+1
+				CreateWhirlpool(x,y)
+			end
+			GroupRemoveUnit(perebor,e)
+		end
+		--print("Заменено существ: "..k)
+end
+
+function CreateWhirlpool(x,y)
+	local eff =AddSpecialEffect("Whirlpool",x,y)
+	BlzSetSpecialEffectZ(eff,-190)
+	BlzPlaySpecialEffect(eff,ANIM_TYPE_BIRTH)
+	TimerStart(CreateTimer(), 5, true, function()
+		CreateTorrent(x,y,4,500)
+	end)
+end
+
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 16.02.2020 18:42
+---
+function InitZone3()
+
+	TorrentReplacer()
+end
+
+
 --CUSTOM_CODE
 function Trig_ResArrowBotton_Actions()
         CreateArrow()
@@ -4711,7 +4899,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -3648.0, 9088.0)
+    DefineStartLocation(0, 6528.0, 4480.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

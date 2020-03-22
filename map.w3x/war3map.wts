@@ -111,7 +111,7 @@ STRING 27
 }
 
 STRING 28
-// Doodads: D000 (Водоворот), Name (Name)
+// Units: e00C (Водоворот), Name (Name)
 {
 Водоворот
 }
@@ -462,5 +462,35 @@ STRING 88
 // Units: u001 (Линкор нежити (подводный)), Name (Name)
 {
 Линкор нежити (подводный)
+}
+
+STRING 89
+// Units: e004 (Глубоководная мина), EditorSuffix (Name - Editor Suffix)
+{
+(для замены)
+}
+
+STRING 90
+// Units: e00C (Водоворот), Tip (Tooltip - Basic)
+{
+дамми
+}
+
+STRING 91
+// Units: e00C (Водоворот), Ubertip (Tooltip - Extended)
+{
+Это даммми юнит
+}
+
+STRING 92
+// Units: e00C (Водоворот), EditorSuffix (Name - Editor Suffix)
+{
+(для замены)
+}
+
+STRING 93
+// Doodads: D000 (Водоворот), Name (Name)
+{
+Водоворот
 }
 

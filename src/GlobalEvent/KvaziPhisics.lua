@@ -168,5 +168,6 @@ function UnitAddVectorForce(hero,Angle,Speed,Distance)
 	data.ForceSpeed[k]=Speed
 	data.ForceAngle[k]=Angle
 	data.IsForce[k]=true
+	data.AngleForce=Angle
 	--print("параметры заданы"..GetUnitName(hero)..k)
 end

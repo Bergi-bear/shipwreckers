@@ -24,7 +24,8 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
-		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,200,true)-- Небольгая подсветка
+		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,300,true)-- Небольгая подсветка
+
 		--local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		--BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
 		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
@@ -279,8 +280,10 @@ end
 
 function CreateLightingCharges(hero)
 	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
-	TimerStart(CreateTimer(), 0.1, true, function()
+	--print("1")
+	TimerStart(CreateTimer(), 0.7, true, function()
 		if data.ReleaseRMB then
+			HeroUpdateWeaponCharges(hero,7,-1)
 			FindEnemyForLighting(hero,500)
 		else
 			DestroyTimer(GetExpiredTimer())
@@ -289,5 +292,71 @@ function CreateLightingCharges(hero)
 end
 
 function FindEnemyForLighting(hero, range)
+	local e=nil
+	local x,y=GetUnitXY(hero)
 
+	GroupEnumUnitsInRange(perebor,x,y,range,nil)
+	--print("2")
+	while true do
+		e = FirstOfGroup(perebor)
+		if e == nil then break end
+		if UnitAlive(e) and IsUnitEnemy(e,GetOwningPlayer(hero)) and IsUnitVisible(e,GetOwningPlayer(hero))  then
+			--print("найден враг")
+			if HeroUpdateWeaponCharges(hero,7,1) then
+				local dummy=CreateUnit(GetOwningPlayer(hero), DummyID, GetUnitX(hero), GetUnitY(hero), 0)
+				SetUnitZ(dummy,GetUnitZ(hero)+90)
+				UnitAddAbility(dummy,FourCC('A00B'))-- молния
+				UnitApplyTimedLife(dummy,DummyID,1)
+				if not Cast(dummy,0,0,e) then
+					HeroUpdateWeaponCharges(hero,7,-1)
+				end
+			else
+				DestroyTimer(GetExpiredTimer())
+			end
+		end
+		GroupRemoveUnit(perebor,e)
+	end
+end
+
+function SawActivated(hero)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	local saw=AddSpecialEffect(SawDiskModel,GetUnitXY(hero))
+	local id=UnitGetPid(hero)
+	BlzSetSpecialEffectScale(saw,0.7)
+	--HeroUpdateWeaponCharges(hero,8,-1)
+	--print("пила активирована")
+	local CurAngle=GetUnitFacing(hero)
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+		local x,y=GetUnitXY(hero)
+		local angle=AngleBetweenXY(x,y,GetPlayerMouseX[id],GetPlayerMouseY[id])/bj_DEGTORAD
+		--angle=math.abs(angle)
+		--print(angle)
+		--if CurAngle>=angle-10 and CurAngle<=angle+10 then
+		if data.ReleaseRMB then
+			if CurAngle <=angle then
+				if CurAngle<angle-10 then
+					CurAngle=CurAngle+5
+				end
+			else
+				CurAngle=CurAngle-5
+			end
+		end
+
+		local nx,ny=MoveXY(x,y,130,angle)
+
+		if UnitDamageArea(hero,30,nx,ny,150,GetUnitZ(hero)+50,"Abilities/Weapons/AncestralGuardianMissile/AncestralGuardianMissile.mdl") then
+			--[[if HeroUpdateWeaponCharges(hero,8,1) then
+			else
+				DestroyTimer(GetExpiredTimer())
+				DestroyEffect(saw)
+			end]]
+		end
+
+
+		BlzSetSpecialEffectPosition(saw,nx,ny,GetUnitZ(hero)+20)
+		if  data.WeaponIndex~=8 then
+			DestroyTimer(GetExpiredTimer())
+			DestroyEffect(saw)
+		end
+	end)
 end

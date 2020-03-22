@@ -56,7 +56,8 @@ function InitGameCore()
 			ForceRemain={},
 			ForceAngle={},
 			ForceSpeed={},
-			IsForce={}
+			IsForce={},
+			ChkPointID=0,
 			--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 		}
 	end
@@ -65,7 +66,7 @@ function InitGameCore()
 			Single=true,
 			Board=true,
 			Rocket=false,
-			Fire=false,
+			Fire=true,
 			Toss=true,
 			Barrel=true,
 			Light=true,
@@ -76,11 +77,11 @@ function InitGameCore()
 			Single=150,
 			Board=100,
 			Rocket=0,
-			Fire=0,
+			Fire=500,
 			Toss=10,
 			Barrel=10,
 			Light=100,
-			Saw=999,
+			Saw=99,
 			Oil=100
 		}
 	}
@@ -192,7 +193,7 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch7, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Light then
 			data.WeaponIndex=7
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
@@ -206,9 +207,10 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch8, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Saw and  data.WeaponIndex~=8 then
 			data.WeaponIndex=8
 			SwitchWeaponVisual(pid,data.WeaponIndex)
+			SawActivated(data.UnitHero)
 		end
 	end)
 	-----------------------------------------------------------------OSKEY_9
@@ -220,7 +222,7 @@ function InitGameCore()
 	TriggerAddAction(TrigWeaponSwitch9, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
-		if Ammo[pid].Available.Barrel then
+		if Ammo[pid].Available.Oil then
 			data.WeaponIndex=9
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
@@ -325,6 +327,7 @@ function InitGameCore()
 	TriggerAddAction(gg_trg_EventUpSpace, function()
 		local pid=GetPlayerId(GetTriggerPlayer())
 		local data=HERO[pid]
+		BlzFrameSetVisible(MiniMap[data.pid], true)
 		data.ReleaseSpace=true
 	end)
 	local TrigDepressSpace = CreateTrigger()
@@ -501,34 +504,34 @@ function InitGameCore()
 			data.CurrentSpeed=data.Acceleration
 
 			--if data.CurrentSpeed>0 and data.Alive and data.OnTorrent==false then--
-					--print("текущая скорость = "..data.CurrentSpeed)
-				--[[local x,y=GetUnitX(hero),GetUnitY(hero)
-				local angle=GetUnitFacing(hero)
-				data.AngleForce=angle
-				local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
-				local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
-				local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
-				local z3=GetTerrainZ(newX3,newY3)
-				local z2=GetTerrainZ(newX2,newY2)
-				local Perepad=zhero-z2
-				local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
+			--print("текущая скорость = "..data.CurrentSpeed)
+			--[[local x,y=GetUnitX(hero),GetUnitY(hero)
+			local angle=GetUnitFacing(hero)
+			data.AngleForce=angle
+			local zhero=GetUnitZ(hero) --GetTerrainZ(x,y)
+			local newX3,newY3=MoveX(x,180,angle),MoveY(y,180,angle)
+			local newX2,newY2=MoveX(x,60,angle),MoveY(y,60,angle)
+			local z3=GetTerrainZ(newX3,newY3)
+			local z2=GetTerrainZ(newX2,newY2)
+			local Perepad=zhero-z2
+			local newX,newY=MoveX(x,data.CurrentSpeed,angle),MoveY(y,data.CurrentSpeed,angle)
 
-				if Perepad<1  then
-					SetUnitPositionSmooth(hero,newX,newY)
+			if Perepad<1  then
+				SetUnitPositionSmooth(hero,newX,newY)
+			else
+				if Perepad>110 then
+					SetUnitX(hero,newX)
+					SetUnitY(hero,newY)
 				else
-					if Perepad>110 then
-						SetUnitX(hero,newX)
-						SetUnitY(hero,newY)
-					else
-						SetUnitPositionSmooth(hero,newX,newY)
-					end
+					SetUnitPositionSmooth(hero,newX,newY)
 				end
-				]]
-------
-				local k=data.ForcesCount
-				local WASDMoving = Vector3:copyFromUnit(hero)
-				local angle=GetUnitFacing(hero)
-				local newPos=WASDMoving
+			end
+			]]
+			------
+			local k=data.ForcesCount
+			local WASDMoving = Vector3:copyFromUnit(hero)
+			local angle=GetUnitFacing(hero)
+			local newPos=WASDMoving
 			if data.CurrentSpeed>0 and data.Alive and not data.OnTorrent and not data.IsDisabled then--движение при нажатиии кнопок
 
 				newPos=WASDMoving+WASDMoving:yawPitchOffset( data.CurrentSpeed, angle * ( math.pi / 180 ), 0.0 )
@@ -541,54 +544,44 @@ function InitGameCore()
 				newPos=newPos+Vector3:new(10, 0, 0)
 				--print("поток")
 			end
-				local f=0
-				for i=1,k do
-					if data.ForceRemain[i]>0 then
-						--print("Внешняя сила="..data.ForceRemain[i])
-						f=f+1
-						newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
-						--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
-						data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
-					else
-						if data.IsForce[i] then
-							data.IsForce[i]=false
-						end
+			local f=0
+			for i=1,k do
+				if data.ForceRemain[i]>0 then
+					--print("Внешняя сила="..data.ForceRemain[i])
+					f=f+1
+					newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
+					--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
+					data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
+				else
+					if data.IsForce[i] then
+						data.IsForce[i]=false
 					end
 				end
-				if f==0 then
-					data.ForcesCount=0
-					data.IsDisabled=false
-					SetUnitPathing(hero,true)
-					--print("нет больше сил")
-				end
+			end
+			if f==0 then
+				data.ForcesCount=0
+				data.IsDisabled=false
+				SetUnitPathing(hero,true)
+				--print("нет больше сил")
+			end
 
 
-
-			local tempZ=NexPointZ(GetUnitX(hero),GetUnitY(hero), GetUnitFacing(hero),60) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
+			--print("1")
+			--local tempZ=PerepadZ(hero) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
 			--data.AngleForce=angle
-			--print("perepad="..tempZ)
-			--[[
-			if tempZ<=10 then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-			end
-
+			--local NexX,NexY=
+			local NexZ=0
 			if data.ForcesCount==0 then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				--print("простое движение")
-			end]]
-
-			if tempZ<1  then
-				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				NexZ=GetTerrainZ(MoveXY(GetUnitX(hero),GetUnitY(hero),200,GetUnitFacing(hero)))
 			else
-				if tempZ>110 then
-					SetUnitX(hero,newPos.x)
-					SetUnitY(hero,newPos.y)
-				else
-					SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				end
+				NexZ=GetTerrainZ(MoveXY(GetUnitX(hero),GetUnitY(hero),200,data.AngleForce))
 			end
-
-
+		--print("Z="..NexZ)
+		if NexZ<=50 then
+		SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+		else
+			--print("Высоко не перелететь")
+		end
 			data.XPos=GetUnitX(hero)
 			data.YPos=GetUnitY(hero)
 
@@ -596,11 +589,11 @@ function InitGameCore()
 	end)
 end
 
-function NexPointZ(x,y,angle,next)
+function PerepadZ(hero)
+	--print("2")
 	local perepad=0
-	local zhero=GetTerrainZ(x,y)
-	local newX2,newY2=MoveX(x,next,angle),MoveY(y,next,angle)
-	local z2=GetTerrainZ(newX2,newY2)
+	local zhero=GetUnitZ(hero)
+	local z2=GetTerrainZ(GetUnitXY(hero))
 	perepad=zhero-z2
 	return math.abs(perepad)
 end

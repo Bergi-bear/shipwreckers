@@ -14,7 +14,9 @@ function InitZone1()
 	CreateFogInRect(gg_rct_TestFog)
 	MineReplacer()
 	DeeperShip()
+	Kraken=FindUnitOfType(FourCC('n004'))
 	BossZoneInit()
+	TentacleInFog()
 	--Открыть ворота к боссу
 end
 

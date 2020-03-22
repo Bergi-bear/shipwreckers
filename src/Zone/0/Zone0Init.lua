@@ -17,4 +17,5 @@ function InitZone0()
 	InMineWay()
 	InitZone1()--- временно потом перенести в другое место
 	InitZone2()
+	InitZone3()
 end

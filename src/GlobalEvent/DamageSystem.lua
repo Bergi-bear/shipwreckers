@@ -81,9 +81,11 @@ end
 function IsUnitZCollision(hero,ZDamageSource)
 	local zcollision=false
 	local z=GetUnitZ(hero)
-	--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
+
 	if  ZDamageSource+60>=z and ZDamageSource-60<=z then
 		zcollision=true
+	else
+		--print("Высота снаряда="..ZDamageSource.."Высота юнита="..z)
 	end
 	return zcollision
 end

@@ -3,6 +3,7 @@
 --- Created by Bergi.
 --- DateTime: 11.03.2020 1:03
 FirstEnterBoss=false
+
 function BossZoneInit()
 	ThisTriggerBoss1 = CreateTrigger()
 	TriggerRegisterEnterRectSimple(ThisTriggerBoss1, gg_rct_BossZone1)
@@ -11,7 +12,7 @@ function BossZoneInit()
 		local hero=GetTriggerUnit()
 		if IsUnitType(hero,UNIT_TYPE_HERO) then
 			--print("Запускаем Триггер")
-			local boss=FindUnitOfType(FourCC('n004')) -- определение босса
+			local boss=Kraken--FindUnitOfType(FourCC('n004')) -- определение босса
 			CreateFogModifierRectBJ(true, GetOwningPlayer(hero), FOG_OF_WAR_VISIBLE, gg_rct_BossZone1)
 			BlzSetUnitMaxHP(boss,10000)
 			HealUnit(boss,10000)
@@ -170,4 +171,23 @@ function AnyHeroContainInRect(rect)
 		end
 	end
 	return contain
+end
+
+function TentacleInFog()
+	TimerStart(CreateTimer(), 10,true, function()
+		--print("период")
+		if not UnitAlive(Kraken) then
+			DestroyTimer(GetExpiredTimer())
+		end
+		for i=0,3 do
+			local hero=HERO[i].UnitHero
+			--print("i="..i..GetUnitName(hero))
+			if not Kraken then print("Кракен не определён") end
+			if IsUnitInRange(Kraken,hero,2800) or RectContainsCoords(gg_rct_TestFog,GetUnitXY(hero)) then
+				--print("призыв")
+				CreateTorrent(GetUnitXY(hero))
+				CreateTentacle(Kraken,GetUnitX(hero),GetUnitY(hero),10,0.5)
+			end
+		end
+	end)
 end
