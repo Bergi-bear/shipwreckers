@@ -31,7 +31,7 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
 
-			SetUnitPathing(e,false)
+			--SetUnitPathing(e,false)--отключени
 
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]

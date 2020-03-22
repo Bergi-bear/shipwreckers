@@ -4,14 +4,17 @@
 --- DateTime: 16.02.2020 18:42
 ---
 function InitZone0()
+	local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
 	TimerStart(CreateTimer(), 5, true, function()
-		local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
 		CreateTorrent(x,y,4,500)
 	end)
+	local WaterBirth =AddSpecialEffect("Whirlpool",x,y)
+	BlzPlaySpecialEffect(WaterBirth,ANIM_TYPE_BIRTH)
 	--перечисляем все регистрации
 	Enter00()
 	StartAllSaw()
 	ActivatedAllTower()
 	InMineWay()
 	InitZone1()--- временно потом перенести в другое место
+	InitZone2()
 end

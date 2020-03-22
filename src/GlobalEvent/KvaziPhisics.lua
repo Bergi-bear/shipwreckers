@@ -59,7 +59,8 @@ function UnitCheckPathingInRound(hero,range)
 			if  UnitAlive(hero) and k>=10 then
 				data.IsDisabled=true
 				print("force ="..k)
-				UnitAddVectorForce(hero,med-180,5+k,80+5*k)
+				SetUnitPathing(hero,false)--отключение
+				UnitAddVectorForce(hero,med-180,10+k,80+5*k)
 			end
 		end
 	end

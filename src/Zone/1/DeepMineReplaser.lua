@@ -33,6 +33,9 @@ function CreateDeepMine(x,y)
 			UnitDamageTarget( hero, hero, 100, true, false, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS )
 			ExplodeEffect(eff,3)
 			DestroyTimer(GetExpiredTimer())
+			TimerStart(CreateTimer(), 60, false, function()
+				CreateDeepMine(x,y)
+			end)
 		end
 	end)
 end

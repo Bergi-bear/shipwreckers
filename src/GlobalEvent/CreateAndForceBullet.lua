@@ -24,6 +24,7 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
+		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,200,true)-- Небольгая подсветка
 		--local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		--BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
 		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
@@ -274,4 +275,19 @@ function EffectAddRegistrationCollision(eff,hero,range,duration,flag)
 			DestroyTimer(GetExpiredTimer())
 		end
 	end)
+end
+
+function CreateLightingCharges(hero)
+	local data=HERO[GetPlayerId(GetOwningPlayer(hero))]
+	TimerStart(CreateTimer(), 0.1, true, function()
+		if data.ReleaseRMB then
+			FindEnemyForLighting(hero,500)
+		else
+			DestroyTimer(GetExpiredTimer())
+		end
+	end)
+end
+
+function FindEnemyForLighting(hero, range)
+
 end

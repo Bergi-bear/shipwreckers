@@ -18,11 +18,15 @@ gg_rct_BossZone1 = nil
 gg_rct_Boss1Gate = nil
 gg_rct_VisiblePoint0 = nil
 gg_rct_Boss1Gate1 = nil
+gg_rct_ActivateArrow1 = nil
+gg_rct_Sercret1 = nil
+gg_rct_Gate3 = nil
 gg_cam_CameraHATE = nil
 gg_snd_AAA = nil
 gg_snd_AAA1 = nil
 gg_snd_Load = nil
 gg_snd_CollectOB1 = nil
+gg_trg_ResArrowBotton = nil
 gg_trg_Button3IsDead = nil
 gg_trg_InitZone0 = nil
 gg_trg_Button0IsDead = nil
@@ -33,6 +37,7 @@ gg_trg_InCombatZone = nil
 gg_trg_Button0to1 = nil
 gg_trg_Visiblepoint = nil
 gg_trg_InitZone1BossOpenGate = nil
+gg_trg_Button10IsDead = nil
 gg_trg_EVENTMMB = nil
 gg_trg_NonAttack = nil
 gg_trg_sec1 = nil
@@ -43,7 +48,9 @@ gg_dest_B000_0118 = nil
 gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
+gg_dest_B000_0906 = nil
 gg_dest_B000_0963 = nil
+gg_dest_DTfx_1224 = nil
 function InitGlobals()
 end
 
@@ -85,8 +92,10 @@ function CreateAllDestructables()
     gg_dest_B000_0963 = BlzCreateDestructableWithSkin(FourCC("B000"), 3840.0, 2880.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0275 = BlzCreateDestructableWithSkin(FourCC("B000"), -1472.0, 0.0, 354.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0273 = BlzCreateDestructableWithSkin(FourCC("B000"), -3264.0, 128.0, 174.000, 1.000, 0, FourCC("B000"))
+    gg_dest_B000_0906 = BlzCreateDestructableWithSkin(FourCC("B000"), 2944.0, 8256.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B000_0131 = BlzCreateDestructableWithSkin(FourCC("B000"), -1600.0, 3008.0, 84.000, 1.000, 0, FourCC("B000"))
     gg_dest_B006_0274 = BlzCreateDestructableZWithSkin(FourCC("B006"), -2368.0, 640.0, -108.0, 270.000, 1.500, 0, FourCC("B006"))
+    gg_dest_DTfx_1224 = BlzCreateDestructableZWithSkin(FourCC("DTfx"), -3776.0, 7872.0, -139.9, 270.000, 1.000, 0, FourCC("DTfx"))
 end
 
 function CreateUnitsForPlayer0()
@@ -193,7 +202,7 @@ function CreateNeutralPassive()
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 2866.6, -2823.1, 253.298, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 2693.0, -3017.0, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e003"), -2708.5, 2585.8, 200.070, FourCC("e003"))
-    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1773.7, 1497.3, 251.580, FourCC("e002"))
+    u = BlzCreateUnitWithSkin(p, FourCC("e002"), -1750.7, 1487.5, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), -2543.9, -2240.3, 251.580, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 855.1, 323.7, 18.886, FourCC("e002"))
     u = BlzCreateUnitWithSkin(p, FourCC("e002"), 1125.6, 305.2, 18.886, FourCC("e002"))
@@ -296,6 +305,9 @@ function CreateRegions()
     gg_rct_Boss1Gate = Rect(-1600.0, 6720.0, -1216.0, 8512.0)
     gg_rct_VisiblePoint0 = Rect(-1696.0, 2848.0, -1536.0, 2976.0)
     gg_rct_Boss1Gate1 = Rect(-3040.0, 8576.0, -2400.0, 8928.0)
+    gg_rct_ActivateArrow1 = Rect(-3872.0, 7776.0, -3680.0, 7968.0)
+    gg_rct_Sercret1 = Rect(1856.0, 6400.0, 2624.0, 6656.0)
+    gg_rct_Gate3 = Rect(3072.0, 5792.0, 3360.0, 6656.0)
 end
 
 function CreateCameras()
@@ -655,7 +667,7 @@ function UnitFlyTorrentInRange(x,y,range,zMax)
 		if UnitAlive(e) and GetUnitFlyHeight(e)<=10 then
 			FlyUnitOnTorrent(e,zMax)
 
-			SetUnitPathing(e,false)
+			--SetUnitPathing(e,false)--отключени
 
 			if IsUnitType(e,UNIT_TYPE_HERO) then
 				local data=HERO[UnitGetPid(e)]
@@ -919,6 +931,12 @@ function CreateWeaponFrame()
 		end
 		BlzFrameSetSize(hot, 0.03, 0.03)
 		BlzFrameSetPoint(hot, FRAMEPOINT_CENTER, SkillButton, FRAMEPOINT_CENTER, 0.,0.)
+		local t = CreateTrigger()
+		BlzTriggerRegisterFrameEvent(t, hot, FRAMEEVENT_CONTROL_CLICK)
+		TriggerAddAction(t,function()
+			print("click "..i) -- вот тут не работает
+		end)
+
 	end
 
 end
@@ -1140,6 +1158,7 @@ function CreateAndForceBullet(hero,angle,speed,effectmodel,xs,ys)
 		local zGround=GetTerrainZ(MoveX(x,speed*2,angle),MoveY(y,speed*2,angle))
 		BlzSetSpecialEffectPosition(bullet,MoveX(x,speed,angle),MoveY(y,speed,angle),z-2)
 		BlzSetSpecialEffectPosition(cloud,MoveX(x,speed/3,angle),MoveY(y,speed/3,angle),z-2)
+		SetFogStateRadius(GetOwningPlayer(hero),FOG_OF_WAR_VISIBLE,x,y,200,true)-- Небольгая подсветка
 		--local xbam,ybam=BlzGetLocalSpecialEffectX(bam),BlzGetLocalSpecialEffectY(bam)
 		--BlzSetSpecialEffectPosition(bam,MoveX(xbam,2*data.CurrentSpeed,GetUnitFacing(hero)),MoveY(ybam,2*data.CurrentSpeed,GetUnitFacing(hero)),z-50)
 		local ZBullet=BlzGetLocalSpecialEffectZ(bullet)
@@ -1619,9 +1638,9 @@ function InitGameCore()
 			Fire=false,
 			Toss=true,
 			Barrel=true,
-			Light=false,
-			Saw=false,
-			Oil=false
+			Light=true,
+			Saw=true,
+			Oil=true
 		},
 		Count={
 			Single=150,
@@ -1630,9 +1649,9 @@ function InitGameCore()
 			Fire=0,
 			Toss=10,
 			Barrel=10,
-			Light=0,
-			Saw=0,
-			Oil=0
+			Light=100,
+			Saw=999,
+			Oil=100
 		}
 	}
 	BlzLoadTOCFile("Main.toc")
@@ -1731,6 +1750,48 @@ function InitGameCore()
 		local data=HERO[pid]
 		if Ammo[pid].Available.Barrel then
 			data.WeaponIndex=6
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_7
+	local TrigWeaponSwitch7 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch7,Player(i),OSKEY_7,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch7, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=7
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_8
+	local TrigWeaponSwitch8 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch8,Player(i),OSKEY_8,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch8, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=8
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_9
+	local TrigWeaponSwitch9 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch6,Player(i),OSKEY_9,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch9, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=9
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
 	end)
@@ -1974,7 +2035,7 @@ function InitGameCore()
 				BlzFrameSetVisible(MiniMap[data.pid], false)
 			end
 
-			UnitCheckPathingInRound(hero,80)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,60)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -2053,6 +2114,7 @@ function InitGameCore()
 						--print("Внешняя сила="..data.ForceRemain[i])
 						f=f+1
 						newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
+						--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
 						data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
 					else
 						if data.IsForce[i] then
@@ -2063,19 +2125,51 @@ function InitGameCore()
 				if f==0 then
 					data.ForcesCount=0
 					data.IsDisabled=false
+					SetUnitPathing(hero,true)
 					--print("нет больше сил")
 				end
+
+
+
+			local tempZ=NexPointZ(GetUnitX(hero),GetUnitY(hero), GetUnitFacing(hero),60) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
+			--data.AngleForce=angle
+			--print("perepad="..tempZ)
+			--[[
+			if tempZ<=10 then
 				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				--SetUnitX( hero, newPos.x )
-				--SetUnitY( hero, newPos.y )
-				-----------
-			--end
+			end
+
+			if data.ForcesCount==0 then
+				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				--print("простое движение")
+			end]]
+
+			if tempZ<1  then
+				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+			else
+				if tempZ>110 then
+					SetUnitX(hero,newPos.x)
+					SetUnitY(hero,newPos.y)
+				else
+					SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				end
+			end
+
 
 			data.XPos=GetUnitX(hero)
 			data.YPos=GetUnitY(hero)
 
 		end
 	end)
+end
+
+function NexPointZ(x,y,angle,next)
+	local perepad=0
+	local zhero=GetTerrainZ(x,y)
+	local newX2,newY2=MoveX(x,next,angle),MoveY(y,next,angle)
+	local z2=GetTerrainZ(newX2,newY2)
+	perepad=zhero-z2
+	return math.abs(perepad)
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -2138,7 +2232,8 @@ function UnitCheckPathingInRound(hero,range)
 			if  UnitAlive(hero) and k>=10 then
 				data.IsDisabled=true
 				print("force ="..k)
-				UnitAddVectorForce(hero,med-180,5+k,80+5*k)
+				SetUnitPathing(hero,false)--отключение
+				UnitAddVectorForce(hero,med-180,10+k,80+5*k)
 			end
 		end
 	end
@@ -3746,9 +3841,9 @@ function InMineWay()
 	local gg_trg_InMineWay = CreateTrigger()
 	TriggerRegisterEnterRectSimple(gg_trg_InMineWay, gg_rct_Zone03In)
 	TriggerAddAction(gg_trg_InMineWay, function()
-		--print("баржа отправляется в путь")
+		print("баржа отправляется в путь")
 		DisableTrigger(GetTriggeringTrigger())
-		local barga=gg_unit_o001_0002
+		local barga=FindUnitOfType(FourCC('o001'),1000,GetUnitXY(GetTriggerUnit()))
 		UnitAddAbility(barga,FourCC('Avul'))
 		local xs,ys=GetUnitXY(barga)
 		local x,y=GetRectCenterX(gg_rct_Zone03Out),GetRectCenterY(gg_rct_Zone03Out)
@@ -3783,16 +3878,19 @@ end
 --- DateTime: 16.02.2020 18:42
 ---
 function InitZone0()
+	local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
 	TimerStart(CreateTimer(), 5, true, function()
-		local x,y=GetRectCenterX(gg_rct_SingleTorrentZone),GetRectCenterY(gg_rct_SingleTorrentZone)
 		CreateTorrent(x,y,4,500)
 	end)
+	local WaterBirth =AddSpecialEffect("Whirlpool",x,y)
+	BlzPlaySpecialEffect(WaterBirth,ANIM_TYPE_BIRTH)
 	--перечисляем все регистрации
 	Enter00()
 	StartAllSaw()
 	ActivatedAllTower()
 	InMineWay()
 	InitZone1()--- временно потом перенести в другое место
+	InitZone2()
 end
 ---
 --- Generated by EmmyLua(https://github.com/EmmyLua)
@@ -4262,7 +4360,56 @@ OrcSkeletonPool={
 	nil,
 	nil,
 }
+---
+--- Generated by EmmyLua(https://github.com/EmmyLua)
+--- Created by Bergi.
+--- DateTime: 16.02.2020 18:42
+---
+function InitZone2()
+
+	EnterArrow1()
+end
+
+
+
+function EnterArrow1()
+	local ThisTrigger = CreateTrigger()
+	local button=gg_dest_DTfx_1224
+	TriggerRegisterEnterRectSimple(ThisTrigger, gg_rct_ActivateArrow1)
+	TriggerAddAction(ThisTrigger, function()
+		--print("смерть")
+		--CreateArrow()
+		KillDestructable(button)
+		TimerStart(CreateTimer(),2,true, function ()
+			DestructableRestoreLife(button, GetDestructableMaxLife(button), true)
+			if PointContentUnit(GetDestructableX(button),GetDestructableY(button),200) then
+				--print("Юнит втутри ")
+				KillDestructable(button)
+				--CreateArrow()
+			else
+				DestroyTimer(GetExpiredTimer())
+				--print("Разрушение таймера ")
+			end
+		end)
+	end)
+end
+
+function CreateArrow()
+	print("Выпускаем стрелу")
+end
 --CUSTOM_CODE
+function Trig_ResArrowBotton_Actions()
+        CreateArrow()
+    TriggerSleepAction(2)
+    DestructableRestoreLife(GetDyingDestructable(), GetDestructableMaxLife(GetLastCreatedDestructable()), true)
+end
+
+function InitTrig_ResArrowBotton()
+    gg_trg_ResArrowBotton = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_ResArrowBotton, gg_dest_DTfx_1224)
+    TriggerAddAction(gg_trg_ResArrowBotton, Trig_ResArrowBotton_Actions)
+end
+
 function Trig_Button3IsDead_Func001A()
     KillDestructable(GetEnumDestructable())
 end
@@ -4432,6 +4579,20 @@ function InitTrig_InitZone1BossOpenGate()
     TriggerAddAction(gg_trg_InitZone1BossOpenGate, Trig_InitZone1BossOpenGate_Actions)
 end
 
+function Trig_Button10IsDead_Func001A()
+    KillDestructable(GetEnumDestructable())
+end
+
+function Trig_Button10IsDead_Actions()
+    EnumDestructablesInRectAll(gg_rct_Sercret1, Trig_Button10IsDead_Func001A)
+end
+
+function InitTrig_Button10IsDead()
+    gg_trg_Button10IsDead = CreateTrigger()
+    TriggerRegisterDeathEvent(gg_trg_Button10IsDead, gg_dest_B000_0906)
+    TriggerAddAction(gg_trg_Button10IsDead, Trig_Button10IsDead_Actions)
+end
+
 function Trig_EVENTMMB_Conditions()
     if (not (BlzGetTriggerPlayerMouseButton() == MOUSE_BUTTON_TYPE_MIDDLE)) then
         return false
@@ -4491,6 +4652,7 @@ function InitTrig_sec1()
 end
 
 function InitCustomTriggers()
+    InitTrig_ResArrowBotton()
     InitTrig_Button3IsDead()
     InitTrig_InitZone0()
     InitTrig_Button0IsDead()
@@ -4501,6 +4663,7 @@ function InitCustomTriggers()
     InitTrig_Button0to1()
     InitTrig_Visiblepoint()
     InitTrig_InitZone1BossOpenGate()
+    InitTrig_Button10IsDead()
     InitTrig_EVENTMMB()
     InitTrig_NonAttack()
     InitTrig_sec1()
@@ -4548,7 +4711,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, -3968.0, 9728.0)
+    DefineStartLocation(0, -3648.0, 9088.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end

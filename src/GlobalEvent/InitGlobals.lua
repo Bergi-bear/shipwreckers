@@ -68,9 +68,9 @@ function InitGameCore()
 			Fire=false,
 			Toss=true,
 			Barrel=true,
-			Light=false,
-			Saw=false,
-			Oil=false
+			Light=true,
+			Saw=true,
+			Oil=true
 		},
 		Count={
 			Single=150,
@@ -79,9 +79,9 @@ function InitGameCore()
 			Fire=0,
 			Toss=10,
 			Barrel=10,
-			Light=0,
-			Saw=0,
-			Oil=0
+			Light=100,
+			Saw=999,
+			Oil=100
 		}
 	}
 	BlzLoadTOCFile("Main.toc")
@@ -180,6 +180,48 @@ function InitGameCore()
 		local data=HERO[pid]
 		if Ammo[pid].Available.Barrel then
 			data.WeaponIndex=6
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_7
+	local TrigWeaponSwitch7 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch7,Player(i),OSKEY_7,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch7, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=7
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_8
+	local TrigWeaponSwitch8 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch8,Player(i),OSKEY_8,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch8, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=8
+			SwitchWeaponVisual(pid,data.WeaponIndex)
+		end
+	end)
+	-----------------------------------------------------------------OSKEY_9
+	local TrigWeaponSwitch9 = CreateTrigger()
+	for i = 0, bj_MAX_PLAYER_SLOTS - 1 do
+		local player = Player(i)
+		BlzTriggerRegisterPlayerKeyEvent(TrigWeaponSwitch9,Player(i),OSKEY_9,0,true)
+	end
+	TriggerAddAction(TrigWeaponSwitch9, function()
+		local pid=GetPlayerId(GetTriggerPlayer())
+		local data=HERO[pid]
+		if Ammo[pid].Available.Barrel then
+			data.WeaponIndex=9
 			SwitchWeaponVisual(pid,data.WeaponIndex)
 		end
 	end)
@@ -366,6 +408,9 @@ function InitGameCore()
 				if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateBarrel(hero)
 				end
+				if data.WeaponIndex==7 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
+					CreateLightingCharges(hero)
+				end
 			end
 		end
 	end)
@@ -423,7 +468,7 @@ function InitGameCore()
 				BlzFrameSetVisible(MiniMap[data.pid], false)
 			end
 
-			UnitCheckPathingInRound(hero,80)--Фунция выталкивания --временно отрубил
+			UnitCheckPathingInRound(hero,60)--Фунция выталкивания --временно отрубил
 
 			if data.ReleaseLMB then
 
@@ -502,6 +547,7 @@ function InitGameCore()
 						--print("Внешняя сила="..data.ForceRemain[i])
 						f=f+1
 						newPos=newPos+newPos:yawPitchOffset( data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0.0 )
+						--newPos=Vector3:copyFromUnit(hero)+Vector3:new(data.ForceSpeed[i], data.ForceAngle[i] * ( math.pi / 180 ), 0)
 						data.ForceRemain[i]=data.ForceRemain[i]-data.ForceSpeed[i]
 					else
 						if data.IsForce[i] then
@@ -512,17 +558,49 @@ function InitGameCore()
 				if f==0 then
 					data.ForcesCount=0
 					data.IsDisabled=false
+					SetUnitPathing(hero,true)
 					--print("нет больше сил")
 				end
+
+
+
+			local tempZ=NexPointZ(GetUnitX(hero),GetUnitY(hero), GetUnitFacing(hero),60) --вырван угол data.ForceAngle[i] * ( math.pi / 180 )
+			--data.AngleForce=angle
+			--print("perepad="..tempZ)
+			--[[
+			if tempZ<=10 then
 				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
-				--SetUnitX( hero, newPos.x )
-				--SetUnitY( hero, newPos.y )
-				-----------
-			--end
+			end
+
+			if data.ForcesCount==0 then
+				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				--print("простое движение")
+			end]]
+
+			if tempZ<1  then
+				SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+			else
+				if tempZ>110 then
+					SetUnitX(hero,newPos.x)
+					SetUnitY(hero,newPos.y)
+				else
+					SetUnitPositionSmooth(hero,newPos.x,newPos.y)
+				end
+			end
+
 
 			data.XPos=GetUnitX(hero)
 			data.YPos=GetUnitY(hero)
 
 		end
 	end)
+end
+
+function NexPointZ(x,y,angle,next)
+	local perepad=0
+	local zhero=GetTerrainZ(x,y)
+	local newX2,newY2=MoveX(x,next,angle),MoveY(y,next,angle)
+	local z2=GetTerrainZ(newX2,newY2)
+	perepad=zhero-z2
+	return math.abs(perepad)
 end

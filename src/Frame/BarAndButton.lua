@@ -156,6 +156,12 @@ function CreateWeaponFrame()
 		end
 		BlzFrameSetSize(hot, 0.03, 0.03)
 		BlzFrameSetPoint(hot, FRAMEPOINT_CENTER, SkillButton, FRAMEPOINT_CENTER, 0.,0.)
+		local t = CreateTrigger()
+		BlzTriggerRegisterFrameEvent(t, hot, FRAMEEVENT_CONTROL_CLICK)
+		TriggerAddAction(t,function()
+			print("click "..i) -- вот тут не работает
+		end)
+
 	end
 
 end
