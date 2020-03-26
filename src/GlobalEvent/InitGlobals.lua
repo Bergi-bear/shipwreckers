@@ -71,18 +71,18 @@ function InitGameCore()
 			Barrel=true,
 			Light=true,
 			Saw=true,
-			Oil=true
+			Oil=false
 		},
 		Count={
-			Single=150,
-			Board=100,
-			Rocket=0,
+			Single=500,
+			Board=500,
+			Rocket=500,
 			Fire=500,
-			Toss=10,
-			Barrel=10,
-			Light=100,
-			Saw=99,
-			Oil=100
+			Toss=500,
+			Barrel=500,
+			Light=500,
+			Saw=500,
+			Oil=0
 		}
 	}
 	BlzLoadTOCFile("Main.toc")

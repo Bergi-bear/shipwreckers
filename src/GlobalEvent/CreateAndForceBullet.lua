@@ -116,12 +116,12 @@ function CreateFire(hero,board)
 
 		if board==0 then
 			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5-90))
-			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5-90)
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5-90,GetUnitZ(hero)+50)
 		else
 			local problem=GetUnitFacing(hero)+board-5+90
 			--print("проблемный угол="..problem)
 			BlzSetSpecialEffectYaw(fire,math.rad(problem))
-			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5+90)
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5+90,GetUnitZ(hero)+50)
 		end
 		if (data.ReleaseRMB==false and board==0)  then
 			--print("отключен вручную")

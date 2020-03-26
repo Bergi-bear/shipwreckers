@@ -91,13 +91,13 @@ function IsUnitZCollision(hero,ZDamageSource)
 end
 
 
-function UnitDamageLine(u,damage,x,y,range,distance,angle)
+function UnitDamageLine(u,damage,x,y,range,distance,angle,z)
 	local isdamage=false
 	local nx,ny
 	for i=0,distance/range do
 		nx=MoveX(x,i*range,angle)
 		ny=MoveY(y,i*range,angle)
-		UnitDamageArea(u,damage,nx,ny,range)
+		UnitDamageArea(u,damage,nx,ny,range,z)
 	end
 	return isdamage
 end

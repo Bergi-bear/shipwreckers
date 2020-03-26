@@ -45,12 +45,12 @@ gg_trg_StartMainTheme = nil
 gg_unit_h002_0023 = nil
 gg_dest_B000_0131 = nil
 gg_dest_B000_0118 = nil
+gg_dest_DTfx_1224 = nil
 gg_dest_B006_0274 = nil
 gg_dest_B000_0275 = nil
 gg_dest_B000_0273 = nil
 gg_dest_B000_0906 = nil
 gg_dest_B000_0963 = nil
-gg_dest_DTfx_1224 = nil
 function InitGlobals()
 end
 
@@ -1284,12 +1284,12 @@ function CreateFire(hero,board)
 
 		if board==0 then
 			BlzSetSpecialEffectYaw(fire,math.rad(GetUnitFacing(hero)+board-5-90))
-			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5-90)
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5-90,GetUnitZ(hero)+50)
 		else
 			local problem=GetUnitFacing(hero)+board-5+90
 			--print("проблемный угол="..problem)
 			BlzSetSpecialEffectYaw(fire,math.rad(problem))
-			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5+90)
+			UnitDamageLine(hero,10,nx,ny,80,80*6,GetUnitFacing(hero)+board-5+90,GetUnitZ(hero)+50)
 		end
 		if (data.ReleaseRMB==false and board==0)  then
 			--print("отключен вручную")
@@ -1621,13 +1621,13 @@ function IsUnitZCollision(hero,ZDamageSource)
 end
 
 
-function UnitDamageLine(u,damage,x,y,range,distance,angle)
+function UnitDamageLine(u,damage,x,y,range,distance,angle,z)
 	local isdamage=false
 	local nx,ny
 	for i=0,distance/range do
 		nx=MoveX(x,i*range,angle)
 		ny=MoveY(y,i*range,angle)
-		UnitDamageArea(u,damage,nx,ny,range)
+		UnitDamageArea(u,damage,nx,ny,range,z)
 	end
 	return isdamage
 end
@@ -1760,18 +1760,18 @@ function InitGameCore()
 			Barrel=true,
 			Light=true,
 			Saw=true,
-			Oil=true
+			Oil=false
 		},
 		Count={
-			Single=150,
-			Board=100,
-			Rocket=0,
+			Single=500,
+			Board=500,
+			Rocket=500,
 			Fire=500,
-			Toss=10,
-			Barrel=10,
-			Light=100,
-			Saw=99,
-			Oil=100
+			Toss=500,
+			Barrel=500,
+			Light=500,
+			Saw=500,
+			Oil=0
 		}
 	}
 	BlzLoadTOCFile("Main.toc")
@@ -4899,7 +4899,7 @@ function config()
     SetPlayers(1)
     SetTeams(1)
     SetGamePlacement(MAP_PLACEMENT_USE_MAP_SETTINGS)
-    DefineStartLocation(0, 6528.0, 4480.0)
+    DefineStartLocation(0, -2752.0, -3072.0)
     InitCustomPlayerSlots()
     InitCustomTeams()
 end
