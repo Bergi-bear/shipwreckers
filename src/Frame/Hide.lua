@@ -17,6 +17,10 @@ function hideEverything()
 	--BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), false)
 	--скрываем по одиночке
 	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+	local Portrait = BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0)
+	BlzFrameClearAllPoints(Portrait)
+	BlzFrameSetAbsPoint(Portrait, FRAMEPOINT_LEFT, 0.1, 0.6 - 0.02)
+	BlzFrameSetSize(Portrait, 0.03, 0.03)
 
 	local map=BlzGetOriginFrame(ORIGIN_FRAME_MINIMAP, 0)
 	BlzFrameClearAllPoints(map)

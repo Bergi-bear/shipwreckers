@@ -211,3 +211,12 @@ function UnitCollisionOFF(unit)
 	UnitAddAbility(unit,FourCC('A000'))
 	IssueImmediateOrder(unit,"windwalk")
 end
+
+function math.clamp (inb, low, high) --
+    return math.min( math.max(inb, low ), high )
+end
+
+function math.lerp(a, b, t)
+	return a + (b - a) * t
+end
+

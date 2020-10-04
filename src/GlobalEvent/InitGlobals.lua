@@ -10,15 +10,17 @@ Ammo={}
 do
 	local InitGlobalsOrigin = InitGlobals -- записываем InitGlobals в переменную
 	function InitGlobals()
-		InitGlobalsOrigin() -- вызываем оригинальную InitGlobals из переменной
-		InitGameCore()
-		hideEverything()
-		InitMouseMoveTrigger()
-		InitDamage()
-		InitUnitDeath()
-		InitZone0()
-		RegisterAnyCheckpointSave()
-		StartMainTheme()
+			InitGlobalsOrigin() -- вызываем оригинальную InitGlobals из переменной
+			TimerStart(CreateTimer(), 0.1, false, function()
+			InitGameCore()
+			hideEverything()
+			InitMouseMoveTrigger()
+			InitDamage()
+			InitUnitDeath()
+			InitZone0()
+			RegisterAnyCheckpointSave()
+			StartMainTheme()
+		end)
 	end
 end
 
@@ -27,7 +29,7 @@ function InitGameCore()
 	--BlzEnableSelections(false,false)
 	EnableDragSelect(false,false)
 	--EnablePreSelect(false,false)--выделение
-	for i=0,0 do
+	for i=0,0 do -- Для 1 игрока
 		HERO[i]={
 			ReleaseW=false,
 			ReleaseS=false,
@@ -45,9 +47,19 @@ function InitGameCore()
 			IsDisabled=false,
 			OnTorrent=false,
 			Alive=true,
-			IsAttackReadyR=true,
-			IsAttackReadyL=true,
+			IsAttackReadyR={true,true,true,true,true,true,true,true,true}, --9
+			IsAttackReadyL={true,true,true,true,true,true,true,true,true},
 			AttackCD=0.5,
+			AttackCDWeapon={0.2,
+			          1,
+			          2,
+			          3,
+			          4,
+			          5,
+			          6,
+			          2,
+			          1,
+			},
 			XPos=0,
 			YPos=0,
 			pid=i,
@@ -58,6 +70,7 @@ function InitGameCore()
 			ForceSpeed={},
 			IsForce={},
 			ChkPointID=0,
+			SelfFrame={}, -- массив фреймов Оружия
 			--Camera=CreateUnit(Player(0), FourCC('e001'), GetPlayerStartLocationX(Player(0)), GetPlayerStartLocationY(Player(0)), 0)
 		}
 	end
@@ -93,7 +106,10 @@ function InitGameCore()
 	SelectUnitForPlayerSingle(HERO[0].UnitHero,GetOwningPlayer(HERO[0].UnitHero))
 	RegisterAllAmmoBoxes(HERO[0].UnitHero)
 	--CreateWeaponFrame()
-	CreateWeaponFrame()
+	--CreateWeaponFrame()
+	--CreateWeaponFrameGlue()
+	--return
+	--CreateWeaponFrameGlue2()
 	for i=1,9 do
 		HeroUpdateWeaponCharges(HERO[0].UnitHero,i,0)
 	end
@@ -353,10 +369,13 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseLMB=true
 			local hero=data.UnitHero
-			if 	data.Alive and data.IsAttackReadyL then
-				data.IsAttackReadyL=false
+			if 	data.Alive and data.IsAttackReadyL[data.WeaponIndex] then
+				data.IsAttackReadyL[data.WeaponIndex]=false
+
 				if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
 					BoardCannon(hero,90,GetRandomInt(5,5))
+					data.AttackCD=data.AttackCDWeapon[data.WeaponIndex]
+					StarFrameCooldown(data.SelfFrame[data.WeaponIndex],data.AttackCD,data.WeaponIndex)
 				end
 				if data.WeaponIndex==4 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateFire(hero,1)
@@ -391,10 +410,15 @@ function InitGameCore()
 			local data=HERO[pid]
 			data.ReleaseRMB=true
 			local hero=data.UnitHero
-			if 	data.Alive and data.IsAttackReadyR then
-				data.IsAttackReadyR=false
+			if 	data.Alive and data.IsAttackReadyR[data.WeaponIndex]  then
+				data.IsAttackReadyR[data.WeaponIndex]=false
+				data.AttackCD=data.AttackCDWeapon[data.WeaponIndex]
+				StarFrameCooldown(data.SelfFrame[data.WeaponIndex],data.AttackCD,data.WeaponIndex)
+
 				if data.WeaponIndex==1 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					SingleCannon(hero)
+					--print("перезарядка стрельбы?")
+					--StarFrameCooldown(data.SelfFrame[data.WeaponIndex],data.AttackCD)
 				end
 				if data.WeaponIndex==2 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,4) then
 					BoardCannon(hero,-90,GetRandomInt(5,5))
@@ -410,6 +434,7 @@ function InitGameCore()
 				end
 				if data.WeaponIndex==6 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateBarrel(hero)
+					--StarFrameCooldown(data.SelfFrame[data.WeaponIndex],5)
 				end
 				if data.WeaponIndex==7 and HeroUpdateWeaponCharges(hero,data.WeaponIndex,1) then
 					CreateLightingCharges(hero)
@@ -440,7 +465,7 @@ function InitGameCore()
 	end)
 	local acdr=0
 	local acdl=0
-	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()
+	TimerStart(CreateTimer(), TIMER_PERIOD, true, function()-- глобальный таймер
 		for _, data in pairs(HERO) do
 			local hero= data.UnitHero
 			local p=GetOwningPlayer(hero)
@@ -449,7 +474,7 @@ function InitGameCore()
 			SetCameraQuickPosition(GetUnitX(hero),GetUnitY(hero))
 			SetCameraTargetControllerNoZForPlayer(p,hero, 10,10,true) -- не дергается
 
-			if data.IsAttackReadyR==false then
+			--[[if data.IsAttackReadyR==false then
 				acdr=acdr+TIMER_PERIOD
 				if acdr>=data.AttackCD then
 					data.IsAttackReadyR=true
@@ -462,7 +487,7 @@ function InitGameCore()
 					data.IsAttackReadyL=true
 					acdl=0
 				end
-			end
+			end]]
 
 			if data.ReleaseSpace then
 				---print("показываем миникарту")

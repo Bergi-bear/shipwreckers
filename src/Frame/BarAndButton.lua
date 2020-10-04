@@ -33,8 +33,66 @@ FrameSelecter={}
 VisualCharges={}
 MiniMap={}
 
+do --Инициализация
+	TimerStart(CreateTimer(), 1, false, function()
+		--создаёт триггер отлова клавишь
+		if not BlzLoadTOCFile("Main.toc") then
+			print("errloadtoc")
+		end
+		TimerStart(CreateTimer(), 1, false, function()
+			--CreateWeaponFrameGlue()
+		end)
+	end)
+end
 
-function CreateWeaponFrame()
+
+function CreateWeaponFrameGlue()
+	print("стартуем рисовать Убер кнопки")
+	local NextPoint=0.039
+	local SelfFrame = BlzCreateFrame("GlueWText", BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0), 0, 0)
+	local IconFrame = BlzFrameGetChild(SelfFrame, 0)
+	local texture=nil
+	if not texture then
+		texture="ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn"
+	end
+	--BlzFrameSetTexture(IconFrame, texture, 0, true)
+	BlzFrameSetText(BlzFrameGetChild(SelfFrame, 2), "Test")
+	BlzFrameSetAllPoints(IconFrame, SelfFrame)
+	BlzFrameSetSize(IconFrame,NextPoint,NextPoint)
+	BlzFrameSetAbsPoint(IconFrame,FRAMEPOINT_CENTER,0.4,0.3)
+
+
+	print("создаём события..")
+	local  ClickTrig = CreateTrigger()
+	BlzFrameSetEnable(BlzGetTriggerFrame(), false)
+	BlzFrameSetEnable(BlzGetTriggerFrame(), true)
+	BlzTriggerRegisterFrameEvent(ClickTrig, SelfFrame, FRAMEEVENT_CONTROL_CLICK)
+	print("гRRRRRRAAAAAAA") --Работает
+	TriggerAddAction(ClickTrig, function ()
+		print("Нажата кнопка ") --Вот тут уже не работает
+		BlzFrameSetEnable(BlzGetTriggerFrame(), false)
+		BlzFrameSetEnable(BlzGetTriggerFrame(), true)
+	end)
+
+	local  TrigMOUSE_ENTER = CreateTrigger()
+	BlzTriggerRegisterFrameEvent( TrigMOUSE_ENTER, SelfFrame, FRAMEEVENT_MOUSE_ENTER)
+	TriggerAddAction( TrigMOUSE_ENTER, function ()
+		print("показать подсказку")
+
+	end)
+	local  TrigMOUSE_LEAVE = CreateTrigger()
+	BlzTriggerRegisterFrameEvent( TrigMOUSE_LEAVE, SelfFrame, FRAMEEVENT_MOUSE_LEAVE)
+	TriggerAddAction( TrigMOUSE_LEAVE, function ()
+		--data.MouseOnFrame=false
+		--HideAllToolTips(mainData)
+		print("убрать подсказку")
+	end)
+	print("endglue..") --работает
+end
+
+
+
+function CreateWeaponFrame() --Отключено
 	local texture={
 		"ReplaceableTextures\\CommandButtons\\BTNDwarvenLongRifle.blp",
 		"ReplaceableTextures\\CommandButtons\\BTNHumanMissileUpThree.blp",

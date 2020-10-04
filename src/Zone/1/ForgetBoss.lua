@@ -179,7 +179,7 @@ function TentacleInFog()
 		if not UnitAlive(Kraken) then
 			DestroyTimer(GetExpiredTimer())
 		end
-		for i=0,3 do
+		for i=0,0 do -- 1 раз
 			local hero=HERO[i].UnitHero
 			--print("i="..i..GetUnitName(hero))
 			if not Kraken then print("Кракен не определён") end

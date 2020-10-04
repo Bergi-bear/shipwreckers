@@ -1,3 +1,5 @@
 MyFakeBar.fdf
 Main.fdf
 MySimpleButton.fdf
+FDF\\GlueWText.fdf
+FDF//GlueWText.fdf

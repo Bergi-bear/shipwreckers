@@ -10,7 +10,7 @@ function CreateTorrent(x,y,size,zMax)
 	if size==nil then size=1 end
 	if zMax==nil then zMax=size*50 end
 	if z<=-80 then
-		torrent=AddSpecialEffect("Torrent.mdl",x,y)
+		torrent=AddSpecialEffect("Torrent",x,y)
 		BlzSetSpecialEffectMatrixScale(torrent,size,size,size/10)
 		DestroyEffect(torrent)
 		IsWater=true
