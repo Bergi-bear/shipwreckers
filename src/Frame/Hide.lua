@@ -6,10 +6,11 @@
 
 function hideEverything()
 	BlzFrameSetVisible(BlzGetFrameByName("ConsoleUIBackdrop", 0), false)
-	for i = 1,11 do
-		BlzFrameSetVisible(BlzGetFrameByName("CommandButton_"..i, 0), false)
+	for i = 0,11 do
+		--BlzFrameSetVisible(BlzGetFrameByName("CommandButton_"..i, 0), false) --отключить
+		BlzFrameSetSize(BlzGetFrameByName("CommandButton_"..i, 0),0,0)--скрыть, но работать будут
 	end
-	BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
+	--BlzFrameSetSize(BlzGetFrameByName("CommandButton_0", 0),0,0)--сколлапсировал в точку
 	local GAME_UI     = BlzGetOriginFrame(ORIGIN_FRAME_GAME_UI, 0)
 	local WORLD_FRAME = BlzGetOriginFrame(ORIGIN_FRAME_WORLD_FRAME, 0)
 	BlzHideOriginFrames(true)--скрыть всё
@@ -17,6 +18,7 @@ function hideEverything()
 	--BlzFrameSetVisible(BlzGetFrameByName("CinematicPortrait", 0), false)
 	--скрываем по одиночке
 	BlzFrameSetVisible(BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0), true)
+
 	local Portrait = BlzGetOriginFrame(ORIGIN_FRAME_PORTRAIT, 0)
 	BlzFrameClearAllPoints(Portrait)
 	BlzFrameSetAbsPoint(Portrait, FRAMEPOINT_LEFT, 0.1, 0.6 - 0.02)
@@ -32,5 +34,4 @@ function hideEverything()
 	MiniMap[1]=map
 	MiniMap[2]=map
 	MiniMap[3]=map
-
 end

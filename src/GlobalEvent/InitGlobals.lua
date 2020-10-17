@@ -50,7 +50,7 @@ function InitGameCore()
 			IsAttackReadyR={true,true,true,true,true,true,true,true,true}, --9
 			IsAttackReadyL={true,true,true,true,true,true,true,true,true},
 			AttackCD=0.5,
-			AttackCDWeapon={0.2,
+			AttackCDWeapon={0.4,
 			          1,
 			          2,
 			          3,

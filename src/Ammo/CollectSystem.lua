@@ -9,7 +9,9 @@ function RegisterAllAmmoBoxes(hero)
 
 	TriggerAddAction(gg_trg_RANGE, function()
 		local AmmoBox=GetTriggerUnit()
+		--print(GetUnitName(AmmoBox))
 		--hero - юнит к которому подошли
+		CallCollect(hero,AmmoBox)
 		TimerStart(CreateTimer(), 0.5, true, function()
 			CallCollect(hero,AmmoBox)
 			if not IsUnitInRange(hero,AmmoBox,300) then
@@ -80,4 +82,8 @@ function CallCollect (hero,AmmoBox)
 			end
 		end
 	end
+end
+
+function AddAmmoChargesVisual()
+
 end
