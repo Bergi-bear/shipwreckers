@@ -1,0 +1,1 @@
+start mpqtool extract testmap.w3x -o ./unpack
